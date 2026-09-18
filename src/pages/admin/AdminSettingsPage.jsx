@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useClinicData } from "../../hooks/useClinicData";
-import { CheckIcon, RefreshIcon, AlertCircleIcon, ShieldIcon } from "../../components/common/Icons";
+import { CheckIcon, RefreshIcon, SparklesIcon } from "../../components/common/Icons";
 
 export const AdminSettingsPage = () => {
   const { business, updateBusiness, resetDemoData } = useClinicData();
@@ -10,7 +10,12 @@ export const AdminSettingsPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ 
+      ...prev, 
+      [name]: value,
+      // Keep aliases in sync
+      ...(name === "salonName" ? { clinicName: value, doctorName: value } : {})
+    }));
     setSavedSuccess(false);
     setResetSuccess(false);
   };
@@ -23,13 +28,13 @@ export const AdminSettingsPage = () => {
   };
 
   const handleReset = () => {
-    if (window.confirm("¿Seguro que deseas restablecer todos los datos demo a los valores iniciales de fábrica? Esto volverá a cargar las citas y pacientes de muestra.")) {
+    if (window.confirm("¿Seguro que deseas restablecer todos los datos demo de Bellart Salón a los valores iniciales de fábrica? Esto recargará las citas, estilistas y clientas de muestra.")) {
       resetDemoData();
       setResetSuccess(true);
       setSavedSuccess(false);
       setTimeout(() => {
         window.location.reload();
-      }, 800);
+      }, 700);
     }
   };
 
@@ -38,9 +43,9 @@ export const AdminSettingsPage = () => {
       <div className="admin-card" style={{ maxWidth: "800px" }}>
         <div className="admin-card-header">
           <div>
-            <h2 className="admin-card-title">Configuración General del Consultorio</h2>
+            <h2 className="admin-card-title">Configuración de Bellart Salón</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Personaliza los datos visibles del consultorio del Dr. Luis Armando Rosado.
+              Personaliza los datos visibles del salón, horarios, medios de contacto y mensaje de confirmación.
             </p>
           </div>
         </div>
@@ -58,81 +63,74 @@ export const AdminSettingsPage = () => {
           <div className="alert-banner alert-warning" style={{ marginBottom: "1.5rem" }}>
             <div className="alert-content-left">
               <RefreshIcon size={18} />
-              <span>Restableciendo datos demo iniciales...</span>
+              <span>Restableciendo datos demo iniciales de Bellart Salón...</span>
             </div>
           </div>
         )}
 
         <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <div className="form-grid">
+            {/* Nombre del negocio */}
             <div>
-              <label className="form-label" htmlFor="clinicName">Nombre del Consultorio</label>
+              <label className="form-label" htmlFor="salonName">Nombre del Negocio</label>
               <input
                 type="text"
-                id="clinicName"
-                name="clinicName"
-                value={formData.clinicName}
+                id="salonName"
+                name="salonName"
+                value={formData.salonName || formData.clinicName || "Bellart Salón"}
                 onChange={handleChange}
                 required
               />
             </div>
 
+            {/* Teléfono */}
             <div>
-              <label className="form-label" htmlFor="doctorName">Nombre del Médico</label>
-              <input
-                type="text"
-                id="doctorName"
-                name="doctorName"
-                value={formData.doctorName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="form-label" htmlFor="phone">Teléfono del Consultorio</label>
+              <label className="form-label" htmlFor="phone">Teléfono de Contacto</label>
               <input
                 type="tel"
                 id="phone"
                 name="phone"
-                value={formData.phone}
+                value={formData.phone || "899 124 1188"}
                 onChange={handleChange}
                 required
               />
             </div>
 
+            {/* WhatsApp */}
             <div>
-              <label className="form-label" htmlFor="whatsapp">WhatsApp de Recepción</label>
+              <label className="form-label" htmlFor="whatsapp">WhatsApp para Citas</label>
               <input
                 type="tel"
                 id="whatsapp"
                 name="whatsapp"
-                value={formData.whatsapp}
+                value={formData.whatsapp || "8991241188"}
                 onChange={handleChange}
                 required
               />
             </div>
 
+            {/* Correo */}
             <div>
-              <label className="form-label" htmlFor="email">Correo Electrónico</label>
+              <label className="form-label" htmlFor="email">Correo Electrónico (Demo)</label>
               <input
                 type="email"
                 id="email"
                 name="email"
-                value={formData.email}
+                value={formData.email || "contacto@bellartsalon.demo"}
                 onChange={handleChange}
                 required
               />
             </div>
 
+            {/* Color Principal */}
             <div>
-              <label className="form-label" htmlFor="primaryColor">Color Principal</label>
+              <label className="form-label" htmlFor="primaryColor">Color Principal de Marca</label>
               <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
                 <input
                   type="color"
                   id="primaryColorPicker"
                   name="primaryColor"
-                  value={formData.primaryColor || "#123C69"}
+                  value={formData.primaryColor || "#1D1D1F"}
                   onChange={handleChange}
                   style={{ width: "45px", height: "42px", padding: "2px", cursor: "pointer" }}
                 />
@@ -140,43 +138,46 @@ export const AdminSettingsPage = () => {
                   type="text"
                   id="primaryColor"
                   name="primaryColor"
-                  value={formData.primaryColor || "#123C69"}
+                  value={formData.primaryColor || "#1D1D1F"}
                   onChange={handleChange}
                 />
               </div>
             </div>
 
+            {/* Dirección */}
             <div className="form-group-full">
               <label className="form-label" htmlFor="address">Dirección Física (Reynosa, Tamps.)</label>
               <input
                 type="text"
                 id="address"
                 name="address"
-                value={formData.address}
+                value={formData.address || "Reynosa, Tamaulipas (Ubicación referencial de demostración)"}
                 onChange={handleChange}
                 required
               />
             </div>
 
+            {/* Horario */}
             <div className="form-group-full">
               <label className="form-label" htmlFor="schedule">Horario de Atención</label>
               <input
                 type="text"
                 id="schedule"
                 name="schedule"
-                value={formData.schedule}
+                value={formData.schedule || "Lunes a Sábado de 9:00 a.m. a 7:00 p.m."}
                 onChange={handleChange}
                 required
               />
             </div>
 
+            {/* Mensaje de Confirmación */}
             <div className="form-group-full">
-              <label className="form-label" htmlFor="confirmationMessage">Mensaje de Confirmación para Pacientes</label>
+              <label className="form-label" htmlFor="confirmationMessage">Mensaje de Confirmación para Clientes</label>
               <textarea
                 id="confirmationMessage"
                 name="confirmationMessage"
                 rows="3"
-                value={formData.confirmationMessage}
+                value={formData.confirmationMessage || "Tu cita fue registrada con éxito en Bellart Salón. Revisaremos tu solicitud y confirmaremos tu horario por WhatsApp."}
                 onChange={handleChange}
                 required
               ></textarea>
@@ -188,7 +189,7 @@ export const AdminSettingsPage = () => {
             alignItems: "center", 
             justifyContent: "space-between", 
             paddingTop: "1.5rem", 
-            borderTop: "1px solid #E2E8F0",
+            borderTop: "1px solid var(--border-light)",
             flexWrap: "wrap",
             gap: "1rem"
           }}>

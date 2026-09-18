@@ -8,7 +8,7 @@ export const AdminLayout = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("clinicflow_auth");
+    const isAuth = localStorage.getItem("beautyflow_auth") || localStorage.getItem("clinicflow_auth");
     if (!isAuth) {
       navigate("/admin/login");
     }
@@ -17,13 +17,14 @@ export const AdminLayout = () => {
   // Determine header title based on current route
   const getHeaderTitle = () => {
     const path = location.pathname;
-    if (path.includes("/dashboard")) return "Resumen de Recepción";
-    if (path.includes("/agenda")) return "Agenda de Consultas";
+    if (path.includes("/dashboard")) return "Resumen de Bellart Salón";
+    if (path.includes("/agenda")) return "Agenda de Citas";
     if (path.includes("/citas")) return "Gestión de Citas";
-    if (path.includes("/pacientes")) return "Directorio de Pacientes";
-    if (path.includes("/servicios")) return "Servicios y Consultas";
-    if (path.includes("/configuracion")) return "Configuración del Consultorio";
-    return "Panel de Recepción";
+    if (path.includes("/clientes") || path.includes("/pacientes")) return "Directorio de Clientes";
+    if (path.includes("/servicios")) return "Catálogo de Servicios";
+    if (path.includes("/pagos")) return "Anticipos y Pagos";
+    if (path.includes("/configuracion")) return "Configuración del Salón";
+    return "Panel de Administración";
   };
 
   return (

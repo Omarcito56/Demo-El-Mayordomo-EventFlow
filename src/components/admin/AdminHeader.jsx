@@ -21,7 +21,7 @@ export const AdminHeader = ({ title = "Panel de Recepción" }) => {
 
         <div className="admin-reception-pill">
           <span className="status-dot" style={{ backgroundColor: "var(--color-accent)", width: "8px", height: "8px" }}></span>
-          <span>Recepción Activa</span>
+          <span>Panel Activo</span>
         </div>
       </div>
     </header>

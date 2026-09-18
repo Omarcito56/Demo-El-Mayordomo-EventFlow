@@ -1,160 +1,163 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { CalendarCheckIcon, UsersIcon, CheckCircleIcon, WhatsAppIcon, ClockIcon, ArrowRightIcon, EyeIcon } from "../common/Icons";
+import { 
+  CalendarCheckIcon, UsersIcon, ClockIcon, CreditCardIcon, 
+  WhatsAppIcon, EyeIcon, ArrowRightIcon, CheckCircleIcon, SparklesIcon 
+} from "../common/Icons";
 import { Modal } from "../common/Modal";
 
 export const ClinicPitch = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
+  const pitchFeatures = [
+    {
+      icon: <CalendarCheckIcon size={20} />,
+      title: "Agenda organizada",
+      desc: "Visualización clara de turnos de hoy, mañana y la semana sin cruces de horarios entre estilistas."
+    },
+    {
+      icon: <UsersIcon size={20} />,
+      title: "Clientes registrados",
+      desc: "Directorio automático de clientas con historial de citas, servicios favoritos y teléfono de contacto."
+    },
+    {
+      icon: <ClockIcon size={20} />,
+      title: "Disponibilidad real",
+      desc: "Control de espacios y horarios libres para que las clientas solo soliciten turnos realmente disponibles."
+    },
+    {
+      icon: <CreditCardIcon size={20} />,
+      title: "Control de anticipos",
+      desc: "Registro de anticipos para asegurar el tiempo de las estilistas y reducir cancelaciones de último momento."
+    },
+    {
+      icon: <WhatsAppIcon size={20} />,
+      title: "Recordatorios WhatsApp",
+      desc: "Envío de recordatorio prearmado en un clic por WhatsApp para confirmar asistencia antes de cada cita.",
+      fullWidth: true
+    }
+  ];
+
   return (
-    <section className="clinic-pitch-section">
+    <section className="salon-pitch-section">
       <div className="container">
-        <div className="clinic-pitch-inner">
+        <div className="salon-pitch-inner">
           {/* Left Column: Pitch Message */}
-          <div>
-            <span className="pitch-tag">Solución Digital BS ClinicFlow</span>
-            <h2 className="pitch-title">Una agenda más organizada para el consultorio</h2>
-            <p className="pitch-desc">
-              Consulta citas próximas, pacientes registrados y solicitudes pendientes desde un panel sencillo diseñado para facilitar el trabajo diario de recepción.
+          <div className="pitch-editorial-left">
+            <div className="pitch-badge-wrap">
+              <SparklesIcon size={14} />
+              <span>PROPUESTA COMERCIAL · BS BEAUTYFLOW</span>
+            </div>
+
+            <h2 className="pitch-editorial-title">
+              Tu agenda organizada <br />
+              <span className="pitch-title-serif">desde un solo lugar.</span>
+            </h2>
+
+            <p className="pitch-editorial-desc">
+              Consulta las citas del día, organiza horarios, confirma clientes y lleva un control básico de anticipos desde un panel sencillo y moderno.
             </p>
             
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            <div className="pitch-actions-wrap">
               <button 
-                className="btn btn-accent" 
+                type="button"
+                className="btn btn-primary btn-pitch-experience" 
                 onClick={() => setModalOpen(true)}
               >
                 <EyeIcon size={18} />
-                <span>Ver cómo funciona</span>
+                <span>Conocer la experiencia</span>
+                <ArrowRightIcon size={15} />
               </button>
-              <Link to="/admin/login" className="btn btn-secondary">
-                <span>Probar acceso de recepción</span>
-                <ArrowRightIcon size={16} />
-              </Link>
             </div>
           </div>
 
           {/* Right Column: 5 Feature Cards */}
-          <div className="pitch-features-grid">
-            <div className="pitch-feature-card">
-              <div className="pitch-card-title">
-                <CalendarCheckIcon size={18} style={{ color: "var(--color-accent)" }} />
-                <span>Agenda organizada</span>
+          <div className="pitch-cards-grid">
+            {pitchFeatures.map((feat, idx) => (
+              <div 
+                key={idx} 
+                className={`pitch-feature-card ${feat.fullWidth ? "full-width-card" : ""}`}
+              >
+                <div className="pitch-card-header">
+                  <div className="pitch-card-icon-box">
+                    {feat.icon}
+                  </div>
+                  <h4 className="pitch-card-title">{feat.title}</h4>
+                </div>
+                <p className="pitch-card-desc">{feat.desc}</p>
               </div>
-              <p className="pitch-card-desc">
-                Visualización clara de turnos de hoy, mañana y la semana sin cruces de horario.
-              </p>
-            </div>
-
-            <div className="pitch-feature-card">
-              <div className="pitch-card-title">
-                <UsersIcon size={18} style={{ color: "var(--color-accent)" }} />
-                <span>Pacientes registrados</span>
-              </div>
-              <p className="pitch-card-desc">
-                Directorio automático de pacientes que se alimenta de cada cita solicitada.
-              </p>
-            </div>
-
-            <div className="pitch-feature-card">
-              <div className="pitch-card-title">
-                <CheckCircleIcon size={18} style={{ color: "var(--color-accent)" }} />
-                <span>Confirmaciones ágiles</span>
-              </div>
-              <p className="pitch-card-desc">
-                Recepción valida solicitudes pendientes en 1 clic y mantiene informado al médico.
-              </p>
-            </div>
-
-            <div className="pitch-feature-card">
-              <div className="pitch-card-title">
-                <WhatsAppIcon size={18} style={{ color: "var(--color-accent)" }} />
-                <span>Recordatorios directos</span>
-              </div>
-              <p className="pitch-card-desc">
-                Envío de mensaje de confirmación por WhatsApp en un clic para reducir inasistencias.
-              </p>
-            </div>
-
-            <div className="pitch-feature-card" style={{ gridColumn: "1 / -1" }}>
-              <div className="pitch-card-title">
-                <ClockIcon size={18} style={{ color: "var(--color-accent)" }} />
-                <span>Seguimiento de estados de citas</span>
-              </div>
-              <p className="pitch-card-desc">
-                Control de citas Pendientes, Confirmadas, Atendidas, Reagendadas o Canceladas con registro en tiempo real.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Explanatory Modal "Ver cómo funciona" */}
+      {/* Explanatory Modal "Conocer la experiencia" */}
       <Modal 
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
-        title="¿Cómo apoya el panel digital a la recepción del consultorio?"
+        title="¿Cómo beneficia esta solución a Bellart Salón?"
         maxWidth="640px"
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <p style={{ color: "var(--color-text-secondary)", fontSize: "0.95rem", lineHeight: "1.6" }}>
-            El objetivo de esta solución para el <strong>Dr. Luis Armando Rosado</strong> es optimizar la atención de los pacientes sin complejidades de sistemas hospitalarios costosos:
+            Esta propuesta comercial de <strong>BS Code</strong> para <strong>Bellart Salón</strong> resuelve los problemas más comunes de administración manual:
           </p>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
-            <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-              <div style={{ background: "var(--color-accent-soft)", color: "var(--color-accent-hover)", padding: "0.4rem", borderRadius: "8px", marginTop: "2px" }}>
-                <CheckCircleIcon size={18} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div style={{ display: "flex", gap: "0.85rem", alignItems: "flex-start" }}>
+              <div style={{ background: "var(--color-accent-soft)", color: "var(--color-accent)", padding: "0.5rem", borderRadius: "10px", marginTop: "2px", flexShrink: 0 }}>
+                <CheckCircleIcon size={20} />
               </div>
               <div>
-                <strong style={{ color: "var(--color-primary)", display: "block" }}>1. Reducción de mensajes repetitivos en WhatsApp</strong>
-                <span style={{ color: "var(--color-text-secondary)", fontSize: "0.88rem" }}>
-                  Los pacientes consultan directamente los turnos y servicios disponibles sin saturar la línea de recepción con preguntas de disponibilidad.
+                <strong style={{ color: "var(--color-primary)", display: "block", fontSize: "0.98rem" }}>1. Menos mensajes repetitivos de WhatsApp</strong>
+                <span style={{ color: "var(--color-text-secondary)", fontSize: "0.88rem", lineHeight: "1.5" }}>
+                  Tus clientas consultan directamente servicios, precios y horarios libres sin necesidad de preguntar una y otra vez "¿tienes espacio para hoy?".
                 </span>
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-              <div style={{ background: "var(--color-primary-soft)", color: "var(--color-primary)", padding: "0.4rem", borderRadius: "8px", marginTop: "2px" }}>
-                <CheckCircleIcon size={18} />
+            <div style={{ display: "flex", gap: "0.85rem", alignItems: "flex-start" }}>
+              <div style={{ background: "var(--color-primary-soft)", color: "var(--color-primary)", padding: "0.5rem", borderRadius: "10px", marginTop: "2px", flexShrink: 0 }}>
+                <CheckCircleIcon size={20} />
               </div>
               <div>
-                <strong style={{ color: "var(--color-primary)", display: "block" }}>2. Preregistro ordenado antes de que llegue el paciente</strong>
-                <span style={{ color: "var(--color-text-secondary)", fontSize: "0.88rem" }}>
-                  Al solicitar la cita, el paciente ingresa su nombre, WhatsApp, motivo general y si es primera consulta, ahorrando minutos valiosos en recepción.
+                <strong style={{ color: "var(--color-primary)", display: "block", fontSize: "0.98rem" }}>2. Control de anticipos para asegurar el tiempo de tus estilistas</strong>
+                <span style={{ color: "var(--color-text-secondary)", fontSize: "0.88rem", lineHeight: "1.5" }}>
+                  Los servicios de alta duración (colorimetría, peinado, tratamientos) pueden solicitar un anticipo simbólico que compromete la asistencia y protege los ingresos del salón.
                 </span>
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-              <div style={{ background: "#EDE9FE", color: "#6D28D9", padding: "0.4rem", borderRadius: "8px", marginTop: "2px" }}>
-                <CheckCircleIcon size={18} />
+            <div style={{ display: "flex", gap: "0.85rem", alignItems: "flex-start" }}>
+              <div style={{ background: "#F5F3FF", color: "#6D28D9", padding: "0.5rem", borderRadius: "10px", marginTop: "2px", flexShrink: 0 }}>
+                <CheckCircleIcon size={20} />
               </div>
               <div>
-                <strong style={{ color: "var(--color-primary)", display: "block" }}>3. Menos pacientes que faltan o no avisan</strong>
-                <span style={{ color: "var(--color-text-secondary)", fontSize: "0.88rem" }}>
-                  Recepción tiene un botón para disparar el recordatorio por WhatsApp con el mensaje prearmado con folio, fecha y hora de la consulta.
+                <strong style={{ color: "var(--color-primary)", display: "block", fontSize: "0.98rem" }}>3. Todo organizado en una pantalla sin libretas ni hojas sueltas</strong>
+                <span style={{ color: "var(--color-text-secondary)", fontSize: "0.88rem", lineHeight: "1.5" }}>
+                  Visualiza quién atiende a quién, qué servicios se van a realizar y cuánto saldo resta por liquidar al terminar cada visita.
                 </span>
               </div>
             </div>
           </div>
 
           <div style={{ 
-            backgroundColor: "#F8FAFC", 
-            border: "1px solid #E2E8F0", 
-            borderRadius: "12px", 
-            padding: "1rem", 
+            backgroundColor: "var(--color-bg)", 
+            border: "1px solid var(--border-light)", 
+            borderRadius: "14px", 
+            padding: "1.25rem", 
             textAlign: "center",
-            marginTop: "0.5rem"
+            marginTop: "0.75rem"
           }}>
-            <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginBottom: "0.75rem" }}>
-              Puedes ingresar a explorar el panel de administración con las credenciales demo precargadas:
+            <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginBottom: "0.85rem" }}>
+              Puedes explorar el panel de administración con las credenciales demo precargadas:
             </p>
             <Link 
               to="/admin/login" 
               className="btn btn-primary btn-sm"
               onClick={() => setModalOpen(false)}
             >
-              <span>Ir al Panel de Recepción Demo</span>
+              <span>Explorar Panel Administrativo Demo</span>
               <ArrowRightIcon size={16} />
             </Link>
           </div>

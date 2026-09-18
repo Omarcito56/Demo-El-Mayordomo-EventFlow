@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useClinicData } from "../../hooks/useClinicData";
+import { initialProfessionalsData } from "../../data/professionalsData";
 import { 
-  CalendarIcon, ClockIcon, UserIcon, ArrowRightIcon, ArrowLeftIcon, 
-  CheckIcon, StethoscopeIcon, ShieldIcon, AlertCircleIcon 
+  CalendarIcon, ClockIcon, ArrowRightIcon, ArrowLeftIcon, 
+  CheckIcon, SparklesIcon, CreditCardIcon, AlertCircleIcon,
+  ScissorsIcon, PaletteIcon, DropletIcon, StarIcon, HandIcon
 } from "../../components/common/Icons";
 import { trackEvent, useTrackOnMount } from "../../analytics/analytics";
 
-
-const TIME_SLOTS = [
+const SALON_TIME_SLOTS = [
   "9:00 a.m.",
-  "10:00 a.m.",
-  "11:30 a.m.",
-  "1:00 p.m.",
+  "10:30 a.m.",
+  "12:00 p.m.",
+  "2:30 p.m.",
   "4:00 p.m.",
   "5:30 p.m."
 ];
@@ -25,29 +26,32 @@ export const BookingPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formError, setFormError] = useState("");
 
-  // Get minimum date (today) string in YYYY-MM-DD
   const getTodayISO = () => {
     const d = new Date();
     return d.toISOString().split("T")[0];
   };
 
-  const initialServiceId = searchParams.get("service") || (services[0]?.id || "consulta-medica");
+  const initialServiceId = searchParams.get("service") || (services[0]?.id || "coloracion");
 
   const [bookingData, setBookingData] = useState({
     serviceId: initialServiceId,
     serviceName: "",
     servicePrice: "",
+    serviceCostNumber: 650,
     serviceDuration: "",
+    suggestedDeposit: 200,
+    professionalId: "sin-preferencia",
+    professionalName: "Sin preferencia",
     date: getTodayISO(),
-    time: "10:00 a.m.",
-    patientName: "",
-    patientPhone: "",
-    patientEmail: "",
-    birthDate: "",
+    time: "10:30 a.m.",
+    clientName: "",
+    clientPhone: "",
+    clientEmail: "",
     isFirstTime: true,
-    reason: "",
     comments: "",
-    privacyAccepted: false
+    privacyAccepted: false,
+    hasDeposit: true,
+    paymentMethod: "Tarjeta demo"
   });
 
   // Keep service details in sync when serviceId changes
@@ -59,18 +63,19 @@ export const BookingPage = () => {
         serviceId: selected.id,
         serviceName: selected.name,
         servicePrice: selected.price,
-        serviceDuration: selected.duration
+        serviceCostNumber: selected.priceNumber || 650,
+        serviceDuration: selected.duration,
+        suggestedDeposit: selected.suggestedDeposit || 200
       }));
     }
   }, [bookingData.serviceId, services]);
 
-  // Track booking_started una única vez al montar (protegido contra StrictMode)
+  // Track booking_started una única vez al montar
   useTrackOnMount("booking_started", {
-    flow_type: "medical_booking",
+    flow_type: "salon_booking",
     route: "/agendar",
     source: searchParams.get("service") ? "service_card" : "direct"
   });
-
 
   const handleServiceSelect = (service) => {
     setBookingData((prev) => ({
@@ -78,7 +83,18 @@ export const BookingPage = () => {
       serviceId: service.id,
       serviceName: service.name,
       servicePrice: service.price,
-      serviceDuration: service.duration
+      serviceCostNumber: service.priceNumber || 650,
+      serviceDuration: service.duration,
+      suggestedDeposit: service.suggestedDeposit || 200
+    }));
+    setFormError("");
+  };
+
+  const handleProfessionalSelect = (prof) => {
+    setBookingData((prev) => ({
+      ...prev,
+      professionalId: prof.id,
+      professionalName: prof.name
     }));
     setFormError("");
   };
@@ -92,49 +108,44 @@ export const BookingPage = () => {
     setFormError("");
   };
 
-  // Check if a time slot on the selected date is already booked
   const isSlotBooked = (time) => {
     return appointments.some(
       (apt) => apt.date === bookingData.date && apt.time === time && apt.status !== "Cancelada"
     );
   };
 
-  // Step validations
   const validateStep = () => {
     setFormError("");
     if (currentStep === 1) {
       if (!bookingData.serviceId) {
-        setFormError("Por favor selecciona un tipo de consulta.");
+        setFormError("Por favor selecciona un servicio.");
         return false;
       }
     } else if (currentStep === 2) {
+      if (!bookingData.professionalId) {
+        setFormError("Por favor selecciona una profesional o la opción 'Sin preferencia'.");
+        return false;
+      }
+    } else if (currentStep === 3) {
       if (!bookingData.date) {
         setFormError("Por favor selecciona una fecha válida.");
         return false;
       }
       if (!bookingData.time) {
-        setFormError("Por favor selecciona un horario de consulta.");
+        setFormError("Por favor selecciona un horario de cita.");
         return false;
       }
-    } else if (currentStep === 3) {
-      if (!bookingData.patientName.trim()) {
+    } else if (currentStep === 4) {
+      if (!bookingData.clientName.trim()) {
         setFormError("Por favor ingresa tu nombre completo.");
         return false;
       }
-      if (!bookingData.patientPhone.trim()) {
+      if (!bookingData.clientPhone.trim()) {
         setFormError("Por favor ingresa tu teléfono o WhatsApp de contacto.");
         return false;
       }
-      if (bookingData.patientPhone.replace(/\D/g, "").length < 10) {
-        setFormError("El número de teléfono debe tener al menos 10 dígitos para contacto.");
-        return false;
-      }
-      if (!bookingData.patientEmail.trim() || !bookingData.patientEmail.includes("@")) {
-        setFormError("Por favor ingresa un correo electrónico válido.");
-        return false;
-      }
-      if (!bookingData.reason.trim()) {
-        setFormError("Por favor describe brevemente el motivo general de tu consulta.");
+      if (bookingData.clientPhone.replace(/\D/g, "").length < 10) {
+        setFormError("El número de teléfono debe tener al menos 10 dígitos para confirmarte por WhatsApp.");
         return false;
       }
       if (!bookingData.privacyAccepted) {
@@ -147,181 +158,287 @@ export const BookingPage = () => {
 
   const nextStep = () => {
     if (validateStep()) {
-      setCurrentStep((prev) => Math.min(prev + 1, 4));
-      window.scrollTo({ top: 160, behavior: "smooth" });
+      setCurrentStep((prev) => Math.min(prev + 1, 5));
+      window.scrollTo({ top: 120, behavior: "smooth" });
     }
   };
 
   const prevStep = () => {
     setFormError("");
     setCurrentStep((prev) => Math.max(prev - 1, 1));
-    window.scrollTo({ top: 160, behavior: "smooth" });
+    window.scrollTo({ top: 120, behavior: "smooth" });
   };
 
   const handleSubmitAppointment = (e) => {
     e.preventDefault();
     if (!validateStep()) return;
 
-    // Evento de analytics: flujo de reserva completado (sin datos personales)
+    // Track completion without personal data
     trackEvent("booking_completed", {
-      flow_type: "medical_booking",
+      flow_type: "salon_booking",
       route: "/confirmacion"
     });
 
     // Create appointment in localStorage
-    const newAppointment = createAppointment(bookingData);
+    const newAppointment = createAppointment({
+      clientName: bookingData.clientName,
+      patientName: bookingData.clientName,
+      clientPhone: bookingData.clientPhone,
+      patientPhone: bookingData.clientPhone,
+      clientEmail: bookingData.clientEmail,
+      patientEmail: bookingData.clientEmail,
+      isFirstTime: bookingData.isFirstTime,
+      serviceId: bookingData.serviceId,
+      serviceName: bookingData.serviceName,
+      serviceCostNumber: bookingData.serviceCostNumber,
+      professional: bookingData.professionalName,
+      date: bookingData.date,
+      time: bookingData.time,
+      hasDeposit: bookingData.hasDeposit,
+      depositNumber: bookingData.suggestedDeposit,
+      paymentMethod: bookingData.hasDeposit ? bookingData.paymentMethod : "En salón",
+      comments: bookingData.comments
+    });
 
     // Redirect to confirmation page passing created data
     navigate("/confirmacion", { state: { appointment: newAppointment } });
   };
 
+  const serviceCost = bookingData.serviceCostNumber || 650;
+  const suggestedDeposit = bookingData.hasDeposit ? (bookingData.suggestedDeposit || 200) : 0;
+  const remainingBalance = Math.max(0, serviceCost - suggestedDeposit);
+
+  const wizardSteps = [
+    { num: "01", label: "Servicio" },
+    { num: "02", label: "Profesional" },
+    { num: "03", label: "Horario" },
+    { num: "04", label: "Tus datos" },
+    { num: "05", label: "Anticipo" },
+    { num: "06", label: "Confirmación" }
+  ];
+
   return (
-    <div className="booking-page-wrap">
+    <div className="booking-page-editorial-wrap">
       <div className="container">
-        {/* Header */}
-        <div className="booking-header">
-          <h1 className="booking-header-title">Agenda tu Consulta Médica</h1>
-          <p className="booking-header-sub">
-            Dr. Luis Armando Rosado • Centro de Especialidades Médicas, Reynosa
+        {/* Editorial Header */}
+        <div className="booking-editorial-header text-center">
+          <span className="editorial-eyebrow">EXPERIENCIA BELLART</span>
+          <h1 className="booking-editorial-title">Reserva tu momento Bellart</h1>
+          <p className="booking-editorial-sub">
+            Selecciona tu servicio, profesional y horario ideal en Reynosa en pocos pasos.
           </p>
         </div>
 
-        {/* Wizard Progress Bar */}
-        <div className="wizard-steps-bar">
-          <div className="wizard-connector-line"></div>
+        {/* Minimalist Editorial Stepper */}
+        <div className="editorial-stepper-bar">
+          {wizardSteps.map((st, idx) => {
+            const stepIndex = idx + 1;
+            const isActive = currentStep === stepIndex;
+            const isDone = currentStep > stepIndex;
 
-          <div 
-            className={`wizard-step-node ${currentStep === 1 ? "active" : ""} ${currentStep > 1 ? "completed" : ""}`}
-            onClick={() => currentStep > 1 && setCurrentStep(1)}
-          >
-            <div className="wizard-step-circle">
-              {currentStep > 1 ? <CheckIcon size={18} /> : "1"}
-            </div>
-            <span className="wizard-step-label">Consulta</span>
-          </div>
-
-          <div 
-            className={`wizard-step-node ${currentStep === 2 ? "active" : ""} ${currentStep > 2 ? "completed" : ""}`}
-            onClick={() => currentStep > 2 && setCurrentStep(2)}
-          >
-            <div className="wizard-step-circle">
-              {currentStep > 2 ? <CheckIcon size={18} /> : "2"}
-            </div>
-            <span className="wizard-step-label">Fecha y Hora</span>
-          </div>
-
-          <div 
-            className={`wizard-step-node ${currentStep === 3 ? "active" : ""} ${currentStep > 3 ? "completed" : ""}`}
-            onClick={() => currentStep > 3 && setCurrentStep(3)}
-          >
-            <div className="wizard-step-circle">
-              {currentStep > 3 ? <CheckIcon size={18} /> : "3"}
-            </div>
-            <span className="wizard-step-label">Preregistro</span>
-          </div>
-
-          <div className={`wizard-step-node ${currentStep === 4 ? "active" : ""}`}>
-            <div className="wizard-step-circle">4</div>
-            <span className="wizard-step-label">Resumen</span>
-          </div>
+            return (
+              <div 
+                key={st.num} 
+                className={`editorial-step-node ${isActive ? "active" : ""} ${isDone ? "completed" : ""}`}
+                onClick={() => isDone && setCurrentStep(stepIndex)}
+              >
+                <div className="step-num-line">
+                  <span className="step-big-num">{st.num}</span>
+                  <span className="step-label-text">{st.label}</span>
+                </div>
+                <div className="step-indicator-hairline"></div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Wizard Main Card */}
-        <div className="wizard-card animate-fade-in">
+        <div className="booking-editorial-card animate-fade-in">
           {formError && (
-            <div className="alert-banner alert-warning" style={{ marginBottom: "1.5rem" }}>
-              <div className="alert-content-left">
-                <AlertCircleIcon size={18} />
-                <span>{formError}</span>
-              </div>
+            <div className="editorial-alert-banner alert-warning">
+              <AlertCircleIcon size={18} />
+              <span>{formError}</span>
             </div>
           )}
 
-          {/* STEP 1: Tipo de Consulta */}
+          {/* ================= STEP 1: SERVICIO ================= */}
           {currentStep === 1 && (
-            <div>
-              <h2 className="wizard-step-title">Paso 1: Selecciona el tipo de consulta</h2>
-              <p className="wizard-step-desc">
-                Escoge el servicio médico que requieres para revisar los tiempos de atención correspondientes.
-              </p>
+            <div className="step-pane">
+              <div className="step-pane-header">
+                <span className="step-tag">PASO 01</span>
+                <h2 className="step-title">Elige tu servicio</h2>
+                <p className="step-desc">
+                  Selecciona el servicio que deseas realizarte para coordinar el tiempo y productos necesarios.
+                </p>
+              </div>
 
-              <div className="service-select-list">
-                {services.map((service) => (
-                  <div
-                    key={service.id}
-                    className={`service-select-item ${bookingData.serviceId === service.id ? "selected" : ""}`}
-                    onClick={() => handleServiceSelect(service)}
-                  >
-                    <div className="service-select-left">
-                      <div className="service-radio-custom">
-                        {bookingData.serviceId === service.id && <div className="service-radio-dot"></div>}
+              <div className="booking-services-grid">
+                {services.map((service) => {
+                  const isSelected = bookingData.serviceId === service.id;
+                  return (
+                    <div
+                      key={service.id}
+                      className={`booking-service-tile ${isSelected ? "selected" : ""}`}
+                      onClick={() => handleServiceSelect(service)}
+                    >
+                      <div className="tile-image-box">
+                        <img 
+                          src={service.image} 
+                          alt={service.name} 
+                          className="tile-img"
+                          loading="lazy"
+                        />
+                        <span className="tile-category-tag">{service.category}</span>
+                        {isSelected && (
+                          <div className="tile-check-bubble">
+                            <CheckIcon size={14} />
+                          </div>
+                        )}
                       </div>
-                      <div className="service-select-info">
-                        <h4>{service.name}</h4>
-                        <p>{service.description}</p>
+
+                      <div className="tile-content">
+                        <div className="tile-top">
+                          <h4 className="tile-name">{service.name}</h4>
+                          <span className="tile-duration">
+                            <ClockIcon size={13} />
+                            <span>{service.duration}</span>
+                          </span>
+                        </div>
+                        <p className="tile-desc">{service.description}</p>
+                        <div className="tile-price">{service.price}</div>
                       </div>
                     </div>
-
-                    <div className="service-select-right">
-                      <div className="service-select-price">{service.price}</div>
-                      <div className="service-select-time">{service.duration} aprox.</div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="wizard-nav-btns" style={{ justifyContent: "flex-end" }}>
                 <button type="button" className="btn btn-primary" onClick={nextStep}>
-                  <span>Continuar a Fecha y Hora</span>
+                  <span>Continuar a Profesional</span>
                   <ArrowRightIcon size={16} />
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 2: Fecha y Hora */}
+          {/* ================= STEP 2: PROFESIONAL ================= */}
           {currentStep === 2 && (
-            <div>
-              <h2 className="wizard-step-title">Paso 2: Elige fecha y horario</h2>
-              <p className="wizard-step-desc">
-                Horarios de consulta disponibles para {bookingData.serviceName || "tu atención médica"}.
-              </p>
+            <div className="step-pane">
+              <div className="step-pane-header">
+                <span className="step-tag">PASO 02</span>
+                <h2 className="step-title">Selecciona profesional</h2>
+                <p className="step-desc">
+                  Elige a tu estilista de confianza o la opción flexible con mayor disponibilidad de turnos.
+                </p>
+              </div>
 
-              <div className="datetime-grid">
-                {/* Date Picker */}
-                <div className="date-picker-box">
-                  <label htmlFor="date">
-                    <CalendarIcon size={16} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }} />
-                    Selecciona la fecha:
+              <div className="booking-stylists-grid">
+                {initialProfessionalsData.map((prof) => {
+                  const isSelected = bookingData.professionalId === prof.id;
+                  return (
+                    <div
+                      key={prof.id}
+                      className={`booking-stylist-tile ${isSelected ? "selected" : ""}`}
+                      onClick={() => handleProfessionalSelect(prof)}
+                    >
+                      <div className="stylist-tile-avatar-wrap">
+                        {prof.image ? (
+                          <img 
+                            src={prof.image} 
+                            alt={prof.name} 
+                            className="stylist-tile-img" 
+                          />
+                        ) : (
+                          <div className="stylist-tile-fallback-avatar">
+                            <span>{prof.avatar}</span>
+                          </div>
+                        )}
+                        {isSelected && (
+                          <div className="stylist-check-pill">
+                            <CheckIcon size={12} />
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="stylist-tile-info">
+                        <h4 className="stylist-tile-name">{prof.name}</h4>
+                        <span className="stylist-tile-spec">{prof.specialty}</span>
+                        <span className="stylist-tile-avail">
+                          <ClockIcon size={12} />
+                          <span>{prof.availability}</span>
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="booking-info-note">
+                ✨ Perfiles demostrativos para visualizar la selección de profesional en el flujo final.
+              </div>
+
+              <div className="wizard-nav-btns">
+                <button type="button" className="btn btn-secondary" onClick={prevStep}>
+                  <ArrowLeftIcon size={16} />
+                  <span>Atrás</span>
+                </button>
+                <button type="button" className="btn btn-primary" onClick={nextStep}>
+                  <span>Continuar a Horario</span>
+                  <ArrowRightIcon size={16} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ================= STEP 3: FECHA Y HORARIO ================= */}
+          {currentStep === 3 && (
+            <div className="step-pane">
+              <div className="step-pane-header">
+                <span className="step-tag">PASO 03</span>
+                <h2 className="step-title">Escoge fecha y horario</h2>
+                <p className="step-desc">
+                  Espacios disponibles para <strong>{bookingData.serviceName}</strong> con <strong>{bookingData.professionalName}</strong>.
+                </p>
+              </div>
+
+              <div className="booking-datetime-layout">
+                {/* Date Input Box */}
+                <div className="booking-date-card">
+                  <label htmlFor="bookingDateInput" className="editorial-field-label">
+                    <CalendarIcon size={16} />
+                    <span>Fecha deseada:</span>
                   </label>
                   <input
                     type="date"
-                    id="date"
+                    id="bookingDateInput"
                     name="date"
+                    className="editorial-date-input"
                     min={getTodayISO()}
                     value={bookingData.date}
                     onChange={handleFieldChange}
                   />
-                  <div style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)", marginTop: "0.85rem" }}>
-                    ℹ️ El consultorio atiende de Lunes a Sábado en horarios matutinos y vespertinos.
-                  </div>
+                  <p className="field-helper-text">
+                    Atención de Lunes a Sábado. Los horarios disponibles se ajustan a la estilista seleccionada.
+                  </p>
                 </div>
 
-                {/* Time Slots */}
-                <div className="time-slots-box">
-                  <label>
-                    <ClockIcon size={16} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }} />
-                    Horarios disponibles:
+                {/* Time Slots Box */}
+                <div className="booking-slots-card">
+                  <label className="editorial-field-label">
+                    <ClockIcon size={16} />
+                    <span>Horarios disponibles:</span>
                   </label>
 
-                  <div className="slots-grid">
-                    {TIME_SLOTS.map((slot) => {
+                  <div className="editorial-slots-grid">
+                    {SALON_TIME_SLOTS.map((slot) => {
                       const booked = isSlotBooked(slot);
+                      const isSelected = bookingData.time === slot;
+
                       return (
                         <button
                           type="button"
                           key={slot}
-                          className={`slot-btn ${bookingData.time === slot ? "selected" : ""}`}
+                          className={`editorial-slot-pill ${isSelected ? "selected" : ""}`}
                           onClick={() => {
                             if (!booked) {
                               setBookingData((prev) => ({ ...prev, time: slot }));
@@ -329,10 +446,9 @@ export const BookingPage = () => {
                             }
                           }}
                           disabled={booked}
-                          style={booked ? { opacity: 0.45, cursor: "not-allowed", textDecoration: "line-through" } : {}}
-                          title={booked ? "Horario ocupado" : "Disponible"}
+                          style={booked ? { opacity: 0.4, cursor: "not-allowed", textDecoration: "line-through" } : {}}
+                          title={booked ? "Horario no disponible" : "Turno disponible"}
                         >
-                          <ClockIcon size={14} />
                           <span>{slot}</span>
                         </button>
                       );
@@ -347,81 +463,74 @@ export const BookingPage = () => {
                   <span>Atrás</span>
                 </button>
                 <button type="button" className="btn btn-primary" onClick={nextStep}>
-                  <span>Continuar a Preregistro</span>
+                  <span>Continuar a Tus Datos</span>
                   <ArrowRightIcon size={16} />
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 3: Preregistro */}
-          {currentStep === 3 && (
-            <div>
-              <h2 className="wizard-step-title">Paso 3: Preregistro del Paciente</h2>
-              <p className="wizard-step-desc">
-                Ingresa tus datos de contacto básicos. No solicitamos historial clínico complejo en este paso.
-              </p>
+          {/* ================= STEP 4: DATOS DEL CLIENTE ================= */}
+          {currentStep === 4 && (
+            <div className="step-pane">
+              <div className="step-pane-header">
+                <span className="step-tag">PASO 04</span>
+                <h2 className="step-title">Tus datos de contacto</h2>
+                <p className="step-desc">
+                  Información para registrar tu cita y comunicarnos contigo para la confirmación.
+                </p>
+              </div>
 
-              <div className="form-grid">
-                <div>
-                  <label className="form-label" htmlFor="patientName">
-                    Nombre completo <span className="required-star">*</span>
+              <div className="editorial-form-grid">
+                <div className="form-field-group">
+                  <label className="editorial-field-label" htmlFor="clientName">
+                    Nombre completo <span className="req">*</span>
                   </label>
                   <input
                     type="text"
-                    id="patientName"
-                    name="patientName"
-                    placeholder="Ej. María Garza Peña"
-                    value={bookingData.patientName}
+                    id="clientName"
+                    name="clientName"
+                    className="editorial-text-input ph-mask"
+                    placeholder="Ej. Sofía Hernández"
+                    value={bookingData.clientName}
                     onChange={handleFieldChange}
                   />
                 </div>
 
-                <div>
-                  <label className="form-label" htmlFor="patientPhone">
-                    Teléfono / WhatsApp (10 dígitos) <span className="required-star">*</span>
+                <div className="form-field-group">
+                  <label className="editorial-field-label" htmlFor="clientPhone">
+                    Teléfono / WhatsApp (10 dígitos) <span className="req">*</span>
                   </label>
                   <input
                     type="tel"
-                    id="patientPhone"
-                    name="patientPhone"
-                    placeholder="Ej. 8991234567"
-                    value={bookingData.patientPhone}
+                    id="clientPhone"
+                    name="clientPhone"
+                    className="editorial-text-input ph-mask"
+                    placeholder="Ej. 899 124 1188"
+                    value={bookingData.clientPhone}
                     onChange={handleFieldChange}
                   />
                 </div>
 
-                <div>
-                  <label className="form-label" htmlFor="patientEmail">
-                    Correo electrónico <span className="required-star">*</span>
+                <div className="form-field-group full-width">
+                  <label className="editorial-field-label" htmlFor="clientEmail">
+                    Correo electrónico (opcional)
                   </label>
                   <input
                     type="email"
-                    id="patientEmail"
-                    name="patientEmail"
+                    id="clientEmail"
+                    name="clientEmail"
+                    className="editorial-text-input ph-mask"
                     placeholder="correo@ejemplo.com"
-                    value={bookingData.patientEmail}
+                    value={bookingData.clientEmail}
                     onChange={handleFieldChange}
                   />
                 </div>
 
-                <div>
-                  <label className="form-label" htmlFor="birthDate">
-                    Fecha de nacimiento (opcional)
-                  </label>
-                  <input
-                    type="date"
-                    id="birthDate"
-                    name="birthDate"
-                    value={bookingData.birthDate}
-                    onChange={handleFieldChange}
-                  />
-                </div>
-
-                <div className="form-group-full">
-                  <label className="form-label">¿Es tu primera consulta en el consultorio?</label>
-                  <div className="form-radio-group">
-                    <label className="radio-label">
+                <div className="form-field-group full-width">
+                  <label className="editorial-field-label">¿Es tu primera visita a Bellart Salón?</label>
+                  <div className="editorial-radio-row">
+                    <label className="editorial-radio-item">
                       <input
                         type="radio"
                         name="isFirstTime"
@@ -429,9 +538,9 @@ export const BookingPage = () => {
                         checked={bookingData.isFirstTime === true}
                         onChange={() => setBookingData((prev) => ({ ...prev, isFirstTime: true }))}
                       />
-                      <span>Sí, es mi primera consulta</span>
+                      <span>Sí, es mi primera visita</span>
                     </label>
-                    <label className="radio-label">
+                    <label className="editorial-radio-item">
                       <input
                         type="radio"
                         name="isFirstTime"
@@ -439,52 +548,39 @@ export const BookingPage = () => {
                         checked={bookingData.isFirstTime === false}
                         onChange={() => setBookingData((prev) => ({ ...prev, isFirstTime: false }))}
                       />
-                      <span>No, ya soy paciente del consultorio</span>
+                      <span>No, ya soy clienta frecuente</span>
                     </label>
                   </div>
                 </div>
 
-                <div className="form-group-full">
-                  <label className="form-label" htmlFor="reason">
-                    Motivo general de la consulta <span className="required-star">*</span>
+                <div className="form-field-group full-width">
+                  <label className="editorial-field-label" htmlFor="comments">
+                    Comentarios opcionales para la estilista
                   </label>
                   <textarea
-                    id="reason"
-                    name="reason"
-                    rows="2"
-                    placeholder="Ej. Valoración general por malestar respiratorio leve, chequeo de presión, dolor muscular..."
-                    value={bookingData.reason}
-                    onChange={handleFieldChange}
-                  ></textarea>
-                </div>
-
-                <div className="form-group-full">
-                  <label className="form-label" htmlFor="comments">
-                    Comentarios adicionales u observaciones (opcional)
-                  </label>
-                  <input
-                    type="text"
                     id="comments"
                     name="comments"
-                    placeholder="Ej. Prefiero horario exacto, vengo acompañado..."
+                    className="editorial-text-input ph-mask"
+                    rows="2"
+                    placeholder="Ej. Cabello teñido previamente, preferencia de tono frío, diseño especial de uñas, etc."
                     value={bookingData.comments}
                     onChange={handleFieldChange}
-                  />
+                  ></textarea>
                 </div>
               </div>
 
               {/* Privacy Notice Acceptance */}
-              <div className="privacy-notice-box">
+              <div className="editorial-privacy-notice">
                 <input
                   type="checkbox"
                   id="privacyAccepted"
                   name="privacyAccepted"
-                  className="privacy-checkbox"
+                  className="privacy-check-box"
                   checked={bookingData.privacyAccepted}
                   onChange={handleFieldChange}
                 />
-                <label htmlFor="privacyAccepted" style={{ cursor: "pointer" }}>
-                  Acepto el <strong>aviso de privacidad del consultorio</strong>. Entiendo que los datos registrados serán utilizados exclusivamente para coordinar mi cita médica y recibir confirmación directa por parte del personal de recepción.
+                <label htmlFor="privacyAccepted" className="privacy-check-label">
+                  Acepto el <strong>aviso de privacidad de Bellart Salón</strong>. Los datos registrados serán utilizados exclusivamente para coordinar mi cita y confirmación previa por WhatsApp.
                 </label>
               </div>
 
@@ -494,74 +590,145 @@ export const BookingPage = () => {
                   <span>Atrás</span>
                 </button>
                 <button type="button" className="btn btn-primary" onClick={nextStep}>
-                  <span>Revisar Resumen</span>
+                  <span>Continuar a Anticipo</span>
                   <ArrowRightIcon size={16} />
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 4: Resumen */}
-          {currentStep === 4 && (
-            <div>
-              <h2 className="wizard-step-title">Paso 4: Resumen de tu solicitud</h2>
-              <p className="wizard-step-desc">
-                Verifica los datos antes de enviar tu solicitud al consultorio.
-              </p>
+          {/* ================= STEP 5: ANTICIPO DEMO ================= */}
+          {currentStep === 5 && (
+            <div className="step-pane">
+              <div className="step-pane-header">
+                <span className="step-tag">PASO 05</span>
+                <h2 className="step-title">Anticipo y Resumen</h2>
+                <p className="step-desc">
+                  Puedes registrar un anticipo para asegurar tu horario con la estilista seleccionada.
+                </p>
+              </div>
 
-              <div className="summary-card">
-                <div className="summary-row">
-                  <span className="summary-label">Médico tratante:</span>
-                  <span className="summary-value">Dr. Luis Armando Rosado</span>
+              {/* Financial Breakdown Card with Demo Mode Badge */}
+              <div className="editorial-deposit-card">
+                <div className="deposit-card-top-badge">
+                  <span className="demo-mode-pill">MODO DEMOSTRACIÓN</span>
                 </div>
-                <div className="summary-row">
-                  <span className="summary-label">Ubicación:</span>
-                  <span className="summary-value">Centro de Especialidades Médicas (Reynosa, Tamps.)</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Tipo de consulta:</span>
-                  <span className="summary-value">{bookingData.serviceName} ({bookingData.serviceDuration})</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Fecha y horario:</span>
-                  <span className="summary-value" style={{ color: "var(--color-accent-hover)" }}>
-                    {bookingData.date} a las {bookingData.time}
-                  </span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Precio demo estimado:</span>
-                  <span className="summary-value">{bookingData.servicePrice}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Nombre del paciente:</span>
-                  <span className="summary-value ph-mask">{bookingData.patientName}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Teléfono / WhatsApp:</span>
-                  <span className="summary-value ph-mask">{bookingData.patientPhone}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Correo:</span>
-                  <span className="summary-value ph-mask">{bookingData.patientEmail}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Primera consulta:</span>
-                  <span className="summary-value">{bookingData.isFirstTime ? "Sí (Paciente nuevo)" : "No (Seguimiento)"}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Motivo general:</span>
-                  <span className="summary-value ph-mask" style={{ maxWidth: "340px" }}>{bookingData.reason}</span>
+
+                <div className="deposit-details-list">
+                  <div className="deposit-item-row">
+                    <span className="item-lbl">Servicio seleccionado:</span>
+                    <strong className="item-val">{bookingData.serviceName} ({bookingData.serviceDuration})</strong>
+                  </div>
+                  <div className="deposit-item-row">
+                    <span className="item-lbl">Profesional / Estilista:</span>
+                    <strong className="item-val">{bookingData.professionalName}</strong>
+                  </div>
+                  <div className="deposit-item-row">
+                    <span className="item-lbl">Fecha y hora:</span>
+                    <strong className="item-val">{bookingData.date} — {bookingData.time}</strong>
+                  </div>
+                  <div className="deposit-item-row">
+                    <span className="item-lbl">Costo estimado:</span>
+                    <strong className="item-val">${serviceCost} MXN</strong>
+                  </div>
+
+                  <div className="deposit-card-divider"></div>
+
+                  <div className="deposit-item-row highlight-row">
+                    <span className="item-lbl">Anticipo sugerido:</span>
+                    <strong className="item-val highlight-val">
+                      {bookingData.hasDeposit ? `$${bookingData.suggestedDeposit} MXN` : "$0 MXN"}
+                    </strong>
+                  </div>
+
+                  <div className="deposit-item-row balance-row">
+                    <span className="item-lbl">Saldo a liquidar en salón:</span>
+                    <strong className="item-val balance-val">
+                      ${remainingBalance} MXN
+                    </strong>
+                  </div>
                 </div>
               </div>
 
+              {/* Toggle Anticipo Demo vs Sin Anticipo */}
+              <div className="deposit-toggle-container">
+                <label className="editorial-field-label" style={{ marginBottom: "0.85rem", display: "block" }}>
+                  Selecciona la modalidad de reserva:
+                </label>
+
+                <div className="deposit-toggle-cards">
+                  <div 
+                    className={`toggle-option-card ${bookingData.hasDeposit ? "selected" : ""}`}
+                    onClick={() => setBookingData((prev) => ({ ...prev, hasDeposit: true }))}
+                  >
+                    <div className="toggle-card-radio">
+                      {bookingData.hasDeposit && <div className="radio-inner-dot"></div>}
+                    </div>
+                    <div>
+                      <strong>Registrar anticipo demo (${bookingData.suggestedDeposit} MXN)</strong>
+                      <p>Simula el pago previo para apartar tu horario garantizado.</p>
+                    </div>
+                  </div>
+
+                  <div 
+                    className={`toggle-option-card ${!bookingData.hasDeposit ? "selected" : ""}`}
+                    onClick={() => setBookingData((prev) => ({ ...prev, hasDeposit: false }))}
+                  >
+                    <div className="toggle-card-radio">
+                      {!bookingData.hasDeposit && <div className="radio-inner-dot"></div>}
+                    </div>
+                    <div>
+                      <strong>Reservar sin anticipo</strong>
+                      <p>Liquidarás el total de ${serviceCost} MXN directamente al acudir al salón.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Visual Payment Methods */}
+              {bookingData.hasDeposit && (
+                <div className="visual-methods-wrap">
+                  <label className="editorial-field-label" style={{ marginBottom: "0.6rem", display: "block" }}>
+                    Método de demostración visual:
+                  </label>
+
+                  <div className="editorial-methods-grid">
+                    {[
+                      { id: "Tarjeta demo", label: "Tarjeta", icon: <CreditCardIcon size={17} /> },
+                      { id: "Transferencia demo", label: "Transferencia", icon: <SparklesIcon size={17} /> },
+                      { id: "Efectivo en salón", label: "Efectivo en salón", icon: <ClockIcon size={17} /> }
+                    ].map((method) => (
+                      <button
+                        type="button"
+                        key={method.id}
+                        className={`editorial-method-btn ${bookingData.paymentMethod === method.id ? "active" : ""}`}
+                        onClick={() => setBookingData((prev) => ({ ...prev, paymentMethod: method.id }))}
+                      >
+                        {method.icon}
+                        <span>{method.label}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="demo-disclaimer-box">
+                    ℹ️ <strong>Simulación comercial:</strong> No se efectúa ningún cobro financiero real. La versión final puede vincularse a pasarelas bancarias o cobro con terminal en salón.
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation & Final Submit */}
               <div className="wizard-nav-btns">
                 <button type="button" className="btn btn-secondary" onClick={prevStep}>
                   <ArrowLeftIcon size={16} />
-                  <span>Modificar datos</span>
+                  <span>Atrás</span>
                 </button>
-                <button type="button" className="btn btn-accent" onClick={handleSubmitAppointment} style={{ padding: "0.85rem 1.75rem", fontSize: "1.05rem" }}>
-                  <CheckIcon size={20} />
-                  <span>Solicitar cita</span>
+                <button 
+                  type="button" 
+                  className="btn btn-primary btn-submit-reserve" 
+                  onClick={handleSubmitAppointment}
+                >
+                  <CheckIcon size={19} />
+                  <span>Confirmar mi Reserva</span>
                 </button>
               </div>
             </div>

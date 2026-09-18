@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { StethoscopeIcon, UserIcon, ArrowLeftIcon, AlertCircleIcon, ArrowRightIcon } from "../../components/common/Icons";
+import { SparklesIcon, ArrowLeftIcon, AlertCircleIcon, ArrowRightIcon } from "../../components/common/Icons";
 import { trackEvent, useTrackOnMount } from "../../analytics/analytics";
 
 export const AdminLoginPage = () => {
@@ -16,10 +16,10 @@ export const AdminLoginPage = () => {
     e.preventDefault();
     setError("");
 
-    // Demo credentials check
+    // Demo credentials check (preserved as requested)
     if (email.trim() === "admin@clinicflow.com" && password === "demo123") {
       trackEvent("admin_login_success", { route: "/admin/dashboard" });
-      localStorage.setItem("clinicflow_auth", "true");
+      localStorage.setItem("beautyflow_auth", "true");
       navigate("/admin/dashboard");
     } else {
       setError("Credenciales incorrectas. Utiliza el usuario demo indicado abajo.");
@@ -36,15 +36,15 @@ export const AdminLoginPage = () => {
     <div className="login-page-wrap">
       <div className="login-card animate-fade-in">
         <div className="login-brand-header">
-          <div className="login-logo-circle">
-            <StethoscopeIcon size={28} />
+          <div className="login-logo-circle" style={{ background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)" }}>
+            <SparklesIcon size={26} />
           </div>
-          <span className="login-demo-pill">Acceso demo de recepción</span>
-          <h1 style={{ fontSize: "1.5rem", color: "var(--color-primary)", marginBottom: "0.35rem" }}>
-            Consultorio Dr. Luis Armando Rosado
+          <span className="login-demo-pill">Acceso demo para administración</span>
+          <h1 style={{ fontSize: "1.55rem", color: "var(--color-primary)", marginBottom: "0.35rem" }}>
+            Panel Bellart
           </h1>
           <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)" }}>
-            Ingreso al panel de gestión de citas y pacientes
+            Gestión interna de citas, agenda, anticipos y clientes
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export const AdminLoginPage = () => {
         <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
           <Link to="/" style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
             <ArrowLeftIcon size={14} />
-            <span>Volver al sitio público del consultorio</span>
+            <span>Volver al sitio público de Bellart Salón</span>
           </Link>
         </div>
       </div>

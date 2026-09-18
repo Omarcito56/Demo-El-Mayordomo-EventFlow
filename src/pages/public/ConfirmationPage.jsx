@@ -1,95 +1,122 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
-import { CheckCircleIcon, WhatsAppIcon, CalendarIcon, ArrowLeftIcon, MapPinIcon, ClockIcon } from "../../components/common/Icons";
+import { 
+  CheckIcon, WhatsAppIcon, CalendarIcon, ArrowLeftIcon, 
+  SparklesIcon, ClockIcon 
+} from "../../components/common/Icons";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { initialBusinessData } from "../../data/businessData";
+import confirmationBeautyImg from "../../assets/images/beauty/gallery-1.jpg";
 
 export const ConfirmationPage = () => {
   const location = useLocation();
   const appointment = location.state?.appointment || {
-    folio: "MED-000128",
-    patientName: "Paciente Demo",
-    serviceName: "Consulta médica",
+    folio: "BEL-000128",
+    clientName: "Cliente Demo",
+    patientName: "Cliente Demo",
+    serviceName: "Coloración",
+    professional: "Andrea",
     date: new Date().toISOString().split("T")[0],
-    time: "10:00 a.m.",
-    patientPhone: "8991234567",
+    time: "10:30 a.m.",
+    depositAmount: "$200",
+    clientPhone: "8991241188",
     status: "Pendiente"
   };
 
+  const clientDisplayName = appointment.clientName || appointment.patientName || "Cliente";
+  const professionalName = appointment.professional || "Sin preferencia";
+  const depositText = appointment.depositAmount ? `${appointment.depositAmount} demo` : "Sin anticipo";
+
   const whatsappMessage = encodeURIComponent(
-    `Hola, registré mi solicitud de cita médica (Folio: ${appointment.folio}) con el Dr. Luis Armando Rosado para el día ${appointment.date} a las ${appointment.time}. Mi nombre es ${appointment.patientName}.`
+    `Hola, registré mi solicitud de cita en Bellart Salón (Folio: ${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}. Mi nombre es ${clientDisplayName}.`
   );
 
   return (
-    <div className="booking-page-wrap">
+    <div className="confirmation-editorial-wrap">
       <div className="container">
-        <div className="confirmation-card animate-fade-in">
-          {/* Success Badge */}
-          <div className="confirmation-check-badge">
-            <CheckCircleIcon size={42} />
-          </div>
-
-          <span className="confirmation-folio-pill ph-mask">
-            FOLIO: {appointment.folio}
-          </span>
-
-          <h1 className="confirmation-title">¡Solicitud registrada con éxito!</h1>
-          
-          <p className="confirmation-subtext">
-            {initialBusinessData.confirmationMessage}
-          </p>
-
-          {/* Details Box */}
-          <div className="confirmation-details-box">
-            <div className="conf-detail-row">
-              <span className="conf-detail-label">Paciente:</span>
-              <span className="conf-detail-val ph-mask">{appointment.patientName}</span>
-            </div>
-            <div className="conf-detail-row">
-              <span className="conf-detail-label">Tipo de consulta:</span>
-              <span className="conf-detail-val">{appointment.serviceName}</span>
-            </div>
-            <div className="conf-detail-row">
-              <span className="conf-detail-label">Fecha y horario:</span>
-              <span className="conf-detail-val" style={{ color: "var(--color-primary)" }}>
-                {appointment.date} — {appointment.time}
-              </span>
-            </div>
-            <div className="conf-detail-row">
-              <span className="conf-detail-label">Teléfono registrado:</span>
-              <span className="conf-detail-val ph-mask">{appointment.patientPhone}</span>
-            </div>
-            <div className="conf-detail-row">
-              <span className="conf-detail-label">Ubicación:</span>
-              <span className="conf-detail-val">{initialBusinessData.locationName}</span>
-            </div>
-            <div className="conf-detail-row">
-              <span className="conf-detail-label">Estado actual:</span>
-              <StatusBadge status="Pendiente" />
+        <div className="confirmation-editorial-card animate-fade-in">
+          {/* Left / Top Side: Decorative photo thumbnail */}
+          <div className="confirmation-side-visual">
+            <img 
+              src={confirmationBeautyImg} 
+              alt="Momento Bellart Salón" 
+              className="confirmation-visual-img"
+            />
+            <div className="confirmation-visual-overlay">
+              <span className="confirmation-visual-tag">BELLART SALÓN</span>
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="confirmation-actions">
-            <a 
-              href={`https://wa.me/52${initialBusinessData.whatsapp}?text=${whatsappMessage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-whatsapp"
-            >
-              <WhatsAppIcon size={18} />
-              <span>Confirmar o contactar por WhatsApp</span>
-            </a>
+          {/* Right Side: Details & Actions */}
+          <div className="confirmation-card-content">
+            <div className="confirmation-success-badge">
+              <CheckIcon size={22} />
+            </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginTop: "0.5rem" }}>
-              <Link to="/agendar" className="btn btn-secondary">
-                <CalendarIcon size={16} />
-                <span>Agendar otra cita</span>
-              </Link>
-              <Link to="/" className="btn btn-outline">
-                <ArrowLeftIcon size={16} />
-                <span>Volver al inicio</span>
-              </Link>
+            <span className="confirmation-folio-pill ph-mask">
+              FOLIO: {appointment.folio}
+            </span>
+
+            <h1 className="confirmation-title-editorial">
+              Tu cita quedó registrada <span className="sparkle-icon">✨</span>
+            </h1>
+            
+            <p className="confirmation-subtext-editorial">
+              Bellart podrá revisar tu solicitud y confirmar el horario contigo.
+            </p>
+
+            {/* Details Table */}
+            <div className="confirmation-editorial-details">
+              <div className="conf-row">
+                <span className="conf-label">Cliente:</span>
+                <span className="conf-value ph-mask">{clientDisplayName}</span>
+              </div>
+              <div className="conf-row">
+                <span className="conf-label">Servicio:</span>
+                <span className="conf-value">{appointment.serviceName}</span>
+              </div>
+              <div className="conf-row">
+                <span className="conf-label">Profesional / Estilista:</span>
+                <span className="conf-value highlight-stylist">{professionalName}</span>
+              </div>
+              <div className="conf-row">
+                <span className="conf-label">Fecha y horario:</span>
+                <span className="conf-value highlight-datetime">
+                  {appointment.date} — {appointment.time}
+                </span>
+              </div>
+              <div className="conf-row">
+                <span className="conf-label">Anticipo registrado:</span>
+                <span className="conf-value highlight-deposit">{depositText}</span>
+              </div>
+              <div className="conf-row">
+                <span className="conf-label">Estado actual:</span>
+                <StatusBadge status="Pendiente" />
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="confirmation-editorial-actions">
+              <a 
+                href={`https://wa.me/52${initialBusinessData.whatsapp}?text=${whatsappMessage}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-whatsapp btn-block"
+              >
+                <WhatsAppIcon size={18} />
+                <span>Contactar por WhatsApp</span>
+              </a>
+
+              <div className="confirmation-secondary-links">
+                <Link to="/" className="btn btn-outline btn-sm">
+                  <ArrowLeftIcon size={15} />
+                  <span>Volver al inicio</span>
+                </Link>
+                <Link to="/agendar" className="btn btn-secondary btn-sm">
+                  <CalendarIcon size={15} />
+                  <span>Reservar otra cita</span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

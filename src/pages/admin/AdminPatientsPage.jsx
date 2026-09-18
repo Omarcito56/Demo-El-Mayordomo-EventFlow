@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useClinicData } from "../../hooks/useClinicData";
-import { SearchIcon, UserIcon, PhoneIcon, MailIcon, CalendarIcon, WhatsAppIcon } from "../../components/common/Icons";
+import { SearchIcon, UserIcon, WhatsAppIcon, ScissorsIcon } from "../../components/common/Icons";
 import { trackEvent, useTrackOnMount } from "../../analytics/analytics";
 
 export const AdminPatientsPage = () => {
-  const { patients, appointments } = useClinicData();
+  const { patients } = useClinicData();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Registrar apertura protegida contra duplicados de StrictMode
-  useTrackOnMount("admin_patients_opened", { module: "patients" });
+  // Mantener evento existente con route tracking
+  useTrackOnMount("admin_patients_opened", { module: "clients" });
 
   const filteredPatients = patients.filter((patient) => {
     const term = searchTerm.toLowerCase();
     return (
       patient.name.toLowerCase().includes(term) ||
       patient.phone.includes(term) ||
-      patient.email.toLowerCase().includes(term)
+      (patient.email && patient.email.toLowerCase().includes(term))
     );
   });
 
@@ -24,14 +24,14 @@ export const AdminPatientsPage = () => {
       <div className="admin-card">
         <div className="admin-card-header">
           <div>
-            <h2 className="admin-card-title">Directorio de Pacientes</h2>
+            <h2 className="admin-card-title">Directorio de Clientes</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Pacientes registrados en el consultorio mediante la web y recepción.
+              Directorio de clientas registradas en Bellart Salón mediante la web y reservas previas.
             </p>
           </div>
 
           <div style={{ fontSize: "0.86rem", color: "var(--color-text-secondary)" }}>
-            Total pacientes: <strong>{filteredPatients.length}</strong>
+            Total clientes: <strong>{filteredPatients.length}</strong>
           </div>
         </div>
 
@@ -41,23 +41,23 @@ export const AdminPatientsPage = () => {
             <SearchIcon size={18} />
             <input
               type="text"
-              placeholder="Buscar paciente por nombre, teléfono o correo..."
+              placeholder="Buscar cliente por nombre, teléfono o correo..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
 
-        {/* Patients Table */}
+        {/* Clients Table: Cliente, Teléfono, Correo, Última visita, Próxima cita, Estado, Contacto */}
         <div className="table-responsive">
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Nombre del Paciente</th>
+                <th>Cliente</th>
                 <th>Teléfono / WhatsApp</th>
                 <th>Correo Electrónico</th>
-                <th>Última Consulta</th>
-                <th>Total Citas</th>
+                <th>Última Visita</th>
+                <th>Próxima Cita</th>
                 <th>Estado</th>
                 <th>Contacto</th>
               </tr>
@@ -66,7 +66,7 @@ export const AdminPatientsPage = () => {
               {filteredPatients.length === 0 ? (
                 <tr>
                   <td colSpan="7" style={{ textAlign: "center", padding: "3rem", color: "var(--color-text-secondary)" }}>
-                    No se encontraron pacientes con los criterios de búsqueda.
+                    No se encontraron clientes con los criterios de búsqueda.
                   </td>
                 </tr>
               ) : (
@@ -75,8 +75,8 @@ export const AdminPatientsPage = () => {
                     <td>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
                         <div style={{ 
-                          width: "34px", 
-                          height: "34px", 
+                          width: "36px", 
+                          height: "36px", 
                           borderRadius: "50%", 
                           backgroundColor: "var(--color-primary-soft)", 
                           color: "var(--color-primary)",
@@ -84,17 +84,15 @@ export const AdminPatientsPage = () => {
                           alignItems: "center",
                           justifyContent: "center",
                           fontWeight: 700,
-                          fontSize: "0.85rem"
+                          fontSize: "0.88rem"
                         }}>
                           {patient.name.charAt(0)}
                         </div>
                         <div>
                           <div className="table-patient-name ph-mask">{patient.name}</div>
-                          {patient.birthDate && (
-                            <div className="ph-mask" style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
-                              Nacimiento: {patient.birthDate}
-                            </div>
-                          )}
+                          <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
+                            Estilista preferida: {patient.preferredStylist || "Andrea"}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -105,19 +103,13 @@ export const AdminPatientsPage = () => {
                       <span className="ph-mask" style={{ color: "var(--color-text-secondary)" }}>{patient.email || "—"}</span>
                     </td>
                     <td>
-                      <span style={{ color: "var(--color-primary)", fontWeight: 500 }}>
+                      <span style={{ color: "var(--color-text-primary)", fontWeight: 500 }}>
                         {patient.lastAppointmentDate || "Pendiente"}
                       </span>
                     </td>
                     <td>
-                      <span style={{ 
-                        backgroundColor: "#F1F5F9", 
-                        padding: "0.2rem 0.55rem", 
-                        borderRadius: "var(--radius-full)", 
-                        fontSize: "0.8rem",
-                        fontWeight: 700 
-                      }}>
-                        {patient.totalAppointments || 1} cita(s)
+                      <span style={{ color: "var(--color-accent)", fontWeight: 600 }}>
+                        {patient.nextAppointmentDate || "Por programar"}
                       </span>
                     </td>
                     <td>
@@ -128,15 +120,15 @@ export const AdminPatientsPage = () => {
                     </td>
                     <td>
                       <a 
-                        href={`https://wa.me/52${patient.phone}?text=${encodeURIComponent(`Hola ${patient.name}, te contactamos del consultorio del Dr. Luis Armando Rosado.`)}`}
+                        href={`https://wa.me/52${patient.phone}?text=${encodeURIComponent(`Hola ${patient.name}, te contactamos de Bellart Salón.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn btn-sm btn-action-wa"
                         title="Enviar mensaje por WhatsApp"
                         onClick={() => {
                           trackEvent("whatsapp_reminder_clicked", {
-                            module: "patients",
-                            record_type: "patient",
+                            module: "clients",
+                            record_type: "client",
                           });
                         }}
                       >

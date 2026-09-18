@@ -5,13 +5,12 @@ import { initialPatientsData } from "../data/patientsData";
 import { initialAppointmentsData } from "../data/appointmentsData";
 import { trackEvent } from "../analytics/analytics";
 
-
 const STORAGE_KEYS = {
-  BUSINESS: "clinicflow_business",
-  SERVICES: "clinicflow_services",
-  PATIENTS: "clinicflow_patients",
-  APPOINTMENTS: "clinicflow_appointments",
-  AUTH: "clinicflow_auth"
+  BUSINESS: "beautyflow_business",
+  SERVICES: "beautyflow_services",
+  PATIENTS: "beautyflow_clients",
+  APPOINTMENTS: "beautyflow_appointments",
+  AUTH: "beautyflow_auth"
 };
 
 // Safe JSON loader
@@ -28,7 +27,7 @@ const getStored = (key, fallback) => {
 const setStored = (key, value) => {
   try {
     localStorage.setItem(key, JSON.stringify(value));
-    window.dispatchEvent(new Event("clinicflow_storage_updated"));
+    window.dispatchEvent(new Event("beautyflow_storage_updated"));
   } catch (e) {
     console.error(`Error writing ${key} to localStorage`, e);
   }
@@ -69,25 +68,25 @@ export const useClinicData = () => {
       refreshFromStorage();
     };
 
-    window.addEventListener("clinicflow_storage_updated", handleStorageChange);
+    window.addEventListener("beautyflow_storage_updated", handleStorageChange);
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      window.removeEventListener("clinicflow_storage_updated", handleStorageChange);
+      window.removeEventListener("beautyflow_storage_updated", handleStorageChange);
       window.removeEventListener("storage", handleStorageChange);
     };
   }, [refreshFromStorage]);
 
-  // Create new appointment
+  // Create new salon appointment
   const createAppointment = (formData) => {
     const currentApts = getStored(STORAGE_KEYS.APPOINTMENTS, initialAppointmentsData);
-    const currentPats = getStored(STORAGE_KEYS.PATIENTS, initialPatientsData);
+    const currentClients = getStored(STORAGE_KEYS.PATIENTS, initialPatientsData);
 
-    // Compute next sequential folio: MED-000128 etc.
+    // Compute next sequential folio: BEL-000128 etc.
     let nextNum = 126;
     currentApts.forEach((apt) => {
-      if (apt.folio && apt.folio.startsWith("MED-")) {
-        const numPart = parseInt(apt.folio.replace("MED-", ""), 10);
+      if (apt.folio && apt.folio.startsWith("BEL-")) {
+        const numPart = parseInt(apt.folio.replace("BEL-", ""), 10);
         if (!isNaN(numPart) && numPart >= nextNum) {
           nextNum = numPart + 1;
         }
@@ -95,21 +94,39 @@ export const useClinicData = () => {
     });
 
     const paddedNum = String(nextNum).padStart(6, "0");
-    const folio = `MED-${paddedNum}`;
+    const folio = `BEL-${paddedNum}`;
+
+    const costNum = typeof formData.serviceCostNumber === "number" ? formData.serviceCostNumber : 650;
+    const hasDeposit = Boolean(formData.hasDeposit);
+    const depNum = hasDeposit ? (typeof formData.depositNumber === "number" ? formData.depositNumber : 200) : 0;
+    const balanceNum = Math.max(0, costNum - depNum);
+
+    const clientName = formData.clientName || formData.patientName || "Cliente";
+    const clientPhone = formData.clientPhone || formData.patientPhone || "";
+    const clientEmail = formData.clientEmail || formData.patientEmail || "";
 
     const newAppointment = {
       id: `apt-${Date.now()}`,
       folio,
-      patientName: formData.patientName || "Paciente",
-      patientPhone: formData.patientPhone || "",
-      patientEmail: formData.patientEmail || "",
-      birthDate: formData.birthDate || "",
+      patientName: clientName,
+      clientName: clientName,
+      patientPhone: clientPhone,
+      clientPhone: clientPhone,
+      patientEmail: clientEmail,
+      clientEmail: clientEmail,
       isFirstTime: Boolean(formData.isFirstTime),
       serviceId: formData.serviceId,
-      serviceName: formData.serviceName || "Consulta médica",
+      serviceName: formData.serviceName || "Servicio Bellart",
+      professional: formData.professional || "Sin preferencia",
       date: formData.date,
       time: formData.time,
-      reason: formData.reason || "Consulta médica",
+      cost: `$${costNum}`,
+      costNumber: costNum,
+      depositAmount: hasDeposit ? `$${depNum}` : "$0",
+      depositNumber: depNum,
+      balance: `$${balanceNum}`,
+      depositStatus: hasDeposit ? "Pagado" : "No requerido",
+      paymentMethod: hasDeposit ? (formData.paymentMethod || "Tarjeta demo") : "En salón",
       comments: formData.comments || "",
       status: "Pendiente",
       createdAt: new Date().toISOString()
@@ -118,37 +135,38 @@ export const useClinicData = () => {
     const updatedApts = [newAppointment, ...currentApts];
     setStored(STORAGE_KEYS.APPOINTMENTS, updatedApts);
 
-    // Check if patient exists in patients list by phone or email
-    const patientIndex = currentPats.findIndex(
-      (p) =>
-        (formData.patientPhone && p.phone === formData.patientPhone) ||
-        (formData.patientEmail && p.email.toLowerCase() === formData.patientEmail.toLowerCase())
+    // Check if client exists by phone or email
+    const clientIndex = currentClients.findIndex(
+      (c) =>
+        (clientPhone && c.phone === clientPhone) ||
+        (clientEmail && c.email && c.email.toLowerCase() === clientEmail.toLowerCase())
     );
 
-    let updatedPats = [...currentPats];
-    if (patientIndex >= 0) {
-      // Update existing patient
-      updatedPats[patientIndex] = {
-        ...updatedPats[patientIndex],
+    let updatedClients = [...currentClients];
+    if (clientIndex >= 0) {
+      updatedClients[clientIndex] = {
+        ...updatedClients[clientIndex],
         lastAppointmentDate: formData.date,
-        totalAppointments: (updatedPats[patientIndex].totalAppointments || 1) + 1,
+        nextAppointmentDate: formData.date,
+        totalAppointments: (updatedClients[clientIndex].totalAppointments || 1) + 1,
+        preferredStylist: formData.professional || updatedClients[clientIndex].preferredStylist || "Andrea",
         status: "Activo"
       };
     } else {
-      // Create new patient
-      const newPatient = {
-        id: `pat-${Date.now()}`,
-        name: formData.patientName,
-        phone: formData.patientPhone,
-        email: formData.patientEmail,
-        birthDate: formData.birthDate || "",
+      const newClient = {
+        id: `cli-${Date.now()}`,
+        name: clientName,
+        phone: clientPhone,
+        email: clientEmail,
         lastAppointmentDate: formData.date,
+        nextAppointmentDate: formData.date,
         totalAppointments: 1,
+        preferredStylist: formData.professional || "Andrea",
         status: "Activo"
       };
-      updatedPats = [newPatient, ...updatedPats];
+      updatedClients = [newClient, ...updatedClients];
     }
-    setStored(STORAGE_KEYS.PATIENTS, updatedPats);
+    setStored(STORAGE_KEYS.PATIENTS, updatedClients);
 
     return newAppointment;
   };
@@ -164,7 +182,6 @@ export const useClinicData = () => {
     );
     setStored(STORAGE_KEYS.APPOINTMENTS, updatedApts);
 
-    // Evento de analytics: cambio de estado solo si realmente cambió
     if (oldStatus !== newStatus) {
       trackEvent("record_status_changed", {
         from_status: oldStatus,
@@ -189,12 +206,10 @@ export const useClinicData = () => {
     );
     setStored(STORAGE_KEYS.APPOINTMENTS, updatedApts);
 
-    // Evento de analytics: cita reagendada (sin fecha, hora ni paciente)
     trackEvent("record_rescheduled", {
       record_type: "appointment"
     });
   };
-
 
   // Update business configuration
   const updateBusiness = (updatedData) => {
@@ -221,6 +236,10 @@ export const useClinicData = () => {
 
   const todayStr = getTodayISO();
 
+  const totalDeposits = appointments
+    .filter((a) => a.depositStatus === "Pagado")
+    .reduce((sum, a) => sum + (a.depositNumber || 0), 0);
+
   const metrics = {
     total: appointments.length,
     today: appointments.filter((a) => a.date === todayStr && a.status !== "Cancelada").length,
@@ -229,13 +248,17 @@ export const useClinicData = () => {
     attended: appointments.filter((a) => a.status === "Atendida").length,
     rescheduled: appointments.filter((a) => a.status === "Reagendada").length,
     cancelled: appointments.filter((a) => a.status === "Cancelada").length,
-    newPatientsToday: appointments.filter((a) => a.date === todayStr && a.isFirstTime).length
+    newClientsToday: appointments.filter((a) => a.date === todayStr && a.isFirstTime).length,
+    newPatientsToday: appointments.filter((a) => a.date === todayStr && a.isFirstTime).length,
+    totalDeposits,
+    activeServices: services.filter((s) => s.status === "Activo").length
   };
 
   return {
     business,
     services,
     patients,
+    clients: patients,
     appointments,
     metrics,
     createAppointment,

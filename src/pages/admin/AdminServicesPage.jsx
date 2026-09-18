@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useClinicData } from "../../hooks/useClinicData";
-import { SearchIcon, ClockIcon, StethoscopeIcon } from "../../components/common/Icons";
+import { 
+  SearchIcon, ClockIcon, ScissorsIcon, SparklesIcon, 
+  PaletteIcon, DropletIcon, StarIcon, HandIcon 
+} from "../../components/common/Icons";
 import { trackEvent, useTrackOnMount } from "../../analytics/analytics";
 
 export const AdminServicesPage = () => {
@@ -10,11 +13,24 @@ export const AdminServicesPage = () => {
   // Registrar apertura protegida contra duplicados de StrictMode
   useTrackOnMount("admin_services_opened", { module: "services" });
 
+  const getIcon = (type) => {
+    switch (type) {
+      case "scissors": return <ScissorsIcon size={18} />;
+      case "sparkles": return <SparklesIcon size={18} />;
+      case "palette": return <PaletteIcon size={18} />;
+      case "droplet": return <DropletIcon size={18} />;
+      case "star": return <StarIcon size={18} />;
+      case "hand": return <HandIcon size={18} />;
+      default: return <SparklesIcon size={18} />;
+    }
+  };
+
   const filteredServices = services.filter((service) => {
     const term = searchTerm.toLowerCase();
     return (
       service.name.toLowerCase().includes(term) ||
-      service.description.toLowerCase().includes(term)
+      service.description.toLowerCase().includes(term) ||
+      (service.category && service.category.toLowerCase().includes(term))
     );
   });
 
@@ -23,9 +39,9 @@ export const AdminServicesPage = () => {
       <div className="admin-card">
         <div className="admin-card-header">
           <div>
-            <h2 className="admin-card-title">Catálogo de Servicios y Consultas</h2>
+            <h2 className="admin-card-title">Catálogo de Servicios</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Tipos de consulta disponibles para agendar en línea con el Dr. Luis Armando Rosado.
+              Servicios disponibles para agendar en línea en Bellart Salón con tiempos y precios estimados.
             </p>
           </div>
           <div style={{ fontSize: "0.86rem", color: "var(--color-text-secondary)" }}>
@@ -39,23 +55,22 @@ export const AdminServicesPage = () => {
             <SearchIcon size={18} />
             <input
               type="text"
-              placeholder="Buscar servicio por nombre o descripción..."
+              placeholder="Buscar servicio por nombre, categoría o descripción..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
 
-        {/* Services Table */}
+        {/* Services Table with Columns: Servicio, Categoría, Precio, Duración, Estado */}
         <div className="table-responsive">
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Nombre del Servicio</th>
-                <th>Descripción</th>
-                <th>Duración Estimada</th>
+                <th>Servicio</th>
+                <th>Categoría</th>
                 <th>Precio Demo</th>
-                <th>Etiqueta</th>
+                <th>Duración</th>
                 <th>Estado</th>
               </tr>
             </thead>
@@ -63,7 +78,7 @@ export const AdminServicesPage = () => {
               {filteredServices.map((service) => (
                 <tr key={service.id}>
                   <td>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                       <div style={{ 
                         width: "36px", 
                         height: "36px", 
@@ -74,30 +89,42 @@ export const AdminServicesPage = () => {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <StethoscopeIcon size={18} />
+                        {getIcon(service.iconType)}
                       </div>
-                      <strong style={{ color: "var(--color-primary)" }}>{service.name}</strong>
+                      <div>
+                        <strong style={{ color: "var(--color-primary)", display: "block" }}>{service.name}</strong>
+                        <span style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)", maxWidth: "340px", display: "inline-block" }}>
+                          {service.description}
+                        </span>
+                      </div>
                     </div>
                   </td>
                   <td>
-                    <span style={{ fontSize: "0.86rem", color: "var(--color-text-secondary)", maxWidth: "380px", display: "inline-block" }}>
-                      {service.description}
+                    <span style={{ 
+                      backgroundColor: "var(--color-bg)", 
+                      padding: "0.25rem 0.65rem", 
+                      borderRadius: "var(--radius-full)", 
+                      fontSize: "0.8rem", 
+                      fontWeight: 600,
+                      color: "var(--color-primary)",
+                      border: "1px solid var(--border-light)"
+                    }}>
+                      {service.category || "Estilismo"}
                     </span>
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.85rem", color: "var(--color-text-secondary)" }}>
-                      <ClockIcon size={14} />
-                      <span>{service.duration}</span>
-                    </div>
                   </td>
                   <td>
                     <div>
                       <strong style={{ color: "var(--color-primary)" }}>{service.price}</strong>
-                      <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)" }}>{service.priceNote}</div>
+                      <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)" }}>
+                        Anticipo: ${service.suggestedDeposit || 150} MXN
+                      </div>
                     </div>
                   </td>
                   <td>
-                    <span className="service-badge">{service.badge}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.85rem", color: "var(--color-text-secondary)" }}>
+                      <ClockIcon size={14} style={{ color: "var(--color-accent)" }} />
+                      <span>{service.duration}</span>
+                    </div>
                   </td>
                   <td>
                     <span className="status-badge status-Confirmada">
@@ -111,8 +138,8 @@ export const AdminServicesPage = () => {
           </table>
         </div>
 
-        <div style={{ marginTop: "1.5rem", padding: "1rem", backgroundColor: "#F8FAFC", borderRadius: "10px", border: "1px dashed #CBD5E1", fontSize: "0.84rem", color: "var(--color-text-secondary)" }}>
-          ℹ️ <strong>Nota comercial de la demo:</strong> En la implementación real para el consultorio, los servicios, tiempos de consulta y precios se adaptan a la atención médica oficial del Dr. Luis Armando Rosado.
+        <div style={{ marginTop: "1.5rem", padding: "1rem", backgroundColor: "var(--color-bg)", borderRadius: "10px", border: "1px dashed var(--border-light)", fontSize: "0.84rem", color: "var(--color-text-secondary)" }}>
+          ✨ <strong>Nota comercial demostrativa:</strong> En la solución final para Bellart Salón, el catálogo se adapta al menú oficial de servicios, duración real por estilista y precios de la sucursal.
         </div>
       </div>
     </div>

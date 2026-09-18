@@ -11,8 +11,8 @@
  */
 
 export const ANALYTICS_CONFIG = {
-  demoId: "consultorio_luis_rosado",
-  prospectId: "luis_rosado",
+  demoId: "bellart_salon",
+  prospectId: "bellart_salon",
   projectType: "bs_code_demo",
   projectName: "BS Code Demos"
 };

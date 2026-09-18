@@ -1,83 +1,139 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { initialServicesData, servicesDisclaimer } from "../../data/servicesData";
-import { ClockIcon, CalendarIcon, StethoscopeIcon, RefreshIcon, HeartIcon, ShieldIcon, ChatIcon } from "../common/Icons";
+import { ClockIcon, CalendarIcon, ArrowRightIcon, SparklesIcon } from "../common/Icons";
 import { trackEvent } from "../../analytics/analytics";
 
 export const ServicesSection = () => {
-  const getIcon = (type) => {
-    switch (type) {
-      case "stethoscope": return <StethoscopeIcon size={22} />;
-      case "refresh": return <RefreshIcon size={22} />;
-      case "heart": return <HeartIcon size={22} />;
-      case "shield": return <ShieldIcon size={22} />;
-      case "chat": return <ChatIcon size={22} />;
-      default: return <StethoscopeIcon size={22} />;
-    }
+  const featuredService = initialServicesData.find(s => s.isFeatured) || initialServicesData[0];
+  const otherServices = initialServicesData.filter(s => s.id !== featuredService.id);
+
+  const handleServiceClick = (serviceId, serviceName) => {
+    trackEvent("demo_cta_clicked", {
+      cta_location: "services_section",
+      service_id: serviceId,
+      service_name: serviceName
+    });
   };
 
   return (
-    <section className="section" id="servicios">
+    <section className="services-editorial-section" id="servicios">
       <div className="container">
-        <div className="section-header">
-          <span className="section-tag">Servicios del Consultorio</span>
-          <h2 className="section-title">Tipos de Consulta Médica</h2>
-          <p className="section-desc">
-            Selecciona la opción que mejor se adapte a tu necesidad de atención y reserva tu fecha y horario en línea.
+        <div className="section-header-editorial text-center">
+          <span className="editorial-eyebrow">SERVICIOS SELECCIONADOS</span>
+          <h2 className="editorial-title">Encuentra tu próximo look</h2>
+          <p className="editorial-subtext">
+            Servicios de muestra para visualizar cómo Bellart podría organizar su experiencia de reserva.
           </p>
         </div>
 
-        {/* Services Grid */}
-        <div className="services-grid">
-          {initialServicesData.map((service) => (
-            <div key={service.id} className="service-card">
-              <div>
-                <div className="service-card-top">
-                  <div className="service-icon-box">
-                    {getIcon(service.iconType)}
-                  </div>
-                  <span className="service-badge">{service.badge}</span>
-                </div>
+        <div className="services-editorial-layout">
+          {/* Large Hero Card for Featured Service (Coloración) */}
+          <div className="featured-service-hero-card">
+            <div className="featured-service-image-box">
+              <img 
+                src={featuredService.image} 
+                alt={featuredService.name} 
+                className="featured-service-img"
+                loading="lazy"
+              />
+              <span className="featured-service-badge">
+                <SparklesIcon size={14} />
+                <span>{featuredService.badge}</span>
+              </span>
+            </div>
 
-                <h3 className="service-name">{service.name}</h3>
-                <p className="service-desc">{service.description}</p>
+            <div className="featured-service-body">
+              <div className="featured-meta-header">
+                <span className="service-category-tag">{featuredService.category}</span>
+                <span className="service-duration-pill">
+                  <ClockIcon size={14} />
+                  <span>{featuredService.duration}</span>
+                </span>
               </div>
 
-              <div>
-                <div className="service-card-meta">
-                  <div className="service-duration">
-                    <ClockIcon size={16} />
-                    <span>{service.duration} aprox.</span>
-                  </div>
-                  <div className="service-price-block">
-                    <div className="service-price">{service.price}</div>
-                    <div className="service-price-note">{service.priceNote}</div>
-                  </div>
+              <h3 className="featured-service-title">{featuredService.name}</h3>
+              <p className="featured-service-quote">“{featuredService.tagline}”</p>
+              <p className="featured-service-desc">{featuredService.description}</p>
+
+              <div className="featured-service-footer">
+                <div className="featured-price-group">
+                  <span className="featured-price-val">{featuredService.price}</span>
+                  <span className="featured-price-note">{featuredService.priceNote}</span>
                 </div>
 
-                <Link 
-                  to={`/agendar?service=${service.id}`} 
-                  className="btn btn-secondary" 
-                  style={{ width: "100%" }}
-                  onClick={() => {
-                    trackEvent("demo_cta_clicked", { 
-                      cta_label: "agendar_service_card", 
-                      service_id: service.id, 
-                      route: "/" 
-                    });
-                  }}
+                <Link
+                  to={`/agendar?service=${featuredService.id}`}
+                  className="btn btn-primary btn-featured-book"
+                  onClick={() => handleServiceClick(featuredService.id, featuredService.name)}
                 >
                   <CalendarIcon size={16} />
-                  <span>Agendar {service.name}</span>
+                  <span>Reservar ahora</span>
+                  <ArrowRightIcon size={15} />
                 </Link>
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Adjacent Grid of Complementary Services */}
+          <div className="compact-services-grid">
+            {otherServices.map((service) => (
+              <div key={service.id} className="compact-service-card">
+                <div className="compact-service-thumb-wrap">
+                  <img 
+                    src={service.image} 
+                    alt={service.name} 
+                    className="compact-service-thumb"
+                    loading="lazy"
+                  />
+                  <span className="compact-category-tag">{service.category}</span>
+                </div>
+
+                <div className="compact-service-info">
+                  <div className="compact-info-top">
+                    <h4 className="compact-service-name">{service.name}</h4>
+                    <span className="compact-service-duration">
+                      <ClockIcon size={13} />
+                      <span>{service.duration}</span>
+                    </span>
+                  </div>
+
+                  <p className="compact-service-tagline">{service.tagline}</p>
+
+                  <div className="compact-service-bottom">
+                    <div className="compact-price-wrap">
+                      <span className="compact-price-val">{service.price}</span>
+                      <span className="compact-price-sub">{service.priceNote}</span>
+                    </div>
+
+                    <Link
+                      to={`/agendar?service=${service.id}`}
+                      className="btn btn-secondary btn-sm btn-compact-book"
+                      onClick={() => handleServiceClick(service.id, service.name)}
+                    >
+                      <span>Reservar</span>
+                      <ArrowRightIcon size={13} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Disclaimer Notice */}
-        <div className="services-disclaimer-box">
-          ℹ️ <strong>Nota demostrativa:</strong> {servicesDisclaimer}
+        {/* View all services CTA */}
+        <div className="services-bottom-action-bar">
+          <Link to="/servicios" className="btn btn-outline btn-catalog-link">
+            <span>Ver catálogo completo de servicios</span>
+            <ArrowRightIcon size={16} />
+          </Link>
+        </div>
+
+        {/* Demonstrative Disclaimer */}
+        <div className="services-disclaimer-editorial">
+          <p>
+            ✨ <strong>Información demostrativa:</strong> {servicesDisclaimer}
+          </p>
         </div>
       </div>
     </section>

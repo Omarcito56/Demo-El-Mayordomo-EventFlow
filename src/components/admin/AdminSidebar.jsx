@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboardIcon, CalendarIcon, FileTextIcon, UsersIcon, 
-  SettingsIcon, StethoscopeIcon, LogOutIcon, ArrowLeftIcon 
+  SettingsIcon, ScissorsIcon, CreditCardIcon, LogOutIcon, ArrowLeftIcon 
 } from "../common/Icons";
 import { useClinicData } from "../../hooks/useClinicData";
 
@@ -11,6 +11,7 @@ export const AdminSidebar = () => {
   const { metrics } = useClinicData();
 
   const handleLogout = () => {
+    localStorage.removeItem("beautyflow_auth");
     localStorage.removeItem("clinicflow_auth");
     navigate("/admin/login");
   };
@@ -19,12 +20,12 @@ export const AdminSidebar = () => {
     <aside className="admin-sidebar">
       {/* Sidebar Brand */}
       <div className="sidebar-header">
-        <div className="sidebar-logo-icon">
-          <StethoscopeIcon size={20} />
+        <div className="sidebar-logo-icon" style={{ background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)" }}>
+          <ScissorsIcon size={20} />
         </div>
         <div>
-          <h2 className="sidebar-title">Dr. Luis A. Rosado</h2>
-          <span className="sidebar-sub">PANEL RECEPCIÓN</span>
+          <h2 className="sidebar-title">Bellart Salón</h2>
+          <span className="sidebar-sub">PANEL ADMINISTRACIÓN</span>
         </div>
       </div>
 
@@ -46,7 +47,11 @@ export const AdminSidebar = () => {
           >
             <CalendarIcon size={18} />
             <span>Agenda</span>
-            {metrics.today > 0 && <span className="sidebar-badge" style={{ backgroundColor: "var(--color-primary-light)" }}>{metrics.today} hoy</span>}
+            {metrics.today > 0 && (
+              <span className="sidebar-badge" style={{ backgroundColor: "var(--color-primary-light)" }}>
+                {metrics.today} hoy
+              </span>
+            )}
           </NavLink>
         </li>
         <li>
@@ -61,11 +66,11 @@ export const AdminSidebar = () => {
         </li>
         <li>
           <NavLink 
-            to="/admin/pacientes" 
+            to="/admin/clientes" 
             className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
           >
             <UsersIcon size={18} />
-            <span>Pacientes</span>
+            <span>Clientes</span>
           </NavLink>
         </li>
         <li>
@@ -73,8 +78,17 @@ export const AdminSidebar = () => {
             to="/admin/servicios" 
             className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
           >
-            <StethoscopeIcon size={18} />
+            <ScissorsIcon size={18} />
             <span>Servicios</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink 
+            to="/admin/pagos" 
+            className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
+          >
+            <CreditCardIcon size={18} />
+            <span>Pagos</span>
           </NavLink>
         </li>
         <li>
@@ -92,7 +106,7 @@ export const AdminSidebar = () => {
       <div className="sidebar-footer">
         <Link to="/" className="sidebar-btn-public">
           <ArrowLeftIcon size={14} />
-          <span>Ver sitio del consultorio</span>
+          <span>Ver sitio de Bellart</span>
         </Link>
         <button type="button" className="sidebar-btn-logout" onClick={handleLogout}>
           <LogOutIcon size={14} />

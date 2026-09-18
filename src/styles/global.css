@@ -69,8 +69,8 @@ input, select, textarea {
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(18, 60, 105, 0.12);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(185, 120, 111, 0.18);
 }
 
 input::placeholder, textarea::placeholder {
@@ -116,25 +116,25 @@ input::placeholder, textarea::placeholder {
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-text-inverse);
-  box-shadow: 0 2px 8px rgba(18, 60, 105, 0.2);
+  box-shadow: 0 2px 8px rgba(29, 29, 31, 0.18);
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-hover);
   color: var(--color-text-inverse);
-  box-shadow: 0 4px 14px rgba(18, 60, 105, 0.28);
+  box-shadow: 0 4px 14px rgba(29, 29, 31, 0.25);
   transform: translateY(-1px);
 }
 
 .btn-accent {
   background-color: var(--color-accent);
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(45, 190, 159, 0.25);
+  box-shadow: 0 2px 8px rgba(185, 120, 111, 0.25);
 }
 
 .btn-accent:hover {
   background-color: var(--color-accent-hover);
-  box-shadow: 0 4px 14px rgba(45, 190, 159, 0.35);
+  box-shadow: 0 4px 14px rgba(185, 120, 111, 0.35);
   transform: translateY(-1px);
 }
 
@@ -145,7 +145,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .btn-secondary:hover {
-  background-color: #DEEEF9;
+  background-color: #ECE3DA;
   color: var(--color-primary-hover);
 }
 

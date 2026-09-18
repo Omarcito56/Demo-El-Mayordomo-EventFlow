@@ -3,27 +3,40 @@ import { ANALYTICS_CONFIG } from "./analyticsConfig";
 
 let isInitialized = false;
 
-// Lista de campos sensibles bloqueados por privacidad médica
+// Lista de campos sensibles bloqueados por privacidad estricta
 const FORBIDDEN_PROPERTY_KEYS = new Set([
   "name",
   "patientName",
   "patient_name",
+  "clientName",
+  "client_name",
+  "customerName",
+  "customer_name",
   "phone",
   "patientPhone",
   "patient_phone",
+  "clientPhone",
+  "client_phone",
   "whatsapp",
   "email",
   "patientEmail",
   "patient_email",
+  "clientEmail",
+  "client_email",
   "password",
   "birthDate",
   "birth_date",
   "reason",
   "comments",
+  "notes",
   "medical_info",
   "diagnosis",
   "folio",
-  "message"
+  "message",
+  "deposit",
+  "depositAmount",
+  "balance",
+  "cost"
 ]);
 
 /**

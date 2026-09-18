@@ -9,7 +9,6 @@ import { AppointmentDetailModal } from "../../components/admin/AppointmentDetail
 import { RescheduleModal } from "../../components/admin/RescheduleModal";
 import { trackEvent } from "../../analytics/analytics";
 
-
 export const AdminAgendaPage = () => {
   const { appointments, updateAppointmentStatus, rescheduleAppointment } = useClinicData();
   const [activeTab, setActiveTab] = useState("hoy"); // "hoy" | "manana" | "semana"
@@ -49,15 +48,17 @@ export const AdminAgendaPage = () => {
     return true;
   });
 
-  // Open WhatsApp reminder
+  // Open WhatsApp reminder:
+  // "Hola, te recordamos tu cita en Bellart Salón para [servicio] el día [fecha] a las [hora]. Te esperamos."
   const sendWhatsAppReminder = (apt) => {
     trackEvent("whatsapp_reminder_clicked", {
       module: "agenda",
       record_type: "appointment"
     });
 
-    const text = `Hola ${apt.patientName}, te recordamos tu consulta con el Dr. Luis Armando Rosado el día ${apt.date} a las ${apt.time}. Te esperamos.`;
-    const url = `https://wa.me/52${apt.patientPhone}?text=${encodeURIComponent(text)}`;
+    const clientPhone = apt.clientPhone || apt.patientPhone || "";
+    const text = `Hola, te recordamos tu cita en Bellart Salón para ${apt.serviceName} el día ${apt.date} a las ${apt.time}. Te esperamos.`;
+    const url = `https://wa.me/52${clientPhone}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
   };
 
@@ -66,9 +67,9 @@ export const AdminAgendaPage = () => {
       <div className="admin-card">
         <div className="admin-card-header">
           <div>
-            <h2 className="admin-card-title">Agenda Diaria de Consultas</h2>
+            <h2 className="admin-card-title">Agenda de Citas</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Visualiza los turnos ordenados por franja horaria para el consultorio.
+              Visualiza los turnos ordenados por franja horaria y profesional en Bellart Salón.
             </p>
           </div>
 
@@ -98,129 +99,123 @@ export const AdminAgendaPage = () => {
           </div>
         </div>
 
-        {/* Table of appointments */}
+        {/* Agenda Table with Columns: Hora, Cliente, Servicio, Profesional, Estado, Acciones */}
         <div className="table-responsive">
           <table className="admin-table">
             <thead>
               <tr>
                 <th>Hora</th>
-                <th>Paciente</th>
-                <th>Consulta</th>
-                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Servicio</th>
+                <th>Profesional</th>
                 <th>Estado</th>
-                <th>Acciones de Recepción</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {filteredAppointments.length === 0 ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: "center", padding: "3rem", color: "var(--color-text-secondary)" }}>
-                    No hay citas programadas para este periodo en la agenda.
+                  <td colSpan="6" style={{ textAlign: "center", padding: "3.5rem", color: "var(--color-text-secondary)" }}>
+                    No hay citas programadas para este periodo seleccionado.
                   </td>
                 </tr>
               ) : (
-                filteredAppointments.map((apt) => (
-                  <tr key={apt.id}>
-                    <td>
-                      <div style={{ fontWeight: 700, color: "var(--color-primary)", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                        <ClockIcon size={14} style={{ color: "var(--color-accent-hover)" }} />
-                        <span>{apt.time}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="table-patient-name ph-mask">{apt.patientName}</div>
-                      <div className="table-patient-contact ph-mask">
-                        {apt.patientPhone} {apt.isFirstTime && <span style={{ color: "var(--color-accent)", fontWeight: 600 }}>• Primera vez</span>}
-                      </div>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 500 }}>{apt.serviceName}</div>
-                      <div className="ph-mask" style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>{apt.folio}</div>
-                    </td>
-                    <td>
-                      <span style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)" }}>{apt.date}</span>
-                    </td>
-                    <td>
-                      <StatusBadge status={apt.status} />
-                    </td>
-                    <td>
-                      <div className="table-actions-cell">
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-action-view"
-                          onClick={() => {
-                            trackEvent("record_detail_opened", {
-                              record_type: "appointment",
-                              status: apt.status
-                            });
-                            setSelectedAppointment(apt);
-                          }}
-                          title="Ver detalle completo"
-                        >
-                          <EyeIcon size={14} />
-                          <span>Ver</span>
-                        </button>
-
-                        {apt.status === "Pendiente" && (
+                filteredAppointments.map((apt) => {
+                  const clientName = apt.clientName || apt.patientName || "Cliente";
+                  const clientPhone = apt.clientPhone || apt.patientPhone || "";
+                  return (
+                    <tr key={apt.id}>
+                      <td>
+                        <div style={{ fontWeight: 700, color: "var(--color-primary)", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                          <ClockIcon size={14} style={{ color: "var(--color-accent)" }} />
+                          <span>{apt.time}</span>
+                        </div>
+                        <div style={{ fontSize: "0.76rem", color: "var(--color-text-muted)" }}>{apt.date}</div>
+                      </td>
+                      <td>
+                        <div className="table-patient-name ph-mask">{clientName}</div>
+                        <div className="table-patient-contact ph-mask">{clientPhone}</div>
+                      </td>
+                      <td>
+                        <strong>{apt.serviceName}</strong>
+                        <div style={{ fontSize: "0.76rem", color: "var(--color-text-muted)" }}>{apt.cost}</div>
+                      </td>
+                      <td>
+                        <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>
+                          {apt.professional || "Sin preferencia"}
+                        </span>
+                      </td>
+                      <td>
+                        <StatusBadge status={apt.status} />
+                      </td>
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
                           <button
                             type="button"
-                            className="btn btn-sm btn-action-confirm"
-                            onClick={() => updateAppointmentStatus(apt.id, "Confirmada")}
-                            title="Confirmar cita"
+                            className="btn btn-sm btn-action-view"
+                            onClick={() => {
+                              trackEvent("record_detail_opened", {
+                                record_type: "appointment",
+                                status: apt.status
+                              });
+                              setSelectedAppointment(apt);
+                            }}
+                            title="Ver detalle de la cita"
                           >
-                            <CheckIcon size={14} />
-                            <span>Confirmar</span>
+                            <EyeIcon size={13} />
+                            <span>Detalle</span>
                           </button>
-                        )}
 
-                        {apt.status === "Confirmada" && (
+                          {apt.status === "Pendiente" && (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-action-confirm"
+                              onClick={() => updateAppointmentStatus(apt.id, "Confirmada")}
+                              title="Confirmar cita"
+                            >
+                              <CheckIcon size={13} />
+                              <span>Confirmar</span>
+                            </button>
+                          )}
+
                           <button
                             type="button"
-                            className="btn btn-sm btn-action-attend"
-                            onClick={() => updateAppointmentStatus(apt.id, "Atendida")}
-                            title="Marcar como atendida"
+                            className="btn btn-sm btn-action-reschedule"
+                            onClick={() => setRescheduleApt(apt)}
+                            title="Reagendar horario"
                           >
-                            <CheckCircleIcon size={14} />
-                            <span>Atender</span>
+                            <RefreshIcon size={13} />
+                            <span>Reagendar</span>
                           </button>
-                        )}
 
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-action-reschedule"
-                          onClick={() => setRescheduleApt(apt)}
-                          title="Reagendar horario"
-                        >
-                          <RefreshIcon size={14} />
-                          <span>Reagendar</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-action-wa"
-                          onClick={() => sendWhatsAppReminder(apt)}
-                          title="Enviar recordatorio por WhatsApp"
-                        >
-                          <WhatsAppIcon size={14} />
-                          <span>Recordatorio</span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-action-wa"
+                            onClick={() => sendWhatsAppReminder(apt)}
+                            title="Enviar recordatorio por WhatsApp"
+                          >
+                            <WhatsAppIcon size={13} />
+                            <span>Recordatorio</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Modals */}
+      {/* Appointment Detail Modal */}
       <AppointmentDetailModal
         isOpen={Boolean(selectedAppointment)}
         onClose={() => setSelectedAppointment(null)}
         appointment={selectedAppointment}
       />
 
+      {/* Reschedule Modal */}
       <RescheduleModal
         isOpen={Boolean(rescheduleApt)}
         onClose={() => setRescheduleApt(null)}

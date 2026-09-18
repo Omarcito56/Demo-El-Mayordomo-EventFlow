@@ -1,80 +1,74 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MapPinIcon, PhoneIcon, WhatsAppIcon, MailIcon, ClockIcon, StethoscopeIcon } from "../common/Icons";
+import { MapPinIcon, PhoneIcon, WhatsAppIcon, ClockIcon, SparklesIcon } from "../common/Icons";
 import { initialBusinessData } from "../../data/businessData";
 
 export const Footer = () => {
   return (
-    <footer className="footer" id="contacto">
+    <footer className="footer-editorial" id="contacto-footer">
       <div className="container">
-        <div className="footer-grid">
-          {/* Brand & Doctor info */}
-          <div className="footer-col-brand">
-            <h3 className="footer-brand-title">Dr. Luis Armando Rosado</h3>
-            <p className="footer-brand-subtitle">Medicina Familiar / Atención Médica</p>
-            <p className="footer-desc">
-              Atención médica integral orientada al cuidado de la salud de pacientes y familias en Reynosa, Tamaulipas.
+        <div className="footer-editorial-grid">
+          {/* Brand Column */}
+          <div className="footer-editorial-brand">
+            <span className="footer-brand-title">Bellart Salón</span>
+            <span className="footer-brand-tagline">BEAUTY · HAIR · NAILS · MAKEUP</span>
+            <p className="footer-editorial-desc">
+              Espacio de cuidado personal y estilismo profesional en Reynosa, Tamaulipas. Consulta servicios, elige a tu estilista y agenda tu cita en línea.
             </p>
-            <div className="footer-demo-tag">
-              Propuesta Demo • BS ClinicFlow
+            <div className="footer-demo-badge">
+              <span>Propuesta Comercial Demostrativa · BS Code</span>
             </div>
           </div>
 
-          {/* Navigation links */}
-          <div>
-            <h4 className="footer-heading">Navegación</h4>
-            <ul className="footer-links-list">
-              <li><Link to="/" className="footer-link">Inicio</Link></li>
-              <li><a href="#servicios" className="footer-link">Tipos de consulta</a></li>
-              <li><Link to="/agendar" className="footer-link">Agendar cita</Link></li>
-              <li><a href="#como-funciona" className="footer-link">Cómo funciona</a></li>
-              <li><a href="#ubicacion" className="footer-link">Ubicación</a></li>
-              <li><Link to="/admin/login" className="footer-link">Acceso Recepción</Link></li>
+          {/* Navigation Links */}
+          <div className="footer-links-col">
+            <h4 className="footer-col-title">Explorar</h4>
+            <ul className="footer-editorial-nav">
+              <li><Link to="/">Inicio</Link></li>
+              <li><Link to="/servicios">Catálogo de Servicios</Link></li>
+              <li><Link to="/agendar">Agenda en Línea</Link></li>
+              <li><a href="/#galeria">Galería de Inspiración</a></li>
+              <li><a href="/#contacto">Ubicación</a></li>
+              <li><Link to="/admin/login">Acceso Panel (Demo)</Link></li>
             </ul>
           </div>
 
-          {/* Ubicación y Horarios */}
-          <div>
-            <h4 className="footer-heading">Ubicación</h4>
-            <div className="footer-contact-item">
-              <MapPinIcon size={18} className="footer-contact-icon" />
-              <span>
-                <strong>{initialBusinessData.locationName}</strong><br />
-                {initialBusinessData.address}
-              </span>
-            </div>
-            <div className="footer-contact-item">
-              <ClockIcon size={18} className="footer-contact-icon" />
-              <span>
-                <strong>Horarios de consulta:</strong><br />
-                {initialBusinessData.schedule}
-              </span>
-            </div>
-          </div>
-
-          {/* Contacto directo */}
-          <div>
-            <h4 className="footer-heading">Contacto</h4>
-            <div className="footer-contact-item">
-              <PhoneIcon size={18} className="footer-contact-icon" />
+          {/* Contact & Hours */}
+          <div className="footer-links-col">
+            <h4 className="footer-col-title">Atención & Citas</h4>
+            <div className="footer-item-row">
+              <PhoneIcon size={16} />
               <span>{initialBusinessData.phone}</span>
             </div>
-            <div className="footer-contact-item">
-              <WhatsAppIcon size={18} className="footer-contact-icon" />
-              <span>WhatsApp: {initialBusinessData.whatsapp}</span>
+            <div className="footer-item-row">
+              <WhatsAppIcon size={16} />
+              <a 
+                href={`https://wa.me/52${initialBusinessData.whatsapp}?text=Hola%20Bellart%20Sal%C3%B3n`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="footer-whatsapp-link"
+              >
+                WhatsApp: {initialBusinessData.phone}
+              </a>
             </div>
-            <div className="footer-contact-item">
-              <MailIcon size={18} className="footer-contact-icon" />
-              <span>{initialBusinessData.email}</span>
+            <div className="footer-item-row">
+              <ClockIcon size={16} />
+              <span>{initialBusinessData.schedule}</span>
+            </div>
+            <div className="footer-item-row">
+              <MapPinIcon size={16} />
+              <span>{initialBusinessData.locationName} · {initialBusinessData.address}</span>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} Consultorio Dr. Luis Armando Rosado. Todos los derechos reservados.</p>
-          <p>
-            Desarrollado como demo interactiva por <strong>BS Code</strong> (Soluciones web para negocios de Reynosa, Tamps).
+        {/* Bottom Bar */}
+        <div className="footer-editorial-bottom">
+          <p className="footer-copy">
+            © {new Date().getFullYear()} Bellart Salón. Información y fotografías con fines de demostración de propuesta.
+          </p>
+          <p className="footer-credits">
+            Propuesta demostrativa desarrollada por <strong>BS Code</strong> (Reynosa, Tamaulipas).
           </p>
         </div>
       </div>

@@ -1,116 +1,113 @@
 import React from "react";
-import { MapPinIcon, PhoneIcon, WhatsAppIcon, ClockIcon, MailIcon, CalendarIcon } from "../common/Icons";
+import { MapPinIcon, PhoneIcon, WhatsAppIcon, ClockIcon, CalendarIcon, ArrowRightIcon } from "../common/Icons";
 import { initialBusinessData } from "../../data/businessData";
 import { Link } from "react-router-dom";
+import salonLocationPhoto from "../../assets/images/beauty/experience-salon.jpg";
 
 export const LocationContact = () => {
   return (
-    <section className="section section-alt" id="ubicacion">
+    <section className="location-editorial-section" id="contacto">
       <div className="container">
-        <div className="section-header">
-          <span className="section-tag">Ubicación y Atención</span>
-          <h2 className="section-title">Encuéntranos en Reynosa</h2>
-          <p className="section-desc">
-            Instalaciones preparadas para brindarte comodidad, privacidad y atención médica con estacionamiento y fácil acceso.
+        <div className="section-header-editorial text-center">
+          <span className="editorial-eyebrow">UBICACIÓN Y CONTACTO</span>
+          <h2 className="editorial-title">Encuéntranos en Reynosa</h2>
+          <p className="editorial-subtext">
+            Instalaciones preparadas para brindarte una atención cómoda, relajante y con ambiente exclusivo de belleza.
           </p>
         </div>
 
-        <div className="location-grid">
-          {/* Card with details */}
-          <div className="location-card">
-            <div className="location-item">
-              <div className="location-icon-box">
-                <MapPinIcon size={22} />
+        <div className="location-editorial-grid">
+          {/* Left Column: Contact and Hours Card */}
+          <div className="location-info-card">
+            <h3 className="location-card-header-title">Información de Visita</h3>
+            <p className="location-card-header-sub">Atención previa cita para brindarte una experiencia sin esperas.</p>
+
+            <div className="location-items-stack">
+              <div className="location-item-row">
+                <div className="location-icon-circle">
+                  <MapPinIcon size={20} />
+                </div>
+                <div className="location-item-content">
+                  <h4 className="location-item-label">{initialBusinessData.locationName}</h4>
+                  <p className="location-item-val">{initialBusinessData.address}</p>
+                </div>
               </div>
-              <div>
-                <h4 className="location-item-title">{initialBusinessData.locationName}</h4>
-                <p className="location-item-text">{initialBusinessData.address}</p>
+
+              <div className="location-item-row">
+                <div className="location-icon-circle">
+                  <ClockIcon size={20} />
+                </div>
+                <div className="location-item-content">
+                  <h4 className="location-item-label">Horarios de atención</h4>
+                  <p className="location-item-val">{initialBusinessData.schedule}</p>
+                </div>
+              </div>
+
+              <div className="location-item-row">
+                <div className="location-icon-circle">
+                  <PhoneIcon size={20} />
+                </div>
+                <div className="location-item-content">
+                  <h4 className="location-item-label">Teléfono directo</h4>
+                  <p className="location-item-val">
+                    <a href={`tel:${initialBusinessData.phone.replace(/\s+/g, "")}`} className="location-link">
+                      {initialBusinessData.phone}
+                    </a>
+                  </p>
+                </div>
+              </div>
+
+              <div className="location-item-row">
+                <div className="location-icon-circle whatsapp-circle">
+                  <WhatsAppIcon size={20} />
+                </div>
+                <div className="location-item-content">
+                  <h4 className="location-item-label">WhatsApp de citas</h4>
+                  <p className="location-item-val">
+                    <a 
+                      href={`https://wa.me/52${initialBusinessData.whatsapp}?text=${encodeURIComponent("Hola Bellart Salón, me gustaría solicitar información sobre citas y servicios.")}`}
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="location-link whatsapp-link"
+                    >
+                      Enviar mensaje ({initialBusinessData.phone})
+                    </a>
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="location-item">
-              <div className="location-icon-box">
-                <ClockIcon size={22} />
-              </div>
-              <div>
-                <h4 className="location-item-title">Horarios de consulta</h4>
-                <p className="location-item-text">{initialBusinessData.schedule}</p>
-              </div>
-            </div>
-
-            <div className="location-item">
-              <div className="location-icon-box">
-                <PhoneIcon size={22} />
-              </div>
-              <div>
-                <h4 className="location-item-title">Teléfono del consultorio</h4>
-                <p className="location-item-text">
-                  <a href={`tel:${initialBusinessData.phone.replace(/\s+/g, "")}`} style={{ color: "var(--color-primary)", fontWeight: 600 }}>
-                    {initialBusinessData.phone}
-                  </a>
-                </p>
-              </div>
-            </div>
-
-            <div className="location-item">
-              <div className="location-icon-box" style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}>
-                <WhatsAppIcon size={22} />
-              </div>
-              <div>
-                <h4 className="location-item-title">WhatsApp de recepción</h4>
-                <p className="location-item-text">
-                  <a 
-                    href={`https://wa.me/52${initialBusinessData.whatsapp}?text=${encodeURIComponent("Hola, me gustaría información sobre citas con el Dr. Luis Armando Rosado.")}`}
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    style={{ color: "#16A34A", fontWeight: 600 }}
-                  >
-                    Enviar mensaje directo ({initialBusinessData.whatsapp})
-                  </a>
-                </p>
-              </div>
-            </div>
-
-            <div style={{ marginTop: "1.5rem" }}>
-              <Link to="/agendar" className="btn btn-primary" style={{ width: "100%" }}>
-                <CalendarIcon size={18} />
-                <span>Agendar consulta ahora</span>
+            <div className="location-action-bar">
+              <Link to="/agendar" className="btn btn-primary btn-block">
+                <CalendarIcon size={17} />
+                <span>Reservar cita ahora</span>
+                <ArrowRightIcon size={15} />
               </Link>
             </div>
           </div>
 
-          {/* Map Preview Representation */}
-          <div className="map-placeholder-card">
-            <div style={{ 
-              width: "60px", 
-              height: "60px", 
-              borderRadius: "50%", 
-              background: "var(--color-primary)", 
-              color: "#FFFFFF", 
-              display: "flex", 
-              alignItems: "center", 
-              justifyContent: "center",
-              marginBottom: "1.25rem",
-              boxShadow: "0 4px 12px rgba(18, 60, 105, 0.25)"
-            }}>
-              <MapPinIcon size={30} />
-            </div>
-            <h3 style={{ color: "var(--color-primary)", fontSize: "1.25rem", marginBottom: "0.5rem" }}>
-              Centro de Especialidades Médicas
-            </h3>
-            <p style={{ color: "var(--color-text-secondary)", fontSize: "0.9rem", maxWidth: "340px", marginBottom: "1.5rem" }}>
-              Zona céntrica y de fácil localización en Reynosa, Tamaulipas.
-            </p>
-            <div style={{ 
-              backgroundColor: "#FFFFFF", 
-              padding: "0.6rem 1.25rem", 
-              borderRadius: "var(--radius-full)", 
-              fontSize: "0.82rem",
-              fontWeight: 600,
-              color: "var(--color-primary)",
-              border: "1px solid #CBD5E1"
-            }}>
-              📍 Reynosa, Tamaulipas • C.P. 88500
+          {/* Right Column: Visual Presentation Showcase */}
+          <div className="location-visual-card">
+            <img 
+              src={salonLocationPhoto} 
+              alt="Instalaciones Bellart Salón Reynosa" 
+              className="location-visual-photo"
+              loading="lazy"
+            />
+            <div className="location-visual-overlay">
+              <div className="location-visual-pin">
+                <MapPinIcon size={24} />
+              </div>
+              <h3 className="location-visual-title">Bellart Salón</h3>
+              <p className="location-visual-desc">
+                Espacio exclusivo de belleza y cuidado personal en Reynosa, Tamaulipas.
+              </p>
+              <div className="location-city-pill">
+                <span>📍 Reynosa, Tamaulipas</span>
+              </div>
+              <p className="location-disclaimer-note">
+                * Ubicación y horarios demostrativos adaptables a la sucursal física final de Bellart Salón.
+              </p>
             </div>
           </div>
         </div>

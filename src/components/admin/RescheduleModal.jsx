@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "../common/Modal";
 import { CalendarIcon, ClockIcon, AlertCircleIcon } from "../common/Icons";
 
-const DEMO_TIMES = [
+const SALON_TIMES = [
   "9:00 a.m.",
-  "10:00 a.m.",
-  "11:30 a.m.",
-  "1:00 p.m.",
+  "10:30 a.m.",
+  "12:00 p.m.",
+  "2:30 p.m.",
   "4:00 p.m.",
   "5:30 p.m."
 ];
@@ -19,12 +19,14 @@ export const RescheduleModal = ({ isOpen, onClose, appointment, onConfirm }) => 
   useEffect(() => {
     if (appointment) {
       setNewDate(appointment.date || new Date().toISOString().split("T")[0]);
-      setNewTime(appointment.time || "10:00 a.m.");
+      setNewTime(appointment.time || "10:30 a.m.");
       setError("");
     }
   }, [appointment]);
 
   if (!appointment) return null;
+
+  const clientName = appointment.clientName || appointment.patientName || "Cliente";
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -52,9 +54,12 @@ export const RescheduleModal = ({ isOpen, onClose, appointment, onConfirm }) => 
           </div>
         )}
 
-        <div style={{ background: "#F8FAFC", padding: "0.85rem", borderRadius: "8px", border: "1px solid #E2E8F0" }}>
-          <div style={{ fontSize: "0.84rem", color: "var(--color-text-secondary)" }}>Paciente:</div>
-          <div style={{ fontWeight: 700, color: "var(--color-primary)" }}>{appointment.patientName}</div>
+        <div style={{ background: "var(--color-bg)", padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--border-light)" }}>
+          <div style={{ fontSize: "0.84rem", color: "var(--color-text-secondary)" }}>Cliente:</div>
+          <div className="ph-mask" style={{ fontWeight: 700, color: "var(--color-primary)" }}>{clientName}</div>
+          <div style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
+            Servicio: <strong>{appointment.serviceName}</strong> con <strong>{appointment.professional || "estilista"}</strong>
+          </div>
           <div style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
             Fecha y hora actual: <strong>{appointment.date} — {appointment.time}</strong>
           </div>
@@ -84,7 +89,7 @@ export const RescheduleModal = ({ isOpen, onClose, appointment, onConfirm }) => 
             value={newTime}
             onChange={(e) => setNewTime(e.target.value)}
           >
-            {DEMO_TIMES.map((time) => (
+            {SALON_TIMES.map((time) => (
               <option key={time} value={time}>
                 {time}
               </option>
@@ -97,7 +102,7 @@ export const RescheduleModal = ({ isOpen, onClose, appointment, onConfirm }) => 
           justifyContent: "flex-end", 
           gap: "0.75rem", 
           paddingTop: "1rem", 
-          borderTop: "1px solid #E2E8F0" 
+          borderTop: "1px solid var(--border-light)" 
         }}>
           <button type="button" className="btn btn-secondary btn-sm" onClick={onClose}>
             Cancelar
