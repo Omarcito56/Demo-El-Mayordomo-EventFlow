@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { CalendarIcon, ArrowRightIcon } from "../common/Icons";
+import { CalendarIcon, ArrowRightIcon, WhatsAppIcon } from "../common/Icons";
 import { trackEvent } from "../../analytics/analytics";
 import bannerImg from "../../assets/images/beauty/banner-booking.jpg";
 
@@ -16,13 +16,13 @@ export const BookingBanner = () => {
     <section className="booking-banner-section" style={{ backgroundImage: `url(${bannerImg})` }}>
       <div className="booking-banner-overlay"></div>
       <div className="container booking-banner-content">
-        <span className="banner-eyebrow">AGENDA EN LÍNEA EN REYNOSA</span>
+        <span className="banner-eyebrow">MUJER BONITA BY PAULINA CASTILLO</span>
         <h2 className="banner-title">
-          Tu próximo momento Bellart <br />
+          Tu próxima cita <br />
           <span className="banner-title-italic">empieza aquí.</span>
         </h2>
         <p className="banner-subtext">
-          Selecciona tu servicio, profesional de confianza y horario ideal en pocos pasos y sin esperar respuesta.
+          Elige servicio y horario en pocos pasos.
         </p>
         <div className="banner-cta-group">
           <Link 
@@ -35,12 +35,13 @@ export const BookingBanner = () => {
             <ArrowRightIcon size={16} />
           </Link>
           <a
-            href="https://wa.me/528991241188?text=Hola,%20quisiera%20pedir%20informes%20en%20Bellart%20Sal%C3%B3n."
+            href="https://wa.me/528995452489?text=Hola,%20quisiera%20pedir%20informes%20en%20Mujer%20Bonita."
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-outline-light"
           >
-            Preguntar por WhatsApp
+            <WhatsAppIcon size={18} />
+            <span>Preguntar por WhatsApp</span>
           </a>
         </div>
       </div>

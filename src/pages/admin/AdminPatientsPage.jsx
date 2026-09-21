@@ -26,7 +26,7 @@ export const AdminPatientsPage = () => {
           <div>
             <h2 className="admin-card-title">Directorio de Clientes</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Directorio de clientas registradas en Bellart Salón mediante la web y reservas previas.
+              Directorio de clientas registradas en Mujer Bonita mediante la web y reservas previas.
             </p>
           </div>
 
@@ -120,7 +120,7 @@ export const AdminPatientsPage = () => {
                     </td>
                     <td>
                       <a 
-                        href={`https://wa.me/52${patient.phone}?text=${encodeURIComponent(`Hola ${patient.name}, te contactamos de Bellart Salón.`)}`}
+                        href={`https://wa.me/52${patient.phone}?text=${encodeURIComponent(`Hola ${patient.name}, te contactamos de Mujer Bonita.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn btn-sm btn-action-wa"

@@ -12,70 +12,73 @@ export const GallerySection = () => {
       id: 1,
       image: gallery1,
       category: "HAIR",
-      title: "Estilizado & Brillo",
-      sizeClass: "gallery-card-tall"
+      title: "Estilizado & Movimiento",
+      aspectClass: "aspect-tall"
     },
     {
       id: 2,
       image: gallery2,
-      category: "NAILS",
-      title: "Nail Art Minimalista",
-      sizeClass: "gallery-card-wide"
+      category: "COLOR",
+      title: "Balayage & Luminosidad",
+      aspectClass: "aspect-regular"
     },
     {
       id: 3,
       image: gallery3,
       category: "MAKEUP",
-      title: "Maquillaje Editorial",
-      sizeClass: "gallery-card-square"
+      title: "Maquillaje Radiante",
+      aspectClass: "aspect-tall"
     },
     {
       id: 4,
       image: gallery4,
-      category: "HAIR",
-      title: "Ondas Naturales & Textura",
-      sizeClass: "gallery-card-square"
+      category: "BEAUTY",
+      title: "Cuidado & Armonía",
+      aspectClass: "aspect-regular"
     },
     {
       id: 5,
       image: gallery5,
-      category: "NAILS",
-      title: "Manicure Delicado",
-      sizeClass: "gallery-card-wide"
+      category: "COLOR",
+      title: "Tonos & Textura",
+      aspectClass: "aspect-tall"
     },
     {
       id: 6,
       image: gallery6,
-      category: "COLOR",
-      title: "Colorimetría & Balayage",
-      sizeClass: "gallery-card-tall"
+      category: "MAKEUP",
+      title: "Acabado Impecable",
+      aspectClass: "aspect-regular"
     }
   ];
 
   return (
-    <section id="galeria" className="gallery-section">
+    <section id="galeria" className="gallery-boutique-section">
       <div className="container">
         <div className="section-header-editorial text-center">
-          <span className="editorial-eyebrow">NUESTRO ESTILO</span>
-          <h2 className="editorial-title">Un poco de inspiración</h2>
+          <span className="editorial-eyebrow">INSPIRACIÓN & ESTILO</span>
+          <h2 className="editorial-title">Beauty inspiration</h2>
           <p className="editorial-subtext">
-            Cabello, color, uñas y belleza en una experiencia pensada para ti.
+            Ideas de cabello, color, maquillaje y belleza pensadas para inspirar tu próxima cita.
           </p>
         </div>
 
-        <div className="gallery-masonry-grid">
+        {/* Alternated vertical photo composition with gentle rounded corners and cream spacing */}
+        <div className="gallery-boutique-grid">
           {galleryItems.map((item) => (
-            <div key={item.id} className={`gallery-item-card ${item.sizeClass}`}>
-              <div className="gallery-image-wrapper">
+            <div key={item.id} className={`gallery-boutique-card ${item.aspectClass}`}>
+              <div className="gallery-boutique-img-frame">
                 <img 
                   src={item.image} 
                   alt={item.title} 
-                  className="gallery-image"
+                  className="gallery-boutique-photo"
                   loading="lazy"
                 />
-                <div className="gallery-overlay">
-                  <span className="gallery-tag">{item.category}</span>
-                  <h4 className="gallery-item-title">{item.title}</h4>
+                <div className="gallery-boutique-badge">
+                  <span>{item.category}</span>
+                </div>
+                <div className="gallery-boutique-overlay">
+                  <h4 className="gallery-overlay-title">{item.title}</h4>
                 </div>
               </div>
             </div>

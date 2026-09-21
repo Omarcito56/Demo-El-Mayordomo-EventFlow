@@ -3,12 +3,12 @@ import { Modal } from "../common/Modal";
 import { CalendarIcon, ClockIcon, AlertCircleIcon } from "../common/Icons";
 
 const SALON_TIMES = [
-  "9:00 a.m.",
-  "10:30 a.m.",
-  "12:00 p.m.",
-  "2:30 p.m.",
-  "4:00 p.m.",
-  "5:30 p.m."
+  "9:00 AM",
+  "10:30 AM",
+  "12:00 PM",
+  "2:00 PM",
+  "4:00 PM",
+  "5:30 PM"
 ];
 
 export const RescheduleModal = ({ isOpen, onClose, appointment, onConfirm }) => {
@@ -19,7 +19,7 @@ export const RescheduleModal = ({ isOpen, onClose, appointment, onConfirm }) => 
   useEffect(() => {
     if (appointment) {
       setNewDate(appointment.date || new Date().toISOString().split("T")[0]);
-      setNewTime(appointment.time || "10:30 a.m.");
+      setNewTime(appointment.time || "10:30 AM");
       setError("");
     }
   }, [appointment]);

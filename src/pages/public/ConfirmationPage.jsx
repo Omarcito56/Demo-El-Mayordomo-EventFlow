@@ -11,16 +11,16 @@ import confirmationBeautyImg from "../../assets/images/beauty/gallery-1.jpg";
 export const ConfirmationPage = () => {
   const location = useLocation();
   const appointment = location.state?.appointment || {
-    folio: "BEL-000128",
+    folio: "MB-000128",
     clientName: "Cliente Demo",
     patientName: "Cliente Demo",
     serviceName: "Coloración",
     professional: "Andrea",
     date: new Date().toISOString().split("T")[0],
-    time: "10:30 a.m.",
+    time: "10:30 AM",
     depositAmount: "$200",
-    clientPhone: "8991241188",
-    status: "Pendiente"
+    clientPhone: "8995452489",
+    status: "Pendiente de confirmación"
   };
 
   const clientDisplayName = appointment.clientName || appointment.patientName || "Cliente";
@@ -28,7 +28,7 @@ export const ConfirmationPage = () => {
   const depositText = appointment.depositAmount ? `${appointment.depositAmount} demo` : "Sin anticipo";
 
   const whatsappMessage = encodeURIComponent(
-    `Hola, registré mi solicitud de cita en Bellart Salón (Folio: ${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}. Mi nombre es ${clientDisplayName}.`
+    `Hola, registré mi solicitud de cita en Mujer Bonita (Folio: ${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}. Mi nombre es ${clientDisplayName}.`
   );
 
   return (
@@ -39,11 +39,11 @@ export const ConfirmationPage = () => {
           <div className="confirmation-side-visual">
             <img 
               src={confirmationBeautyImg} 
-              alt="Momento Bellart Salón" 
+              alt="Momento Mujer Bonita" 
               className="confirmation-visual-img"
             />
             <div className="confirmation-visual-overlay">
-              <span className="confirmation-visual-tag">BELLART SALÓN</span>
+              <span className="confirmation-visual-tag">MUJER BONITA</span>
             </div>
           </div>
 
@@ -58,11 +58,11 @@ export const ConfirmationPage = () => {
             </span>
 
             <h1 className="confirmation-title-editorial">
-              Tu cita quedó registrada <span className="sparkle-icon">✨</span>
+              ¡Tu cita está registrada! ✨
             </h1>
             
             <p className="confirmation-subtext-editorial">
-              Bellart podrá revisar tu solicitud y confirmar el horario contigo.
+              Mujer Bonita podrá revisar tu solicitud y confirmar tu horario contigo.
             </p>
 
             {/* Details Table */}
@@ -91,7 +91,7 @@ export const ConfirmationPage = () => {
               </div>
               <div className="conf-row">
                 <span className="conf-label">Estado actual:</span>
-                <StatusBadge status="Pendiente" />
+                <StatusBadge status={appointment.status || "Pendiente de confirmación"} />
               </div>
             </div>
 

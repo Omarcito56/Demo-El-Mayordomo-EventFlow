@@ -1,21 +1,27 @@
 export const initialBusinessData = {
-  salonName: "Bellart Salón",
-  clinicName: "Bellart Salón", // backward-compatibility alias
-  doctorName: "Bellart Salón", // backward-compatibility alias
-  tagline: "Tu momento, tu estilo, tu cita",
-  specialty: "Salón de belleza y estilismo profesional",
-  locationName: "Bellart Salón • Reynosa",
-  address: "Reynosa, Tamaulipas (Ubicación referencial de demostración)",
-  phone: "899 124 1188",
-  whatsapp: "8991241188",
-  email: "contacto@bellartsalon.demo",
-  schedule: "Lunes a Sábado de 9:00 a.m. a 7:00 p.m.",
-  primaryColor: "#1D1D1F",
-  accentColor: "#B9786F",
-  nudeColor: "#D9B7B0",
-  beigeColor: "#EDE5DC",
-  creamColor: "#FAF7F2",
-  confirmationMessage: "Tu cita fue registrada con éxito en Bellart Salón. Revisaremos tu solicitud y confirmaremos tu horario por WhatsApp.",
-  aboutText: "En Bellart Salón brindamos una atención personalizada en estilismo, colorimetría, peinado y cuidado integral de tu imagen, con espacios pensados para tu comodidad y bienestar.",
-  disclaimerText: "Información y precios mostrados con fines demostrativos. La versión final puede adaptarse a los servicios y operación real del negocio."
+  salonName: "Mujer Bonita",
+  subName: "by Paulina Castillo",
+  fullName: "Mujer Bonita by Paulina Castillo",
+  clinicName: "Mujer Bonita", // backward-compatibility alias
+  doctorName: "Mujer Bonita", // backward-compatibility alias
+  tagline: "Siéntete bonita. Siéntete tú.",
+  specialty: "Beauty Boutique · Servicios por cita",
+  locationName: "Mujer Bonita · Beauty Boutique",
+  address: "Ubicación demostrativa (adaptable a la sucursal física de Mujer Bonita)",
+  phone: "8995452489",
+  phoneFormatted: "899 545 2489",
+  whatsapp: "8995452489",
+  facebook: "Mujer Bonita by Paulina Castillo",
+  email: "contacto@mujerbonita.demo",
+  schedule: "Lunes a Sábado · Horarios por cita (Demostrativo)",
+  primaryColor: "#6F263D",
+  accentColor: "#B06B7B",
+  oldRoseColor: "#C88F9B",
+  lightRoseColor: "#F3DDE2",
+  creamColor: "#FBF6F1",
+  beigeColor: "#E9DDD3",
+  charcoalColor: "#292326",
+  confirmationMessage: "Tu cita fue registrada con éxito en Mujer Bonita by Paulina Castillo. Revisaremos tu solicitud y confirmaremos tu horario por WhatsApp.",
+  aboutText: "En Mujer Bonita by Paulina Castillo brindamos una experiencia cálida, moderna y personalizada en estilismo, color, maquillaje y cuidado personal, pensada para que te sientas auténticamente tú.",
+  disclaimerText: "Servicios, precios e imágenes utilizados con fines demostrativos. La propuesta final puede adaptarse a la información real de Mujer Bonita."
 };

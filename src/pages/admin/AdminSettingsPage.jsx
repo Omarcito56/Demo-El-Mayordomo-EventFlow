@@ -28,7 +28,7 @@ export const AdminSettingsPage = () => {
   };
 
   const handleReset = () => {
-    if (window.confirm("¿Seguro que deseas restablecer todos los datos demo de Bellart Salón a los valores iniciales de fábrica? Esto recargará las citas, estilistas y clientas de muestra.")) {
+    if (window.confirm("¿Seguro que deseas restablecer todos los datos demo de Mujer Bonita a los valores iniciales de fábrica? Esto recargará las citas, profesionales y clientas de muestra.")) {
       resetDemoData();
       setResetSuccess(true);
       setSavedSuccess(false);
@@ -43,7 +43,7 @@ export const AdminSettingsPage = () => {
       <div className="admin-card" style={{ maxWidth: "800px" }}>
         <div className="admin-card-header">
           <div>
-            <h2 className="admin-card-title">Configuración de Bellart Salón</h2>
+            <h2 className="admin-card-title">Configuración de Mujer Bonita</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
               Personaliza los datos visibles del salón, horarios, medios de contacto y mensaje de confirmación.
             </p>
@@ -63,7 +63,7 @@ export const AdminSettingsPage = () => {
           <div className="alert-banner alert-warning" style={{ marginBottom: "1.5rem" }}>
             <div className="alert-content-left">
               <RefreshIcon size={18} />
-              <span>Restableciendo datos demo iniciales de Bellart Salón...</span>
+              <span>Restableciendo datos demo iniciales de Mujer Bonita...</span>
             </div>
           </div>
         )}
@@ -77,7 +77,7 @@ export const AdminSettingsPage = () => {
                 type="text"
                 id="salonName"
                 name="salonName"
-                value={formData.salonName || formData.clinicName || "Bellart Salón"}
+                value={formData.salonName || formData.clinicName || "Mujer Bonita by Paulina Castillo"}
                 onChange={handleChange}
                 required
               />
@@ -90,7 +90,7 @@ export const AdminSettingsPage = () => {
                 type="tel"
                 id="phone"
                 name="phone"
-                value={formData.phone || "899 124 1188"}
+                value={formData.phone || "8995452489"}
                 onChange={handleChange}
                 required
               />
@@ -103,7 +103,7 @@ export const AdminSettingsPage = () => {
                 type="tel"
                 id="whatsapp"
                 name="whatsapp"
-                value={formData.whatsapp || "8991241188"}
+                value={formData.whatsapp || "8995452489"}
                 onChange={handleChange}
                 required
               />
@@ -116,7 +116,7 @@ export const AdminSettingsPage = () => {
                 type="email"
                 id="email"
                 name="email"
-                value={formData.email || "contacto@bellartsalon.demo"}
+                value={formData.email || "contacto@mujerbonita.demo"}
                 onChange={handleChange}
                 required
               />
@@ -130,7 +130,7 @@ export const AdminSettingsPage = () => {
                   type="color"
                   id="primaryColorPicker"
                   name="primaryColor"
-                  value={formData.primaryColor || "#1D1D1F"}
+                  value={formData.primaryColor || "#6F263D"}
                   onChange={handleChange}
                   style={{ width: "45px", height: "42px", padding: "2px", cursor: "pointer" }}
                 />
@@ -138,7 +138,7 @@ export const AdminSettingsPage = () => {
                   type="text"
                   id="primaryColor"
                   name="primaryColor"
-                  value={formData.primaryColor || "#1D1D1F"}
+                  value={formData.primaryColor || "#6F263D"}
                   onChange={handleChange}
                 />
               </div>
@@ -146,12 +146,12 @@ export const AdminSettingsPage = () => {
 
             {/* Dirección */}
             <div className="form-group-full">
-              <label className="form-label" htmlFor="address">Dirección Física (Reynosa, Tamps.)</label>
+              <label className="form-label" htmlFor="address">Ubicación Demostrativa</label>
               <input
                 type="text"
                 id="address"
                 name="address"
-                value={formData.address || "Reynosa, Tamaulipas (Ubicación referencial de demostración)"}
+                value={formData.address || "Ubicación demostrativa (adaptable a Mujer Bonita)"}
                 onChange={handleChange}
                 required
               />
@@ -159,12 +159,12 @@ export const AdminSettingsPage = () => {
 
             {/* Horario */}
             <div className="form-group-full">
-              <label className="form-label" htmlFor="schedule">Horario de Atención</label>
+              <label className="form-label" htmlFor="schedule">Horario Demostrativo</label>
               <input
                 type="text"
                 id="schedule"
                 name="schedule"
-                value={formData.schedule || "Lunes a Sábado de 9:00 a.m. a 7:00 p.m."}
+                value={formData.schedule || "Lunes a Sábado de 9:00 AM a 7:00 PM (Demostrativo)"}
                 onChange={handleChange}
                 required
               />
@@ -177,7 +177,7 @@ export const AdminSettingsPage = () => {
                 id="confirmationMessage"
                 name="confirmationMessage"
                 rows="3"
-                value={formData.confirmationMessage || "Tu cita fue registrada con éxito en Bellart Salón. Revisaremos tu solicitud y confirmaremos tu horario por WhatsApp."}
+                value={formData.confirmationMessage || "Tu cita fue registrada con éxito en Mujer Bonita. Revisaremos tu solicitud y confirmaremos tu horario por WhatsApp."}
                 onChange={handleChange}
                 required
               ></textarea>

@@ -1,33 +1,32 @@
 :root {
-  /* Brand Salon Beauty Color Palette: Bellart Editorial Beauty */
-  --color-primary: #1D1D1F;
-  --color-primary-hover: #352D2B;
-  --color-primary-light: #423B39;
-  --color-primary-soft: #F5EFE9;
-  --color-primary-soft-border: #E8DDD2;
+  /* Brand Salon Beauty Color Palette: Mujer Bonita — Beauty Boutique */
+  --color-primary: #6F263D;              /* Vino profundo */
+  --color-primary-hover: #591D30;        /* Vino más intenso */
+  --color-primary-light: #8A334E;        /* Vino suave iluminado */
+  --color-primary-soft: #F9ECEF;         /* Tinte vino suave para fondos */
+  --color-primary-soft-border: #F3DDE2;  /* Borde vino muy suave */
 
-  --color-accent: #C58F88;
-  --color-accent-hover: #B27972;
-  --color-accent-soft: #FAF0EE;
-  --color-accent-border: #E8D0CC;
+  --color-accent: #B06B7B;               /* Acento cálido */
+  --color-accent-hover: #9A5666;         /* Acento activo */
+  --color-accent-soft: #FDF3F5;          /* Rosa cálido suave */
+  --color-accent-border: #E8CCD2;        /* Borde rosa cálido */
 
-  --color-nude: #D9B7B0;
-  --color-nude-soft: #FAF3F1;
-  --color-muted-rose: #C58F88;
-  --color-warm-beige: #E8DDD2;
-  --color-beige: #EDE5DC;
-  --color-cream: #FAF7F2;
-  --color-warm-white: #FFFDF9;
-  --color-dark-accent: #352D2B;
+  --color-rose-old: #C88F9B;             /* Rosa viejo */
+  --color-rose-light: #F3DDE2;           /* Rosa claro */
+  --color-cream: #FBF6F1;                /* Crema base */
+  --color-beige: #E9DDD3;                /* Beige */
+  --color-charcoal: #292326;             /* Carbón elegante */
+  --color-white: #FFFFFF;                /* Blanco puro */
+  --color-dark-accent: #3A2027;          /* Carbón vino para contrastes */
 
-  --color-bg: #FAF7F2;
-  --color-surface: #FFFDF9;
-  --color-surface-hover: #FDF9F5;
+  --color-bg: #FBF6F1;                   /* Fondo general crema cálido */
+  --color-surface: #FFFFFF;              /* Superficie de tarjetas blanca pura */
+  --color-surface-hover: #FAF2EC;        /* Hover sutil cálido */
 
   /* Typography Colors */
-  --color-text-primary: #292624;
-  --color-text-secondary: #6B6560;
-  --color-text-muted: #9E968F;
+  --color-text-primary: #292326;         /* Carbón */
+  --color-text-secondary: #6B585F;       /* Tono neutro cálido femenino */
+  --color-text-muted: #9E8D93;          /* Muted neutro */
   --color-text-inverse: #FFFFFF;
 
   /* Status Colors */
@@ -74,8 +73,8 @@
   --radius-xl: 26px;
   --radius-full: 9999px;
 
-  --border-light: 1px solid #EDE5DC;
-  --border-subtle: 1px solid #F3ECE5;
+  --border-light: 1px solid #E9DDD3;
+  --border-subtle: 1px solid #F4EBE4;
 
   /* Transitions */
   --transition-fast: 0.15s ease;

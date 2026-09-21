@@ -11,8 +11,8 @@
  */
 
 export const ANALYTICS_CONFIG = {
-  demoId: "bellart_salon",
-  prospectId: "bellart_salon",
+  demoId: "mujer_bonita",
+  prospectId: "mujer_bonita",
   projectType: "bs_code_demo",
   projectName: "BS Code Demos"
 };

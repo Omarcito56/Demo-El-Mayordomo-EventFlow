@@ -54,8 +54,8 @@ export const Navbar = () => {
       <div className="container navbar-inner">
         {/* Brand Logo */}
         <Link to="/" className="navbar-brand" onClick={() => { closeMenu(); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
-          <span className="navbar-brand-editorial">Bellart Salón</span>
-          <span className="navbar-brand-tagline">BEAUTY & STYLE</span>
+          <span className="navbar-brand-editorial">Mujer Bonita</span>
+          <span className="navbar-brand-tagline">by Paulina Castillo</span>
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -80,8 +80,8 @@ export const Navbar = () => {
               </Link>
             </li>
             <li>
-              <button className="nav-link nav-btn-link" onClick={() => scrollToSection("galeria")}>
-                Galería
+              <button className="nav-link nav-btn-link" onClick={() => scrollToSection("experiencia")}>
+                Experiencia
               </button>
             </li>
             <li>
@@ -104,7 +104,7 @@ export const Navbar = () => {
         {/* Right Actions */}
         <div className="navbar-actions">
           <a
-            href="https://wa.me/528991241188?text=Hola%20Bellart%20Sal%C3%B3n%2C%20quisiera%20pedir%20informes."
+            href="https://wa.me/528995452489?text=Hola%20Mujer%20Bonita%2C%20quisiera%20pedir%20informes."
             target="_blank"
             rel="noopener noreferrer"
             className="navbar-whatsapp-link"
@@ -146,7 +146,10 @@ export const Navbar = () => {
         <div className="mobile-menu-overlay" onClick={closeMenu}>
           <div className="mobile-menu-drawer" onClick={(e) => e.stopPropagation()}>
             <div className="mobile-drawer-header">
-              <span className="navbar-brand-editorial">Bellart Salón</span>
+              <div>
+                <span className="navbar-brand-editorial">Mujer Bonita</span>
+                <span className="navbar-brand-tagline" style={{ display: "block" }}>by Paulina Castillo</span>
+              </div>
               <button className="drawer-close-btn" onClick={closeMenu} aria-label="Cerrar menú">
                 <XIcon size={22} />
               </button>
@@ -163,11 +166,11 @@ export const Navbar = () => {
               <Link to="/servicios" className="mobile-nav-link" onClick={closeMenu}>
                 Servicios
               </Link>
-              <button className="mobile-nav-link" onClick={() => scrollToSection("galeria")}>
-                Galería
+              <button className="mobile-nav-link" onClick={() => scrollToSection("experiencia")}>
+                Experiencia
               </button>
               <Link to="/agendar" className="mobile-nav-link" onClick={closeMenu}>
-                Agenda en línea
+                Agenda
               </Link>
               <button className="mobile-nav-link" onClick={() => scrollToSection("contacto")}>
                 Contacto
@@ -185,7 +188,7 @@ export const Navbar = () => {
               </Link>
 
               <a
-                href="https://wa.me/528991241188?text=Hola%20Bellart%20Sal%C3%B3n%2C%20quisiera%20pedir%20informes."
+                href="https://wa.me/528995452489?text=Hola%20Mujer%20Bonita%2C%20quisiera%20pedir%20informes."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-secondary btn-block"

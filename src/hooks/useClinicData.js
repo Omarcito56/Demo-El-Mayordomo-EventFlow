@@ -41,17 +41,20 @@ export const useClinicData = () => {
 
   // Sync state on mount and ensure localStorage is seeded
   const refreshFromStorage = useCallback(() => {
-    // Seed if empty
-    if (!localStorage.getItem(STORAGE_KEYS.BUSINESS)) {
+    // Check if storage has old Bellart data or is empty
+    const storedBus = getStored(STORAGE_KEYS.BUSINESS, null);
+    const isOldData = storedBus && (storedBus.salonName?.includes("Bellart") || storedBus.phone?.includes("899 124 1188"));
+
+    if (!localStorage.getItem(STORAGE_KEYS.BUSINESS) || isOldData) {
       localStorage.setItem(STORAGE_KEYS.BUSINESS, JSON.stringify(initialBusinessData));
     }
-    if (!localStorage.getItem(STORAGE_KEYS.SERVICES)) {
+    if (!localStorage.getItem(STORAGE_KEYS.SERVICES) || isOldData) {
       localStorage.setItem(STORAGE_KEYS.SERVICES, JSON.stringify(initialServicesData));
     }
-    if (!localStorage.getItem(STORAGE_KEYS.PATIENTS)) {
+    if (!localStorage.getItem(STORAGE_KEYS.PATIENTS) || isOldData) {
       localStorage.setItem(STORAGE_KEYS.PATIENTS, JSON.stringify(initialPatientsData));
     }
-    if (!localStorage.getItem(STORAGE_KEYS.APPOINTMENTS)) {
+    if (!localStorage.getItem(STORAGE_KEYS.APPOINTMENTS) || isOldData) {
       localStorage.setItem(STORAGE_KEYS.APPOINTMENTS, JSON.stringify(initialAppointmentsData));
     }
 
@@ -82,11 +85,11 @@ export const useClinicData = () => {
     const currentApts = getStored(STORAGE_KEYS.APPOINTMENTS, initialAppointmentsData);
     const currentClients = getStored(STORAGE_KEYS.PATIENTS, initialPatientsData);
 
-    // Compute next sequential folio: BEL-000128 etc.
+    // Compute next sequential folio: MB-000126 etc.
     let nextNum = 126;
     currentApts.forEach((apt) => {
-      if (apt.folio && apt.folio.startsWith("BEL-")) {
-        const numPart = parseInt(apt.folio.replace("BEL-", ""), 10);
+      if (apt.folio && (apt.folio.startsWith("MB-") || apt.folio.startsWith("BEL-"))) {
+        const numPart = parseInt(apt.folio.replace(/^(MB|BEL)-/, ""), 10);
         if (!isNaN(numPart) && numPart >= nextNum) {
           nextNum = numPart + 1;
         }
@@ -94,9 +97,9 @@ export const useClinicData = () => {
     });
 
     const paddedNum = String(nextNum).padStart(6, "0");
-    const folio = `BEL-${paddedNum}`;
+    const folio = `MB-${paddedNum}`;
 
-    const costNum = typeof formData.serviceCostNumber === "number" ? formData.serviceCostNumber : 650;
+    const costNum = typeof formData.serviceCostNumber === "number" ? formData.serviceCostNumber : 700;
     const hasDeposit = Boolean(formData.hasDeposit);
     const depNum = hasDeposit ? (typeof formData.depositNumber === "number" ? formData.depositNumber : 200) : 0;
     const balanceNum = Math.max(0, costNum - depNum);
@@ -116,7 +119,7 @@ export const useClinicData = () => {
       clientEmail: clientEmail,
       isFirstTime: Boolean(formData.isFirstTime),
       serviceId: formData.serviceId,
-      serviceName: formData.serviceName || "Servicio Bellart",
+      serviceName: formData.serviceName || "Servicio Mujer Bonita",
       professional: formData.professional || "Sin preferencia",
       date: formData.date,
       time: formData.time,

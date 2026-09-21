@@ -36,7 +36,7 @@ export const AdminAppointmentsPage = () => {
   });
 
   // Reminder via wa.me:
-  // "Hola, te recordamos tu cita en Bellart Salón para [servicio] el día [fecha] a las [hora]. Te esperamos."
+  // "Hola, te recordamos tu cita en Mujer Bonita para [servicio] el día [fecha] a las [hora]. Te esperamos."
   const sendWhatsAppReminder = (apt) => {
     trackEvent("whatsapp_reminder_clicked", {
       module: "appointments",
@@ -44,7 +44,7 @@ export const AdminAppointmentsPage = () => {
     });
 
     const clientPhone = apt.clientPhone || apt.patientPhone || "";
-    const text = `Hola, te recordamos tu cita en Bellart Salón para ${apt.serviceName} el día ${apt.date} a las ${apt.time}. Te esperamos.`;
+    const text = `Hola, te recordamos tu cita en Mujer Bonita para ${apt.serviceName} el día ${apt.date} a las ${apt.time}. Te esperamos.`;
     const url = `https://wa.me/52${clientPhone}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
   };
@@ -56,7 +56,7 @@ export const AdminAppointmentsPage = () => {
           <div>
             <h2 className="admin-card-title">Listado General de Citas</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Administra todas las solicitudes de Bellart Salón, confirma turnos y registra anticipos y asistencia.
+              Administra todas las solicitudes de Mujer Bonita, confirma turnos y registra anticipos y asistencia.
             </p>
           </div>
 

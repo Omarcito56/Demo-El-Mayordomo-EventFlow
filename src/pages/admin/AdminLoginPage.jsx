@@ -41,7 +41,7 @@ export const AdminLoginPage = () => {
           </div>
           <span className="login-demo-pill">Acceso demo para administración</span>
           <h1 style={{ fontSize: "1.55rem", color: "var(--color-primary)", marginBottom: "0.35rem" }}>
-            Panel Bellart
+            Panel Mujer Bonita
           </h1>
           <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)" }}>
             Gestión interna de citas, agenda, anticipos y clientes
@@ -114,7 +114,7 @@ export const AdminLoginPage = () => {
         <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
           <Link to="/" style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
             <ArrowLeftIcon size={14} />
-            <span>Volver al sitio público de Bellart Salón</span>
+            <span>Volver al sitio público de Mujer Bonita</span>
           </Link>
         </div>
       </div>

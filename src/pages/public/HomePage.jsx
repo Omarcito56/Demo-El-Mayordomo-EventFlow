@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { Hero } from "../../components/landing/Hero";
 import { BeautyStrip } from "../../components/landing/BeautyStrip";
 import { ServicesSection } from "../../components/landing/ServicesSection";
-import { GallerySection } from "../../components/landing/GallerySection";
 import { ExperienceSection } from "../../components/landing/ExperienceSection";
+import { GallerySection } from "../../components/landing/GallerySection";
+import { RemindersSection } from "../../components/landing/RemindersSection";
 import { StylistsSection } from "../../components/landing/StylistsSection";
 import { ClinicPitch } from "../../components/landing/ClinicPitch";
 import { BookingBanner } from "../../components/landing/BookingBanner";
@@ -17,7 +18,7 @@ export const HomePage = () => {
   });
 
   useEffect(() => {
-    // Handle hash scroll if arriving with hash like #servicios or #galeria or #contacto
+    // Handle hash scroll if arriving with hash like #servicios or #galeria or #contacto or #experiencia
     if (window.location.hash) {
       const id = window.location.hash.replace("#", "");
       const elem = document.getElementById(id);
@@ -34,8 +35,9 @@ export const HomePage = () => {
       <Hero />
       <BeautyStrip />
       <ServicesSection />
-      <GallerySection />
       <ExperienceSection />
+      <GallerySection />
+      <RemindersSection />
       <StylistsSection />
       <ClinicPitch />
       <BookingBanner />

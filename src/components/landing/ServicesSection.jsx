@@ -5,9 +5,6 @@ import { ClockIcon, CalendarIcon, ArrowRightIcon, SparklesIcon } from "../common
 import { trackEvent } from "../../analytics/analytics";
 
 export const ServicesSection = () => {
-  const featuredService = initialServicesData.find(s => s.isFeatured) || initialServicesData[0];
-  const otherServices = initialServicesData.filter(s => s.id !== featuredService.id);
-
   const handleServiceClick = (serviceId, serviceName) => {
     trackEvent("demo_cta_clicked", {
       cta_location: "services_section",
@@ -17,114 +14,72 @@ export const ServicesSection = () => {
   };
 
   return (
-    <section className="services-editorial-section" id="servicios">
+    <section className="services-boutique-section" id="servicios">
       <div className="container">
         <div className="section-header-editorial text-center">
-          <span className="editorial-eyebrow">SERVICIOS SELECCIONADOS</span>
-          <h2 className="editorial-title">Encuentra tu próximo look</h2>
+          <span className="editorial-eyebrow">SERVICIOS DE BELLEZA</span>
+          <h2 className="editorial-title">Un momento para ti</h2>
           <p className="editorial-subtext">
-            Servicios de muestra para visualizar cómo Bellart podría organizar su experiencia de reserva.
+            Explora algunos servicios de muestra y reserva el horario que mejor se adapte a ti.
           </p>
         </div>
 
-        <div className="services-editorial-layout">
-          {/* Large Hero Card for Featured Service (Coloración) */}
-          <div className="featured-service-hero-card">
-            <div className="featured-service-image-box">
-              <img 
-                src={featuredService.image} 
-                alt={featuredService.name} 
-                className="featured-service-img"
-                loading="lazy"
-              />
-              <span className="featured-service-badge">
-                <SparklesIcon size={14} />
-                <span>{featuredService.badge}</span>
-              </span>
-            </div>
-
-            <div className="featured-service-body">
-              <div className="featured-meta-header">
-                <span className="service-category-tag">{featuredService.category}</span>
-                <span className="service-duration-pill">
-                  <ClockIcon size={14} />
-                  <span>{featuredService.duration}</span>
-                </span>
+        <div className="services-boutique-grid">
+          {initialServicesData.map((service) => (
+            <div key={service.id} className="boutique-service-card">
+              <div className="boutique-service-img-wrap">
+                <img 
+                  src={service.image} 
+                  alt={service.name} 
+                  className="boutique-service-img"
+                  loading="lazy"
+                />
+                <span className="boutique-category-pill">{service.category}</span>
+                {service.badge && (
+                  <span className="boutique-badge-pill">
+                    <SparklesIcon size={12} />
+                    <span>{service.badge}</span>
+                  </span>
+                )}
               </div>
 
-              <h3 className="featured-service-title">{featuredService.name}</h3>
-              <p className="featured-service-quote">“{featuredService.tagline}”</p>
-              <p className="featured-service-desc">{featuredService.description}</p>
-
-              <div className="featured-service-footer">
-                <div className="featured-price-group">
-                  <span className="featured-price-val">{featuredService.price}</span>
-                  <span className="featured-price-note">{featuredService.priceNote}</span>
-                </div>
-
-                <Link
-                  to={`/agendar?service=${featuredService.id}`}
-                  className="btn btn-primary btn-featured-book"
-                  onClick={() => handleServiceClick(featuredService.id, featuredService.name)}
-                >
-                  <CalendarIcon size={16} />
-                  <span>Reservar ahora</span>
-                  <ArrowRightIcon size={15} />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Adjacent Grid of Complementary Services */}
-          <div className="compact-services-grid">
-            {otherServices.map((service) => (
-              <div key={service.id} className="compact-service-card">
-                <div className="compact-service-thumb-wrap">
-                  <img 
-                    src={service.image} 
-                    alt={service.name} 
-                    className="compact-service-thumb"
-                    loading="lazy"
-                  />
-                  <span className="compact-category-tag">{service.category}</span>
-                </div>
-
-                <div className="compact-service-info">
-                  <div className="compact-info-top">
-                    <h4 className="compact-service-name">{service.name}</h4>
-                    <span className="compact-service-duration">
-                      <ClockIcon size={13} />
-                      <span>{service.duration}</span>
-                    </span>
-                  </div>
-
-                  <p className="compact-service-tagline">{service.tagline}</p>
-
-                  <div className="compact-service-bottom">
-                    <div className="compact-price-wrap">
-                      <span className="compact-price-val">{service.price}</span>
-                      <span className="compact-price-sub">{service.priceNote}</span>
-                    </div>
-
-                    <Link
-                      to={`/agendar?service=${service.id}`}
-                      className="btn btn-secondary btn-sm btn-compact-book"
-                      onClick={() => handleServiceClick(service.id, service.name)}
-                    >
-                      <span>Reservar</span>
-                      <ArrowRightIcon size={13} />
-                    </Link>
+              <div className="boutique-service-body">
+                <div className="boutique-service-header">
+                  <h3 className="boutique-service-title">{service.name}</h3>
+                  <div className="boutique-service-duration">
+                    <ClockIcon size={13} />
+                    <span>{service.duration}</span>
                   </div>
                 </div>
+
+                <p className="boutique-service-tagline">“{service.tagline}”</p>
+                <p className="boutique-service-desc">{service.description}</p>
+
+                <div className="boutique-service-footer">
+                  <div className="boutique-price-block">
+                    <span className="boutique-price-val">{service.price}</span>
+                    <span className="boutique-price-note">Precio demo</span>
+                  </div>
+
+                  <Link
+                    to={`/agendar?service=${service.id}`}
+                    className="btn btn-primary btn-sm btn-boutique-book"
+                    onClick={() => handleServiceClick(service.id, service.name)}
+                  >
+                    <CalendarIcon size={14} />
+                    <span>Reservar</span>
+                    <ArrowRightIcon size={13} />
+                  </Link>
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
         {/* View all services CTA */}
         <div className="services-bottom-action-bar">
-          <Link to="/servicios" className="btn btn-outline btn-catalog-link">
-            <span>Ver catálogo completo de servicios</span>
+          <Link to="/servicios" className="btn btn-secondary btn-catalog-link">
+            <span>Ver catálogo completo con filtros</span>
             <ArrowRightIcon size={16} />
           </Link>
         </div>

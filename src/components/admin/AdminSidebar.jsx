@@ -24,7 +24,7 @@ export const AdminSidebar = () => {
           <ScissorsIcon size={20} />
         </div>
         <div>
-          <h2 className="sidebar-title">Bellart Salón</h2>
+          <h2 className="sidebar-title">Mujer Bonita</h2>
           <span className="sidebar-sub">PANEL ADMINISTRACIÓN</span>
         </div>
       </div>
@@ -106,7 +106,7 @@ export const AdminSidebar = () => {
       <div className="sidebar-footer">
         <Link to="/" className="sidebar-btn-public">
           <ArrowLeftIcon size={14} />
-          <span>Ver sitio de Bellart</span>
+          <span>Ver sitio de Mujer Bonita</span>
         </Link>
         <button type="button" className="sidebar-btn-logout" onClick={handleLogout}>
           <LogOutIcon size={14} />

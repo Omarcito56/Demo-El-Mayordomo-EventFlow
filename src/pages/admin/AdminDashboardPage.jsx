@@ -114,7 +114,7 @@ export const AdminDashboardPage = () => {
             <div className="alert-content-left">
               <CreditCardIcon size={18} style={{ color: "var(--color-accent)" }} />
               <span>
-                <strong>{noDepositCount} cita{noDepositCount > 1 ? "s" : ""} sin anticipo</strong> (pago completo al llegar a Bellart Salón).
+                <strong>{noDepositCount} cita{noDepositCount > 1 ? "s" : ""} sin anticipo</strong> (pago completo al acudir a Mujer Bonita).
               </span>
             </div>
             <Link to="/admin/pagos" className="btn btn-sm btn-secondary">
@@ -143,7 +143,7 @@ export const AdminDashboardPage = () => {
         {/* Upcoming Appointments Card */}
         <div className="admin-card">
           <div className="admin-card-header">
-            <h3 className="admin-card-title">Próximas Citas en Bellart Salón</h3>
+            <h3 className="admin-card-title">Próximas Citas en Mujer Bonita</h3>
             <Link to="/admin/citas" style={{ fontSize: "0.86rem", fontWeight: 600, color: "var(--color-accent)" }}>
               Ver todas ({appointments.length}) →
             </Link>
@@ -237,7 +237,7 @@ export const AdminDashboardPage = () => {
                 <div>
                   <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Nueva cita solicitada:</span>
                   <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Folio {appointments[0]?.folio || "BEL-000125"} por {appointments[0]?.clientName || appointments[0]?.patientName || "Cliente"}.
+                    Folio {appointments[0]?.folio || "MB-000125"} por {appointments[0]?.clientName || appointments[0]?.patientName || "Cliente"}.
                   </p>
                 </div>
               </div>

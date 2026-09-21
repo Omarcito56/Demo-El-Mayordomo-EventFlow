@@ -16,7 +16,7 @@ export const AppointmentDetailModal = ({ isOpen, onClose, appointment }) => {
   const balance = appointment.balance || "$450";
 
   const whatsappMessage = encodeURIComponent(
-    `Hola ${clientDisplayName}, te contactamos de Bellart Salón respecto a tu cita (${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}.`
+    `Hola ${clientDisplayName}, te contactamos de Mujer Bonita respecto a tu cita (${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}.`
   );
 
   return (

@@ -41,7 +41,7 @@ export const AdminServicesPage = () => {
           <div>
             <h2 className="admin-card-title">Catálogo de Servicios</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Servicios disponibles para agendar en línea en Bellart Salón con tiempos y precios estimados.
+              Servicios disponibles para agendar en línea en Mujer Bonita con tiempos y precios estimados.
             </p>
           </div>
           <div style={{ fontSize: "0.86rem", color: "var(--color-text-secondary)" }}>
@@ -139,7 +139,7 @@ export const AdminServicesPage = () => {
         </div>
 
         <div style={{ marginTop: "1.5rem", padding: "1rem", backgroundColor: "var(--color-bg)", borderRadius: "10px", border: "1px dashed var(--border-light)", fontSize: "0.84rem", color: "var(--color-text-secondary)" }}>
-          ✨ <strong>Nota comercial demostrativa:</strong> En la solución final para Bellart Salón, el catálogo se adapta al menú oficial de servicios, duración real por estilista y precios de la sucursal.
+          ✨ <strong>Nota comercial demostrativa:</strong> En la propuesta final para Mujer Bonita, el catálogo se adapta al menú oficial de servicios, duración real por profesional y precios del salón.
         </div>
       </div>
     </div>

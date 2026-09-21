@@ -10,12 +10,12 @@ import {
 import { trackEvent, useTrackOnMount } from "../../analytics/analytics";
 
 const SALON_TIME_SLOTS = [
-  "9:00 a.m.",
-  "10:30 a.m.",
-  "12:00 p.m.",
-  "2:30 p.m.",
-  "4:00 p.m.",
-  "5:30 p.m."
+  "9:00 AM",
+  "10:30 AM",
+  "12:00 PM",
+  "2:00 PM",
+  "4:00 PM",
+  "5:30 PM"
 ];
 
 export const BookingPage = () => {
@@ -43,7 +43,7 @@ export const BookingPage = () => {
     professionalId: "sin-preferencia",
     professionalName: "Sin preferencia",
     date: getTodayISO(),
-    time: "10:30 a.m.",
+    time: "10:30 AM",
     clientName: "",
     clientPhone: "",
     clientEmail: "",
@@ -222,10 +222,10 @@ export const BookingPage = () => {
       <div className="container">
         {/* Editorial Header */}
         <div className="booking-editorial-header text-center">
-          <span className="editorial-eyebrow">EXPERIENCIA BELLART</span>
-          <h1 className="booking-editorial-title">Reserva tu momento Bellart</h1>
+          <span className="editorial-eyebrow">MUJER BONITA BY PAULINA CASTILLO</span>
+          <h1 className="booking-editorial-title">Reserva tu cita</h1>
           <p className="booking-editorial-sub">
-            Selecciona tu servicio, profesional y horario ideal en Reynosa en pocos pasos.
+            Selecciona tu servicio, profesional y horario ideal en pocos pasos.
           </p>
         </div>
 
@@ -506,7 +506,7 @@ export const BookingPage = () => {
                     id="clientPhone"
                     name="clientPhone"
                     className="editorial-text-input ph-mask"
-                    placeholder="Ej. 899 124 1188"
+                    placeholder="Ej. 899 545 2489"
                     value={bookingData.clientPhone}
                     onChange={handleFieldChange}
                   />
@@ -528,7 +528,7 @@ export const BookingPage = () => {
                 </div>
 
                 <div className="form-field-group full-width">
-                  <label className="editorial-field-label">¿Es tu primera visita a Bellart Salón?</label>
+                  <label className="editorial-field-label">¿Es tu primera visita a Mujer Bonita?</label>
                   <div className="editorial-radio-row">
                     <label className="editorial-radio-item">
                       <input
@@ -580,7 +580,7 @@ export const BookingPage = () => {
                   onChange={handleFieldChange}
                 />
                 <label htmlFor="privacyAccepted" className="privacy-check-label">
-                  Acepto el <strong>aviso de privacidad de Bellart Salón</strong>. Los datos registrados serán utilizados exclusivamente para coordinar mi cita y confirmación previa por WhatsApp.
+                  Acepto el <strong>aviso de privacidad de Mujer Bonita</strong>. Los datos registrados serán utilizados exclusivamente para coordinar mi cita y confirmación previa por WhatsApp.
                 </label>
               </div>
 
@@ -604,14 +604,14 @@ export const BookingPage = () => {
                 <span className="step-tag">PASO 05</span>
                 <h2 className="step-title">Anticipo y Resumen</h2>
                 <p className="step-desc">
-                  Puedes registrar un anticipo para asegurar tu horario con la estilista seleccionada.
+                  Si lo deseas, puedes registrar un anticipo demo para asegurar el horario.
                 </p>
               </div>
 
               {/* Financial Breakdown Card with Demo Mode Badge */}
               <div className="editorial-deposit-card">
                 <div className="deposit-card-top-badge">
-                  <span className="demo-mode-pill">MODO DEMOSTRACIÓN</span>
+                  <span className="demo-mode-pill">DEMO</span>
                 </div>
 
                 <div className="deposit-details-list">
@@ -628,21 +628,21 @@ export const BookingPage = () => {
                     <strong className="item-val">{bookingData.date} — {bookingData.time}</strong>
                   </div>
                   <div className="deposit-item-row">
-                    <span className="item-lbl">Costo estimado:</span>
+                    <span className="item-lbl">Precio demostrativo:</span>
                     <strong className="item-val">${serviceCost} MXN</strong>
                   </div>
 
                   <div className="deposit-card-divider"></div>
 
                   <div className="deposit-item-row highlight-row">
-                    <span className="item-lbl">Anticipo sugerido:</span>
+                    <span className="item-lbl">Anticipo demo:</span>
                     <strong className="item-val highlight-val">
                       {bookingData.hasDeposit ? `$${bookingData.suggestedDeposit} MXN` : "$0 MXN"}
                     </strong>
                   </div>
 
                   <div className="deposit-item-row balance-row">
-                    <span className="item-lbl">Saldo a liquidar en salón:</span>
+                    <span className="item-lbl">Saldo demostrativo:</span>
                     <strong className="item-val balance-val">
                       ${remainingBalance} MXN
                     </strong>
@@ -650,10 +650,10 @@ export const BookingPage = () => {
                 </div>
               </div>
 
-              {/* Toggle Anticipo Demo vs Sin Anticipo */}
+              {/* Toggle Anticipo Demo vs Continuar sin anticipo */}
               <div className="deposit-toggle-container">
                 <label className="editorial-field-label" style={{ marginBottom: "0.85rem", display: "block" }}>
-                  Selecciona la modalidad de reserva:
+                  Modalidad:
                 </label>
 
                 <div className="deposit-toggle-cards">
@@ -666,7 +666,7 @@ export const BookingPage = () => {
                     </div>
                     <div>
                       <strong>Registrar anticipo demo (${bookingData.suggestedDeposit} MXN)</strong>
-                      <p>Simula el pago previo para apartar tu horario garantizado.</p>
+                      <p>Simula el apartado de tu horario garantizado.</p>
                     </div>
                   </div>
 
@@ -678,8 +678,8 @@ export const BookingPage = () => {
                       {!bookingData.hasDeposit && <div className="radio-inner-dot"></div>}
                     </div>
                     <div>
-                      <strong>Reservar sin anticipo</strong>
-                      <p>Liquidarás el total de ${serviceCost} MXN directamente al acudir al salón.</p>
+                      <strong>Continuar sin anticipo</strong>
+                      <p>Solicita tu cita sin registrar pago previo.</p>
                     </div>
                   </div>
                 </div>
@@ -694,9 +694,9 @@ export const BookingPage = () => {
 
                   <div className="editorial-methods-grid">
                     {[
-                      { id: "Tarjeta demo", label: "Tarjeta", icon: <CreditCardIcon size={17} /> },
-                      { id: "Transferencia demo", label: "Transferencia", icon: <SparklesIcon size={17} /> },
-                      { id: "Efectivo en salón", label: "Efectivo en salón", icon: <ClockIcon size={17} /> }
+                      { id: "Tarjeta demo", label: "Tarjeta demo", icon: <CreditCardIcon size={17} /> },
+                      { id: "Transferencia demo", label: "Transferencia demo", icon: <SparklesIcon size={17} /> },
+                      { id: "En salón", label: "En salón", icon: <ClockIcon size={17} /> }
                     ].map((method) => (
                       <button
                         type="button"
@@ -711,7 +711,7 @@ export const BookingPage = () => {
                   </div>
 
                   <div className="demo-disclaimer-box">
-                    ℹ️ <strong>Simulación comercial:</strong> No se efectúa ningún cobro financiero real. La versión final puede vincularse a pasarelas bancarias o cobro con terminal en salón.
+                    ℹ️ <strong>Información demostrativa:</strong> No se efectúa ningún cobro financiero real. La propuesta final puede adaptarse a la información y políticas reales de Mujer Bonita.
                   </div>
                 </div>
               )}

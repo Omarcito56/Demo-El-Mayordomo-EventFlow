@@ -49,4 +49,4 @@ export const initialProfessionalsData = [
   }
 ];
 
-export const professionalsDisclaimer = "Perfiles demostrativos para mostrar cómo podría funcionar la selección de profesional.";
+export const professionalsDisclaimer = "Perfiles demostrativos para mostrar cómo podría funcionar la selección de profesional en Mujer Bonita. La propuesta final puede adaptarse al equipo real del salón.";

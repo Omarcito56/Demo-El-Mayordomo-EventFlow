@@ -31,7 +31,7 @@ export const HowItWorks = () => {
           <span className="section-tag">Paso a Paso</span>
           <h2 className="section-title">¿Cómo funciona la agenda en línea?</h2>
           <p className="section-desc">
-            En solo 4 pasos sencillos podrás programar tu próxima cita en Bellart Salón sin complicaciones ni esperas.
+            En solo 4 pasos sencillos podrás programar tu próxima cita en Mujer Bonita sin complicaciones ni esperas.
           </p>
         </div>
 
