@@ -13,73 +13,128 @@ export const ServicesSection = () => {
     });
   };
 
+  const featuredService = initialServicesData.find((s) => s.isFeatured) || initialServicesData[0];
+  const otherServices = initialServicesData.filter((s) => s.id !== featuredService.id);
+
   return (
     <section className="services-boutique-section" id="servicios">
       <div className="container">
+        {/* Section Header */}
         <div className="section-header-editorial text-center">
-          <span className="editorial-eyebrow">SERVICIOS DE BELLEZA</span>
-          <h2 className="editorial-title">Un momento para ti</h2>
+          <span className="editorial-eyebrow">CARTA DE SERVICIOS</span>
+          <h2 className="editorial-title">Encuentra tu próximo set</h2>
           <p className="editorial-subtext">
-            Explora algunos servicios de muestra y reserva el horario que mejor se adapte a ti.
+            Servicios demostrativos para mostrar cómo GLAMUROSA podría organizar sus reservas.
           </p>
         </div>
 
-        <div className="services-boutique-grid">
-          {initialServicesData.map((service) => (
-            <div key={service.id} className="boutique-service-card">
-              <div className="boutique-service-img-wrap">
+        {/* Visual Combination Layout: Featured Hero Service Card + Grid of Medium Cards */}
+        <div className="services-combined-layout">
+          {/* Featured Large Service Card (Uñas Acrílicas) */}
+          {featuredService && (
+            <div className="service-featured-master-card">
+              <div className="featured-card-media">
                 <img 
-                  src={service.image} 
-                  alt={service.name} 
-                  className="boutique-service-img"
+                  src={featuredService.image} 
+                  alt={featuredService.name} 
+                  className="featured-service-img"
                   loading="lazy"
                 />
-                <span className="boutique-category-pill">{service.category}</span>
-                {service.badge && (
-                  <span className="boutique-badge-pill">
-                    <SparklesIcon size={12} />
-                    <span>{service.badge}</span>
-                  </span>
-                )}
+                <div className="featured-badge-tag">
+                  <SparklesIcon size={13} />
+                  <span>{featuredService.badge || "Servicio Estrella"}</span>
+                </div>
               </div>
 
-              <div className="boutique-service-body">
-                <div className="boutique-service-header">
-                  <h3 className="boutique-service-title">{service.name}</h3>
-                  <div className="boutique-service-duration">
-                    <ClockIcon size={13} />
-                    <span>{service.duration}</span>
+              <div className="featured-card-content">
+                <div className="featured-card-category-strip">
+                  <span className="featured-cat-pill">{featuredService.category}</span>
+                  <div className="featured-duration-badge">
+                    <ClockIcon size={14} />
+                    <span>{featuredService.duration}</span>
                   </div>
                 </div>
 
-                <p className="boutique-service-tagline">“{service.tagline}”</p>
-                <p className="boutique-service-desc">{service.description}</p>
+                <h3 className="featured-card-title">{featuredService.name}</h3>
+                <p className="featured-card-tagline">“{featuredService.tagline}”</p>
+                <p className="featured-card-desc">{featuredService.description}</p>
 
-                <div className="boutique-service-footer">
-                  <div className="boutique-price-block">
-                    <span className="boutique-price-val">{service.price}</span>
-                    <span className="boutique-price-note">Precio demo</span>
+                <div className="featured-card-footer">
+                  <div className="featured-price-group">
+                    <span className="featured-price-val">{featuredService.price}</span>
+                    <span className="featured-deposit-hint">Anticipo demo: ${featuredService.suggestedDeposit} MXN</span>
                   </div>
 
                   <Link
-                    to={`/agendar?service=${service.id}`}
-                    className="btn btn-primary btn-sm btn-boutique-book"
-                    onClick={() => handleServiceClick(service.id, service.name)}
+                    to={`/agendar?service=${featuredService.id}`}
+                    className="btn btn-primary btn-featured-book"
+                    onClick={() => handleServiceClick(featuredService.id, featuredService.name)}
                   >
-                    <CalendarIcon size={14} />
-                    <span>Reservar</span>
-                    <ArrowRightIcon size={13} />
+                    <CalendarIcon size={16} />
+                    <span>Reservar este set</span>
+                    <ArrowRightIcon size={15} />
                   </Link>
                 </div>
               </div>
             </div>
-          ))}
+          )}
+
+          {/* Grid of Medium Services Cards */}
+          <div className="services-medium-grid">
+            {otherServices.map((service) => (
+              <div key={service.id} className="service-medium-card">
+                <div className="service-medium-media">
+                  <img 
+                    src={service.image} 
+                    alt={service.name} 
+                    className="service-medium-img"
+                    loading="lazy"
+                  />
+                  <span className="service-medium-cat-tag">{service.category}</span>
+                  {service.badge && (
+                    <span className="service-medium-badge-tag">
+                      <SparklesIcon size={11} />
+                      <span>{service.badge}</span>
+                    </span>
+                  )}
+                </div>
+
+                <div className="service-medium-body">
+                  <div className="service-medium-top-row">
+                    <h4 className="service-medium-name">{service.name}</h4>
+                    <div className="service-medium-duration">
+                      <ClockIcon size={13} />
+                      <span>{service.duration}</span>
+                    </div>
+                  </div>
+
+                  <p className="service-medium-desc">{service.description}</p>
+
+                  <div className="service-medium-footer">
+                    <div className="service-medium-price-block">
+                      <span className="service-medium-price">{service.price}</span>
+                      <span className="service-medium-subprice">Precio demo</span>
+                    </div>
+
+                    <Link
+                      to={`/agendar?service=${service.id}`}
+                      className="btn btn-primary btn-sm btn-medium-book"
+                      onClick={() => handleServiceClick(service.id, service.name)}
+                    >
+                      <CalendarIcon size={13} />
+                      <span>Reservar</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* View all services CTA */}
         <div className="services-bottom-action-bar">
           <Link to="/servicios" className="btn btn-secondary btn-catalog-link">
-            <span>Ver catálogo completo con filtros</span>
+            <span>Ver menú de servicios con filtros</span>
             <ArrowRightIcon size={16} />
           </Link>
         </div>

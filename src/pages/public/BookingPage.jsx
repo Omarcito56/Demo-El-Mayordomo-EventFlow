@@ -31,16 +31,17 @@ export const BookingPage = () => {
     return d.toISOString().split("T")[0];
   };
 
-  const initialServiceId = searchParams.get("service") || (services[0]?.id || "coloracion");
+  const initialServiceId = searchParams.get("service") || (services[0]?.id || "unas-acrilicas");
+  const initialTechId = searchParams.get("tech") || "sin-preferencia";
 
   const [bookingData, setBookingData] = useState({
     serviceId: initialServiceId,
     serviceName: "",
     servicePrice: "",
-    serviceCostNumber: 650,
+    serviceCostNumber: 550,
     serviceDuration: "",
     suggestedDeposit: 200,
-    professionalId: "sin-preferencia",
+    professionalId: initialTechId,
     professionalName: "Sin preferencia",
     date: getTodayISO(),
     time: "10:30 AM",
@@ -63,12 +64,26 @@ export const BookingPage = () => {
         serviceId: selected.id,
         serviceName: selected.name,
         servicePrice: selected.price,
-        serviceCostNumber: selected.priceNumber || 650,
+        serviceCostNumber: selected.priceNumber || 550,
         serviceDuration: selected.duration,
         suggestedDeposit: selected.suggestedDeposit || 200
       }));
     }
   }, [bookingData.serviceId, services]);
+
+  // Sync technician if URL param changes
+  useEffect(() => {
+    if (initialTechId && initialTechId !== "sin-preferencia") {
+      const tech = initialProfessionalsData.find((p) => p.id === initialTechId);
+      if (tech) {
+        setBookingData((prev) => ({
+          ...prev,
+          professionalId: tech.id,
+          professionalName: tech.name
+        }));
+      }
+    }
+  }, [initialTechId]);
 
   // Track booking_started una única vez al montar
   useTrackOnMount("booking_started", {
@@ -83,7 +98,7 @@ export const BookingPage = () => {
       serviceId: service.id,
       serviceName: service.name,
       servicePrice: service.price,
-      serviceCostNumber: service.priceNumber || 650,
+      serviceCostNumber: service.priceNumber || 550,
       serviceDuration: service.duration,
       suggestedDeposit: service.suggestedDeposit || 200
     }));
@@ -123,7 +138,7 @@ export const BookingPage = () => {
       }
     } else if (currentStep === 2) {
       if (!bookingData.professionalId) {
-        setFormError("Por favor selecciona una profesional o la opción 'Sin preferencia'.");
+        setFormError("Por favor selecciona una técnica o la opción 'Sin preferencia'.");
         return false;
       }
     } else if (currentStep === 3) {
@@ -196,7 +211,7 @@ export const BookingPage = () => {
       time: bookingData.time,
       hasDeposit: bookingData.hasDeposit,
       depositNumber: bookingData.suggestedDeposit,
-      paymentMethod: bookingData.hasDeposit ? bookingData.paymentMethod : "En salón",
+      paymentMethod: bookingData.hasDeposit ? bookingData.paymentMethod : "En studio",
       comments: bookingData.comments
     });
 
@@ -204,13 +219,13 @@ export const BookingPage = () => {
     navigate("/confirmacion", { state: { appointment: newAppointment } });
   };
 
-  const serviceCost = bookingData.serviceCostNumber || 650;
+  const serviceCost = bookingData.serviceCostNumber || 550;
   const suggestedDeposit = bookingData.hasDeposit ? (bookingData.suggestedDeposit || 200) : 0;
   const remainingBalance = Math.max(0, serviceCost - suggestedDeposit);
 
   const wizardSteps = [
     { num: "01", label: "Servicio" },
-    { num: "02", label: "Profesional" },
+    { num: "02", label: "Técnica" },
     { num: "03", label: "Horario" },
     { num: "04", label: "Tus datos" },
     { num: "05", label: "Anticipo" },
@@ -222,14 +237,14 @@ export const BookingPage = () => {
       <div className="container">
         {/* Editorial Header */}
         <div className="booking-editorial-header text-center">
-          <span className="editorial-eyebrow">MUJER BONITA BY PAULINA CASTILLO</span>
-          <h1 className="booking-editorial-title">Reserva tu cita</h1>
+          <span className="editorial-eyebrow">GLAMUROSA NAIL’S</span>
+          <h1 className="booking-editorial-title">Reserva tu cita en GLAMUROSA</h1>
           <p className="booking-editorial-sub">
-            Selecciona tu servicio, profesional y horario ideal en pocos pasos.
+            Selecciona tu servicio, técnica y horario ideal en pocos pasos.
           </p>
         </div>
 
-        {/* Minimalist Editorial Stepper */}
+        {/* Minimalist Editorial Stepper (01 Servicio, 02 Técnica, 03 Horario, 04 Tus datos, 05 Anticipo, 06 Confirmación) */}
         <div className="editorial-stepper-bar">
           {wizardSteps.map((st, idx) => {
             const stepIndex = idx + 1;
@@ -268,7 +283,7 @@ export const BookingPage = () => {
                 <span className="step-tag">PASO 01</span>
                 <h2 className="step-title">Elige tu servicio</h2>
                 <p className="step-desc">
-                  Selecciona el servicio que deseas realizarte para coordinar el tiempo y productos necesarios.
+                  Selecciona el servicio que deseas realizarte para coordinar el tiempo y materiales de tu set.
                 </p>
               </div>
 
@@ -314,21 +329,21 @@ export const BookingPage = () => {
 
               <div className="wizard-nav-btns" style={{ justifyContent: "flex-end" }}>
                 <button type="button" className="btn btn-primary" onClick={nextStep}>
-                  <span>Continuar a Profesional</span>
+                  <span>Continuar a Técnica</span>
                   <ArrowRightIcon size={16} />
                 </button>
               </div>
             </div>
           )}
 
-          {/* ================= STEP 2: PROFESIONAL ================= */}
+          {/* ================= STEP 2: TÉCNICA ================= */}
           {currentStep === 2 && (
             <div className="step-pane">
               <div className="step-pane-header">
                 <span className="step-tag">PASO 02</span>
-                <h2 className="step-title">Selecciona profesional</h2>
+                <h2 className="step-title">¿Con quién prefieres tu cita?</h2>
                 <p className="step-desc">
-                  Elige a tu estilista de confianza o la opción flexible con mayor disponibilidad de turnos.
+                  Elige a tu técnica de preferencia o selecciona la opción flexible con mayor disponibilidad de turnos.
                 </p>
               </div>
 
@@ -374,7 +389,7 @@ export const BookingPage = () => {
               </div>
 
               <div className="booking-info-note">
-                ✨ Perfiles demostrativos para visualizar la selección de profesional en el flujo final.
+                ✨ Perfiles demostrativos para visualizar la selección de técnica en GLAMUROSA NAIL’S.
               </div>
 
               <div className="wizard-nav-btns">
@@ -390,7 +405,7 @@ export const BookingPage = () => {
             </div>
           )}
 
-          {/* ================= STEP 3: FECHA Y HORARIO ================= */}
+          {/* ================= STEP 3: HORARIO ================= */}
           {currentStep === 3 && (
             <div className="step-pane">
               <div className="step-pane-header">
@@ -418,7 +433,7 @@ export const BookingPage = () => {
                     onChange={handleFieldChange}
                   />
                   <p className="field-helper-text">
-                    Atención de Lunes a Sábado. Los horarios disponibles se ajustan a la estilista seleccionada.
+                    Atención de Lunes a Sábado. Los horarios disponibles se ajustan a la técnica seleccionada.
                   </p>
                 </div>
 
@@ -470,7 +485,7 @@ export const BookingPage = () => {
             </div>
           )}
 
-          {/* ================= STEP 4: DATOS DEL CLIENTE ================= */}
+          {/* ================= STEP 4: TUS DATOS ================= */}
           {currentStep === 4 && (
             <div className="step-pane">
               <div className="step-pane-header">
@@ -491,7 +506,7 @@ export const BookingPage = () => {
                     id="clientName"
                     name="clientName"
                     className="editorial-text-input ph-mask"
-                    placeholder="Ej. Sofía Hernández"
+                    placeholder="Ej. Valeria García"
                     value={bookingData.clientName}
                     onChange={handleFieldChange}
                   />
@@ -506,7 +521,7 @@ export const BookingPage = () => {
                     id="clientPhone"
                     name="clientPhone"
                     className="editorial-text-input ph-mask"
-                    placeholder="Ej. 899 545 2489"
+                    placeholder="Ej. 899 256 9812"
                     value={bookingData.clientPhone}
                     onChange={handleFieldChange}
                   />
@@ -528,7 +543,7 @@ export const BookingPage = () => {
                 </div>
 
                 <div className="form-field-group full-width">
-                  <label className="editorial-field-label">¿Es tu primera visita a Mujer Bonita?</label>
+                  <label className="editorial-field-label">¿Es tu primera visita a GLAMUROSA NAIL’S?</label>
                   <div className="editorial-radio-row">
                     <label className="editorial-radio-item">
                       <input
@@ -555,14 +570,14 @@ export const BookingPage = () => {
 
                 <div className="form-field-group full-width">
                   <label className="editorial-field-label" htmlFor="comments">
-                    Comentarios opcionales para la estilista
+                    Comentarios opcionales para la técnica
                   </label>
                   <textarea
                     id="comments"
                     name="comments"
                     className="editorial-text-input ph-mask"
                     rows="2"
-                    placeholder="Ej. Cabello teñido previamente, preferencia de tono frío, diseño especial de uñas, etc."
+                    placeholder="Ej. Uñas cortas, preferencia de punta almendrada, diseño especial con efecto chrome, retiro de set anterior, etc."
                     value={bookingData.comments}
                     onChange={handleFieldChange}
                   ></textarea>
@@ -580,7 +595,7 @@ export const BookingPage = () => {
                   onChange={handleFieldChange}
                 />
                 <label htmlFor="privacyAccepted" className="privacy-check-label">
-                  Acepto el <strong>aviso de privacidad de Mujer Bonita</strong>. Los datos registrados serán utilizados exclusivamente para coordinar mi cita y confirmación previa por WhatsApp.
+                  Acepto el <strong>aviso de privacidad de GLAMUROSA NAIL’S</strong>. Los datos registrados serán utilizados exclusivamente para coordinar mi cita y confirmación previa por WhatsApp.
                 </label>
               </div>
 
@@ -604,14 +619,14 @@ export const BookingPage = () => {
                 <span className="step-tag">PASO 05</span>
                 <h2 className="step-title">Anticipo y Resumen</h2>
                 <p className="step-desc">
-                  Si lo deseas, puedes registrar un anticipo demo para asegurar el horario.
+                  Revisa el resumen de tu cita y si lo deseas, registra un anticipo demo para apartar tu horario.
                 </p>
               </div>
 
               {/* Financial Breakdown Card with Demo Mode Badge */}
               <div className="editorial-deposit-card">
                 <div className="deposit-card-top-badge">
-                  <span className="demo-mode-pill">DEMO</span>
+                  <span className="demo-mode-pill">MODO DEMOSTRACIÓN</span>
                 </div>
 
                 <div className="deposit-details-list">
@@ -620,11 +635,11 @@ export const BookingPage = () => {
                     <strong className="item-val">{bookingData.serviceName} ({bookingData.serviceDuration})</strong>
                   </div>
                   <div className="deposit-item-row">
-                    <span className="item-lbl">Profesional / Estilista:</span>
+                    <span className="item-lbl">Técnica:</span>
                     <strong className="item-val">{bookingData.professionalName}</strong>
                   </div>
                   <div className="deposit-item-row">
-                    <span className="item-lbl">Fecha y hora:</span>
+                    <span className="item-lbl">Fecha y horario:</span>
                     <strong className="item-val">{bookingData.date} — {bookingData.time}</strong>
                   </div>
                   <div className="deposit-item-row">
@@ -635,14 +650,14 @@ export const BookingPage = () => {
                   <div className="deposit-card-divider"></div>
 
                   <div className="deposit-item-row highlight-row">
-                    <span className="item-lbl">Anticipo demo:</span>
+                    <span className="item-lbl">Anticipo sugerido:</span>
                     <strong className="item-val highlight-val">
                       {bookingData.hasDeposit ? `$${bookingData.suggestedDeposit} MXN` : "$0 MXN"}
                     </strong>
                   </div>
 
                   <div className="deposit-item-row balance-row">
-                    <span className="item-lbl">Saldo demostrativo:</span>
+                    <span className="item-lbl">Saldo restante en studio:</span>
                     <strong className="item-val balance-val">
                       ${remainingBalance} MXN
                     </strong>
@@ -653,7 +668,7 @@ export const BookingPage = () => {
               {/* Toggle Anticipo Demo vs Continuar sin anticipo */}
               <div className="deposit-toggle-container">
                 <label className="editorial-field-label" style={{ marginBottom: "0.85rem", display: "block" }}>
-                  Modalidad:
+                  Modalidad de apartado:
                 </label>
 
                 <div className="deposit-toggle-cards">
@@ -666,7 +681,7 @@ export const BookingPage = () => {
                     </div>
                     <div>
                       <strong>Registrar anticipo demo (${bookingData.suggestedDeposit} MXN)</strong>
-                      <p>Simula el apartado de tu horario garantizado.</p>
+                      <p>Simula el apartado garantizado de tu horario en la agenda.</p>
                     </div>
                   </div>
 
@@ -678,8 +693,8 @@ export const BookingPage = () => {
                       {!bookingData.hasDeposit && <div className="radio-inner-dot"></div>}
                     </div>
                     <div>
-                      <strong>Continuar sin anticipo</strong>
-                      <p>Solicita tu cita sin registrar pago previo.</p>
+                      <strong>Reservar sin anticipo</strong>
+                      <p>Solicita tu cita sin registrar pago previo (pago total al acudir).</p>
                     </div>
                   </div>
                 </div>
@@ -696,7 +711,7 @@ export const BookingPage = () => {
                     {[
                       { id: "Tarjeta demo", label: "Tarjeta demo", icon: <CreditCardIcon size={17} /> },
                       { id: "Transferencia demo", label: "Transferencia demo", icon: <SparklesIcon size={17} /> },
-                      { id: "En salón", label: "En salón", icon: <ClockIcon size={17} /> }
+                      { id: "Efectivo en studio", label: "Efectivo en studio", icon: <ClockIcon size={17} /> }
                     ].map((method) => (
                       <button
                         type="button"
@@ -711,7 +726,7 @@ export const BookingPage = () => {
                   </div>
 
                   <div className="demo-disclaimer-box">
-                    ℹ️ <strong>Información demostrativa:</strong> No se efectúa ningún cobro financiero real. La propuesta final puede adaptarse a la información y políticas reales de Mujer Bonita.
+                    ℹ️ <strong>Información demostrativa:</strong> No se efectúa ningún cobro financiero real. La propuesta final puede adaptarse a la información y políticas reales de GLAMUROSA NAIL’S.
                   </div>
                 </div>
               )}

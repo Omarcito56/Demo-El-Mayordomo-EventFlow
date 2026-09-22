@@ -14,12 +14,11 @@ export const RemindersSection = () => {
             </div>
 
             <h2 className="reminders-title">
-              No pierdas de vista <br />
-              <span className="reminders-serif-highlight">tu próxima cita</span>
+              Tu cita siempre presente
             </h2>
 
             <p className="reminders-desc">
-              La experiencia puede complementarse con confirmaciones y recordatorios para ayudar a reducir olvidos y mantener una agenda más organizada.
+              La propuesta también puede complementarse con confirmaciones y recordatorios para mantener una agenda más organizada.
             </p>
 
             <div className="reminders-benefits-list">
@@ -28,8 +27,8 @@ export const RemindersSection = () => {
                   <CheckCircleIcon size={16} />
                 </div>
                 <div>
-                  <strong>Menos citas olvidadas</strong>
-                  <p>Notificaciones oportunas para que tus clientas tengan siempre presente su turno.</p>
+                  <strong>Menos ausencias de último momento</strong>
+                  <p>Notificaciones oportunas para que tus clientas tengan siempre presente su horario en el studio.</p>
                 </div>
               </div>
 
@@ -38,14 +37,14 @@ export const RemindersSection = () => {
                   <CheckCircleIcon size={16} />
                 </div>
                 <div>
-                  <strong>Agenda protegida</strong>
-                  <p>Confirmación previa que permite reasignar espacios libres con tiempo.</p>
+                  <strong>Agenda protegida y organizada</strong>
+                  <p>Confirmación previa que permite reasignar espacios libres con tiempo para otras clientas.</p>
                 </div>
               </div>
             </div>
 
             <div className="reminders-disclaimer-note">
-              <span>* Funcionalidad demostrativa. La automatización real puede integrarse en una versión final.</span>
+              <span>* Representación demostrativa. La automatización real puede integrarse en una versión final.</span>
             </div>
           </div>
 
@@ -64,12 +63,12 @@ export const RemindersSection = () => {
 
               {/* Chat Header */}
               <div className="chat-mockup-header">
-                <div className="chat-avatar-mini">
-                  <span>MB</span>
+                <div className="chat-avatar-mini" style={{ background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)", color: "#FFF" }}>
+                  <span>GN</span>
                 </div>
                 <div className="chat-header-info">
-                  <strong>Mujer Bonita</strong>
-                  <span className="chat-status-online">En línea · Cuenta comercial</span>
+                  <strong>GLAMUROSA NAIL’S</strong>
+                  <span className="chat-status-online">En línea · Cuenta oficial</span>
                 </div>
                 <div className="chat-header-action">
                   <WhatsAppIcon size={18} />
@@ -84,13 +83,13 @@ export const RemindersSection = () => {
                 <div className="chat-bubble chat-bubble-received">
                   <div className="bubble-brand-tag">
                     <SparklesIcon size={13} />
-                    <span>Mujer Bonita 💕</span>
+                    <span>GLAMUROSA ✨</span>
                   </div>
                   <p className="bubble-text">
-                    Te recordamos que tienes una cita mañana a las 4:00 PM.
+                    Te recordamos tu cita mañana a las 4:00 PM.
                   </p>
                   <p className="bubble-text-sub">
-                    Si necesitas reagendar o confirmar, responde a este mensaje. ¡Te esperamos!
+                    Si necesitas confirmar o tienes alguna duda con tu set, responde a este mensaje. ¡Te esperamos!
                   </p>
                   <div className="bubble-timestamp">
                     <span>3:45 PM</span>
@@ -101,7 +100,7 @@ export const RemindersSection = () => {
                 {/* Customer response bubble */}
                 <div className="chat-bubble chat-bubble-sent">
                   <p className="bubble-text">
-                    ¡Confirmada! Muchas gracias 💕
+                    ¡Confirmadísima! Nos vemos mañana a las 4 ✨💅
                   </p>
                   <div className="bubble-timestamp">
                     <span>3:48 PM</span>

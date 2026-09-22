@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "../common/Modal";
 import { StatusBadge } from "../common/StatusBadge";
-import { WhatsAppIcon, ClockIcon, UserIcon, ScissorsIcon, SparklesIcon, CreditCardIcon } from "../common/Icons";
+import { WhatsAppIcon, ClockIcon, UserIcon, SparklesIcon, CreditCardIcon } from "../common/Icons";
 import { trackEvent } from "../../analytics/analytics";
 
 export const AppointmentDetailModal = ({ isOpen, onClose, appointment }) => {
@@ -11,12 +11,12 @@ export const AppointmentDetailModal = ({ isOpen, onClose, appointment }) => {
   const clientPhone = appointment.clientPhone || appointment.patientPhone || "";
   const clientEmail = appointment.clientEmail || appointment.patientEmail || "No registrado";
   const professionalName = appointment.professional || "Sin preferencia";
-  const cost = appointment.cost || "$650";
+  const cost = appointment.cost || "$550";
   const deposit = appointment.depositAmount || "$0";
-  const balance = appointment.balance || "$450";
+  const balance = appointment.balance || "$350";
 
   const whatsappMessage = encodeURIComponent(
-    `Hola ${clientDisplayName}, te contactamos de Mujer Bonita respecto a tu cita (${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}.`
+    `Hola ${clientDisplayName}, te contactamos de GLAMUROSA NAIL’S respecto a tu cita (${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}.`
   );
 
   return (
@@ -49,7 +49,7 @@ export const AppointmentDetailModal = ({ isOpen, onClose, appointment }) => {
           </div>
         </div>
 
-        {/* Detailed Grid: Folio, Cliente, Teléfono, Correo, Servicio, Profesional, Fecha, Hora, Costo, Anticipo, Saldo, Comentarios */}
+        {/* Detailed Grid */}
         <div className="detail-grid">
           <div>
             <div className="detail-lbl">Cliente</div>
@@ -59,7 +59,7 @@ export const AppointmentDetailModal = ({ isOpen, onClose, appointment }) => {
           <div>
             <div className="detail-lbl">Tipo de Cliente</div>
             <div className="detail-val">
-              {appointment.isFirstTime ? "Primera visita" : "Cliente frecuente"}
+              {appointment.isFirstTime ? "Primera visita" : "Clienta frecuente"}
             </div>
           </div>
 
@@ -90,7 +90,7 @@ export const AppointmentDetailModal = ({ isOpen, onClose, appointment }) => {
           </div>
 
           <div>
-            <div className="detail-lbl">Profesional / Estilista</div>
+            <div className="detail-lbl">Técnica</div>
             <div className="detail-val" style={{ color: "var(--color-primary)", fontWeight: 700 }}>
               {professionalName}
             </div>
@@ -120,13 +120,13 @@ export const AppointmentDetailModal = ({ isOpen, onClose, appointment }) => {
           </div>
 
           <div className="detail-item-full" style={{ background: "var(--color-primary-soft)", padding: "0.75rem 1rem", borderRadius: "8px", border: "1px solid var(--color-primary-soft-border)" }}>
-            <div className="detail-lbl">Saldo Restante por Liquidar en Salón</div>
+            <div className="detail-lbl">Saldo Restante por Liquidar en Studio</div>
             <div className="detail-val" style={{ color: "var(--color-primary)", fontWeight: 800, fontSize: "1.1rem" }}>
               {balance}
             </div>
           </div>
 
-          {/* Comentarios del cliente */}
+          {/* Comentarios de la clienta */}
           <div className="detail-item-full">
             <div className="detail-lbl">Comentarios o Peticiones Especiales</div>
             <div className="ph-mask" style={{ 

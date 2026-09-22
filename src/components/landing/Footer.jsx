@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MapPinIcon, PhoneIcon, WhatsAppIcon, ClockIcon, SparklesIcon } from "../common/Icons";
+import { PhoneIcon, WhatsAppIcon, ClockIcon, SparklesIcon } from "../common/Icons";
 import { initialBusinessData } from "../../data/businessData";
 
 export const Footer = () => {
@@ -10,10 +10,10 @@ export const Footer = () => {
         <div className="footer-editorial-grid">
           {/* Brand Column */}
           <div className="footer-editorial-brand">
-            <span className="footer-brand-title">Mujer Bonita</span>
-            <span className="footer-brand-tagline">by Paulina Castillo</span>
+            <span className="footer-brand-title">GLAMUROSA</span>
+            <span className="footer-brand-tagline">NAIL’S STUDIO</span>
             <p className="footer-editorial-desc">
-              Beauty Boutique. Servicios de estilismo, coloración, peinado, maquillaje y cuidado personal por cita. Consulta disponibilidad y agenda tu cita en línea.
+              Nail Studio Experience. Servicios de uñas acrílicas, gel semipermanente, nail art, manicure y pedicure spa por cita. Consulta disponibilidad y reserva tu set en línea.
             </p>
             <div className="footer-demo-badge">
               <span>Propuesta Comercial Demostrativa · BS Code</span>
@@ -25,10 +25,10 @@ export const Footer = () => {
             <h4 className="footer-col-title">Explorar</h4>
             <ul className="footer-editorial-nav">
               <li><Link to="/">Inicio</Link></li>
-              <li><Link to="/servicios">Catálogo de Servicios</Link></li>
-              <li><a href="/#experiencia">Experiencia</a></li>
+              <li><Link to="/servicios">Menú de Servicios</Link></li>
+              <li><a href="/#anticipo">Aparta tu Cita</a></li>
               <li><Link to="/agendar">Agenda en Línea</Link></li>
-              <li><a href="/#galeria">Beauty Inspiration</a></li>
+              <li><a href="/#inspiracion">Inspiración & Tendencias</a></li>
               <li><a href="/#contacto">Contacto</a></li>
             </ul>
           </div>
@@ -43,7 +43,7 @@ export const Footer = () => {
             <div className="footer-item-row">
               <WhatsAppIcon size={16} />
               <a 
-                href={`https://wa.me/52${initialBusinessData.whatsapp}?text=Hola%20Mujer%20Bonita`} 
+                href={`https://wa.me/52${initialBusinessData.whatsapp}?text=Hola%20GLAMUROSA%20NAIL%E2%80%99S`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="footer-whatsapp-link"
@@ -53,7 +53,7 @@ export const Footer = () => {
             </div>
             <div className="footer-item-row">
               <SparklesIcon size={16} />
-              <span>Facebook: Mujer Bonita by Paulina Castillo</span>
+              <span>Facebook: GLAMUROSA NAIL’S</span>
             </div>
             <div className="footer-item-row">
               <ClockIcon size={16} />
@@ -65,7 +65,7 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="footer-editorial-bottom">
           <p className="footer-copy">
-            © {new Date().getFullYear()} Mujer Bonita by Paulina Castillo. Servicios, precios e imágenes utilizados con fines demostrativos.
+            © {new Date().getFullYear()} GLAMUROSA NAIL’S. Servicios, precios, profesionales e imágenes utilizados con fines demostrativos.
           </p>
           <p className="footer-credits">
             Propuesta comercial demostrativa desarrollada por <strong>BS Code</strong>.

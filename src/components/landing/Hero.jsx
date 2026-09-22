@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { CalendarIcon, SparklesIcon, ArrowRightIcon, CheckCircleIcon, ClockIcon, BellIcon } from "../common/Icons";
+import { CalendarIcon, SparklesIcon, ArrowRightIcon, CheckCircleIcon, ClockIcon, BellIcon, CreditCardIcon } from "../common/Icons";
 import { trackEvent } from "../../analytics/analytics";
-import heroHairModel from "../../assets/images/beauty/hero-hair-model.jpg";
-import heroMakeupDetail from "../../assets/images/beauty/hero-makeup-detail.jpg";
+import heroNailsMacro from "../../assets/images/nails/hero-nails-macro.jpg";
+import heroNailsDetail from "../../assets/images/nails/hero-nails-detail.jpg";
 
 export const Hero = () => {
   const handleCtaClick = (ctaText) => {
@@ -13,30 +13,38 @@ export const Hero = () => {
     });
   };
 
+  const scrollToServices = () => {
+    const el = document.getElementById("servicios");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <section className="hero-boutique-section">
-      <div className="container hero-boutique-container">
-        {/* Centered Editorial Header */}
-        <div className="hero-boutique-header">
-          <div className="hero-eyebrow-pill">
+    <section className="hero-editorial-section">
+      <div className="container hero-editorial-grid">
+        {/* Left Column: Asymmetric Editorial Content */}
+        <div className="hero-editorial-left">
+          <div className="hero-eyebrow-glam">
             <span className="sparkle-bullet">✦</span>
-            <span>BEAUTY · STYLE · YOU</span>
+            <span>NAILS · BEAUTY · YOU</span>
             <span className="sparkle-bullet">✦</span>
           </div>
 
-          <h1 className="hero-boutique-title">
-            Siéntete bonita. <br />
-            <span className="hero-serif-highlight">Siéntete tú.</span>
+          <h1 className="hero-editorial-title">
+            Tus uñas. <br />
+            Tu estilo. <br />
+            <span className="hero-editorial-highlight">Tu momento.</span>
           </h1>
 
-          <p className="hero-boutique-subtext">
-            Descubre nuestros servicios de belleza y reserva tu próxima cita de forma sencilla.
+          <p className="hero-editorial-subtext">
+            Explora servicios, encuentra tu horario ideal y reserva tu próxima cita en pocos pasos.
           </p>
 
-          <div className="hero-boutique-actions">
+          <div className="hero-editorial-actions">
             <Link 
               to="/agendar" 
-              className="btn btn-primary btn-hero-primary"
+              className="btn btn-primary btn-hero-glam"
               onClick={() => handleCtaClick("Reservar cita")}
             >
               <CalendarIcon size={18} />
@@ -44,73 +52,91 @@ export const Hero = () => {
               <ArrowRightIcon size={16} />
             </Link>
 
-            <Link 
-              to="/servicios" 
-              className="btn btn-secondary btn-hero-secondary"
-              onClick={() => handleCtaClick("Ver servicios")}
+            <button
+              type="button"
+              className="btn btn-secondary btn-hero-outline"
+              onClick={() => {
+                handleCtaClick("Ver servicios");
+                scrollToServices();
+              }}
             >
               <SparklesIcon size={17} />
               <span>Ver servicios</span>
-            </Link>
+            </button>
           </div>
 
-          {/* 4 Small Editorial Indicators */}
-          <div className="hero-perks-strip">
-            <div className="hero-perk-pill">
-              <CheckCircleIcon size={14} />
+          {/* 4 Indicators */}
+          <div className="hero-glam-indicators">
+            <div className="hero-indicator-item">
+              <CheckCircleIcon size={15} />
               <span>Reserva en línea</span>
             </div>
-            <div className="hero-perk-pill">
-              <ClockIcon size={14} />
+            <div className="hero-indicator-item">
+              <ClockIcon size={15} />
               <span>Horarios disponibles</span>
             </div>
-            <div className="hero-perk-pill">
-              <SparklesIcon size={14} />
-              <span>Confirmación rápida</span>
+            <div className="hero-indicator-item">
+              <CreditCardIcon size={15} />
+              <span>Anticipo demo</span>
             </div>
-            <div className="hero-perk-pill">
-              <BellIcon size={14} />
+            <div className="hero-indicator-item">
+              <BellIcon size={15} />
               <span>Recordatorios</span>
             </div>
           </div>
         </div>
 
-        {/* Central Vertical Protagonist Photo Composition */}
-        <div className="hero-portrait-stage">
-          <div className="hero-portrait-frame">
-            <img 
-              src={heroHairModel} 
-              alt="Mujer Bonita Beauty Boutique" 
-              className="hero-protagonist-img"
-              fetchPriority="high"
-            />
-            <div className="hero-portrait-badge-top">
-              <span>MUJER BONITA</span>
-            </div>
-            <div className="hero-portrait-badge-sub">
-              <span>by Paulina Castillo</span>
-            </div>
-          </div>
+        {/* Right Column: Asymmetric Macro Photography Composition */}
+        <div className="hero-editorial-right">
+          <div className="hero-photo-stage">
+            {/* Ambient Chrome Glow Behind Main Photo */}
+            <div className="hero-ambient-glow" aria-hidden="true"></div>
 
-          {/* Floating boutique detail thumbnail */}
-          <div className="hero-floating-card-detail">
-            <img 
-              src={heroMakeupDetail} 
-              alt="Detalle de estilismo y belleza" 
-              className="hero-floating-thumb"
-              loading="lazy"
-            />
-            <div className="hero-floating-text">
-              <strong>Beauty Boutique</strong>
-              <span>Tu momento especial</span>
+            {/* Main Macro Photograph */}
+            <div className="hero-main-photo-frame">
+              <img 
+                src={heroNailsMacro} 
+                alt="Manicura y Nail Art en GLAMUROSA NAIL’S" 
+                className="hero-main-photo"
+                fetchPriority="high"
+              />
+              <div className="hero-brand-overlay-tag">
+                <span className="hero-tag-brand">GLAMUROSA</span>
+                <span className="hero-tag-sub">NAIL STUDIO</span>
+              </div>
+            </div>
+
+            {/* Overlapping Secondary Detail Photograph */}
+            <div className="hero-detail-photo-card">
+              <div className="hero-detail-frame">
+                <img 
+                  src={heroNailsDetail} 
+                  alt="Detalle de esmaltes y nail art" 
+                  className="hero-detail-photo"
+                  loading="lazy"
+                />
+              </div>
+              <div className="hero-detail-info">
+                <div className="hero-chrome-dot"></div>
+                <div>
+                  <strong>Nail Art & Gel</strong>
+                  <span>Acabado impecable</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Subtle Glossy Chrome Accent Chip */}
+            <div className="hero-chrome-chip">
+              <SparklesIcon size={14} />
+              <span>Glossy & Chrome Nails</span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Discreet demonstrative note */}
-        <div className="hero-disclaimer-note">
-          <span>* Imágenes utilizadas únicamente con fines demostrativos.</span>
-        </div>
+      {/* Discrete Demonstrative Disclaimer */}
+      <div className="hero-bottom-disclaimer">
+        <span>* Servicios, precios, profesionales e imágenes utilizados con fines demostrativos. La versión final puede adaptarse a la información real de GLAMUROSA NAIL’S.</span>
       </div>
     </section>
   );

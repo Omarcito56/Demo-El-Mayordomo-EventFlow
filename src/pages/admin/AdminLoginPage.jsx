@@ -16,8 +16,9 @@ export const AdminLoginPage = () => {
     e.preventDefault();
     setError("");
 
-    // Demo credentials check (preserved as requested)
-    if (email.trim() === "admin@clinicflow.com" && password === "demo123") {
+    // Demo credentials check
+    const validEmail = email.trim().toLowerCase();
+    if ((validEmail === "admin@glamurosanails.demo" || validEmail === "admin@clinicflow.com") && password === "demo123") {
       trackEvent("admin_login_success", { route: "/admin/dashboard" });
       localStorage.setItem("beautyflow_auth", "true");
       navigate("/admin/dashboard");
@@ -27,7 +28,7 @@ export const AdminLoginPage = () => {
   };
 
   const handleFillDemoCreds = () => {
-    setEmail("admin@clinicflow.com");
+    setEmail("admin@glamurosanails.demo");
     setPassword("demo123");
     setError("");
   };
@@ -41,10 +42,10 @@ export const AdminLoginPage = () => {
           </div>
           <span className="login-demo-pill">Acceso demo para administración</span>
           <h1 style={{ fontSize: "1.55rem", color: "var(--color-primary)", marginBottom: "0.35rem" }}>
-            Panel Mujer Bonita
+            Panel GLAMUROSA NAIL’S
           </h1>
           <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)" }}>
-            Gestión interna de citas, agenda, anticipos y clientes
+            Gestión interna de citas, agenda, anticipos y clientas
           </p>
         </div>
 
@@ -66,7 +67,7 @@ export const AdminLoginPage = () => {
               type="email"
               id="admin-email"
               value={email}
-              placeholder="admin@clinicflow.com"
+              placeholder="admin@glamurosanails.demo"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -98,7 +99,7 @@ export const AdminLoginPage = () => {
             Credenciales de prueba:
           </p>
           <div style={{ fontFamily: "monospace", fontSize: "0.85rem", color: "var(--color-text-primary)", marginBottom: "0.75rem" }}>
-            Usuario: <strong>admin@clinicflow.com</strong><br />
+            Usuario: <strong>admin@glamurosanails.demo</strong><br />
             Contraseña: <strong>demo123</strong>
           </div>
           <button
@@ -114,7 +115,7 @@ export const AdminLoginPage = () => {
         <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
           <Link to="/" style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
             <ArrowLeftIcon size={14} />
-            <span>Volver al sitio público de Mujer Bonita</span>
+            <span>Volver al sitio público de GLAMUROSA NAIL’S</span>
           </Link>
         </div>
       </div>

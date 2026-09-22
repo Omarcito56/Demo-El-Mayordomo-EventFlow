@@ -49,7 +49,7 @@ export const AdminAgendaPage = () => {
   });
 
   // Open WhatsApp reminder:
-  // "Hola, te recordamos tu cita en Mujer Bonita para [servicio] el día [fecha] a las [hora]. Te esperamos."
+  // "Hola, te recordamos tu cita en GLAMUROSA NAIL’S para [servicio] el día [fecha] a las [hora]. Te esperamos."
   const sendWhatsAppReminder = (apt) => {
     trackEvent("whatsapp_reminder_clicked", {
       module: "agenda",
@@ -57,7 +57,7 @@ export const AdminAgendaPage = () => {
     });
 
     const clientPhone = apt.clientPhone || apt.patientPhone || "";
-    const text = `Hola, te recordamos tu cita en Mujer Bonita para ${apt.serviceName} el día ${apt.date} a las ${apt.time}. Te esperamos.`;
+    const text = `Hola, te recordamos tu cita en GLAMUROSA NAIL’S para ${apt.serviceName} el día ${apt.date} a las ${apt.time}. Te esperamos.`;
     const url = `https://wa.me/52${clientPhone}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
   };
@@ -69,7 +69,7 @@ export const AdminAgendaPage = () => {
           <div>
             <h2 className="admin-card-title">Agenda de Citas</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Visualiza los turnos ordenados por franja horaria y profesional en Mujer Bonita.
+              Visualiza los turnos ordenados por franja horaria y técnica en GLAMUROSA NAIL’S.
             </p>
           </div>
 
@@ -99,7 +99,7 @@ export const AdminAgendaPage = () => {
           </div>
         </div>
 
-        {/* Agenda Table with Columns: Hora, Cliente, Servicio, Profesional, Estado, Acciones */}
+        {/* Agenda Table with Columns: Hora, Cliente, Servicio, Técnica, Estado, Acciones */}
         <div className="table-responsive">
           <table className="admin-table">
             <thead>
@@ -107,7 +107,7 @@ export const AdminAgendaPage = () => {
                 <th>Hora</th>
                 <th>Cliente</th>
                 <th>Servicio</th>
-                <th>Profesional</th>
+                <th>Técnica</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>

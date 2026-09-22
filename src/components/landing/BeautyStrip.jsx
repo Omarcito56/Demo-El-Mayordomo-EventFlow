@@ -1,7 +1,7 @@
 import React from "react";
 
 export const BeautyStrip = () => {
-  const items = ["HAIR", "NAILS", "COLOR", "MAKEUP", "BEAUTY", "STYLE", "ESTILO", "CUIDADO"];
+  const items = ["MANICURE", "GEL", "ACRYLIC", "NAIL ART", "PEDICURE", "BEAUTY"];
 
   return (
     <div className="beauty-strip-container" aria-hidden="true">

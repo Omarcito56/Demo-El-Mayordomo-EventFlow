@@ -6,20 +6,20 @@ import {
 } from "../../components/common/Icons";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { initialBusinessData } from "../../data/businessData";
-import confirmationBeautyImg from "../../assets/images/beauty/gallery-1.jpg";
+import confirmationNailsImg from "../../assets/images/nails/hero-nails-macro.jpg";
 
 export const ConfirmationPage = () => {
   const location = useLocation();
   const appointment = location.state?.appointment || {
-    folio: "MB-000128",
+    folio: "GLA-000128",
     clientName: "Cliente Demo",
     patientName: "Cliente Demo",
-    serviceName: "Coloración",
-    professional: "Andrea",
+    serviceName: "Uñas acrílicas",
+    professional: "Mariana",
     date: new Date().toISOString().split("T")[0],
     time: "10:30 AM",
     depositAmount: "$200",
-    clientPhone: "8995452489",
+    clientPhone: "8992569812",
     status: "Pendiente de confirmación"
   };
 
@@ -28,7 +28,7 @@ export const ConfirmationPage = () => {
   const depositText = appointment.depositAmount ? `${appointment.depositAmount} demo` : "Sin anticipo";
 
   const whatsappMessage = encodeURIComponent(
-    `Hola, registré mi solicitud de cita en Mujer Bonita (Folio: ${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}. Mi nombre es ${clientDisplayName}.`
+    `Hola, registré mi solicitud de cita en GLAMUROSA NAIL’S (Folio: ${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}. Mi nombre es ${clientDisplayName}.`
   );
 
   return (
@@ -38,12 +38,12 @@ export const ConfirmationPage = () => {
           {/* Left / Top Side: Decorative photo thumbnail */}
           <div className="confirmation-side-visual">
             <img 
-              src={confirmationBeautyImg} 
-              alt="Momento Mujer Bonita" 
+              src={confirmationNailsImg} 
+              alt="Momento GLAMUROSA NAIL’S" 
               className="confirmation-visual-img"
             />
             <div className="confirmation-visual-overlay">
-              <span className="confirmation-visual-tag">MUJER BONITA</span>
+              <span className="confirmation-visual-tag">GLAMUROSA</span>
             </div>
           </div>
 
@@ -58,11 +58,11 @@ export const ConfirmationPage = () => {
             </span>
 
             <h1 className="confirmation-title-editorial">
-              ¡Tu cita está registrada! ✨
+              ¡Tu cita quedó registrada! ✨
             </h1>
             
             <p className="confirmation-subtext-editorial">
-              Mujer Bonita podrá revisar tu solicitud y confirmar tu horario contigo.
+              GLAMUROSA podrá revisar tu solicitud y confirmar tu horario contigo.
             </p>
 
             {/* Details Table */}
@@ -76,7 +76,7 @@ export const ConfirmationPage = () => {
                 <span className="conf-value">{appointment.serviceName}</span>
               </div>
               <div className="conf-row">
-                <span className="conf-label">Profesional / Estilista:</span>
+                <span className="conf-label">Técnica:</span>
                 <span className="conf-value highlight-stylist">{professionalName}</span>
               </div>
               <div className="conf-row">

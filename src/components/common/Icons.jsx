@@ -78,6 +78,13 @@ export const ShieldIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
+export const ShieldCheckIcon = ({ size = 20, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+    <polyline points="9 12 11 14 15 10"></polyline>
+  </svg>
+);
+
 export const HeartIcon = ({ size = 20, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -283,7 +290,7 @@ export const BellIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
-export const MujerBonitaLogoIcon = ({ size = 24, className = "" }) => (
+export const GlamurosaLogoIcon = ({ size = 24, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M12 2C9.5 5.5 5.5 9.5 5.5 13.5C5.5 17.09 8.41 20 12 20C15.59 20 18.5 17.09 18.5 13.5C18.5 9.5 14.5 5.5 12 2Z" fill="var(--color-rose-light)" fillOpacity="0.4"></path>
     <path d="M12 6C10.5 8.5 8 11.5 8 14C8 16.21 9.79 18 12 18C14.21 18 16 16.21 16 14C16 11.5 13.5 8.5 12 6Z" stroke="var(--color-primary)"></path>
@@ -292,5 +299,6 @@ export const MujerBonitaLogoIcon = ({ size = 24, className = "" }) => (
   </svg>
 );
 
-export const BellartLogoIcon = MujerBonitaLogoIcon;
+export const MujerBonitaLogoIcon = GlamurosaLogoIcon;
+export const BellartLogoIcon = GlamurosaLogoIcon;
 

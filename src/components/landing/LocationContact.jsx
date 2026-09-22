@@ -2,7 +2,7 @@ import React from "react";
 import { PhoneIcon, WhatsAppIcon, ClockIcon, CalendarIcon, ArrowRightIcon, SparklesIcon } from "../common/Icons";
 import { initialBusinessData } from "../../data/businessData";
 import { Link } from "react-router-dom";
-import salonLocationPhoto from "../../assets/images/beauty/experience-salon.jpg";
+import contactNailsPhoto from "../../assets/images/nails/service-manicure-clasico.jpg";
 
 export const LocationContact = () => {
   return (
@@ -10,9 +10,9 @@ export const LocationContact = () => {
       <div className="container">
         <div className="section-header-editorial text-center">
           <span className="editorial-eyebrow">CONTACTO & ATENCIÓN</span>
-          <h2 className="editorial-title">Mujer Bonita by Paulina Castillo</h2>
+          <h2 className="editorial-title">GLAMUROSA NAIL’S</h2>
           <p className="editorial-subtext">
-            Atención personalizada y servicios de belleza por cita para consentirte en cada visita.
+            Atención personalizada y servicios de uñas por cita para consentirte en cada visita.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export const LocationContact = () => {
                   <h4 className="location-item-label">WhatsApp oficial</h4>
                   <p className="location-item-val">
                     <a 
-                      href={`https://wa.me/52${initialBusinessData.whatsapp}?text=${encodeURIComponent("Hola Mujer Bonita, me gustaría solicitar información sobre citas y servicios.")}`}
+                      href={`https://wa.me/52${initialBusinessData.whatsapp}?text=${encodeURIComponent("Hola GLAMUROSA NAIL’S, me gustaría solicitar información sobre citas y servicios.")}`}
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="location-link whatsapp-link"
@@ -63,7 +63,7 @@ export const LocationContact = () => {
                 <div className="location-item-content">
                   <h4 className="location-item-label">Canal público</h4>
                   <p className="location-item-val">
-                    <span>Facebook · Mujer Bonita by Paulina Castillo</span>
+                    <span>Facebook · GLAMUROSA NAIL’S</span>
                   </p>
                 </div>
               </div>
@@ -91,20 +91,20 @@ export const LocationContact = () => {
           {/* Right Column: Visual Presentation Showcase */}
           <div className="location-visual-card">
             <img 
-              src={salonLocationPhoto} 
-              alt="Espacio boutique de Mujer Bonita" 
+              src={contactNailsPhoto} 
+              alt="Espacio y servicios de GLAMUROSA NAIL’S" 
               className="location-visual-photo"
               loading="lazy"
             />
             <div className="location-visual-overlay">
-              <span className="location-brand-badge">BEAUTY BOUTIQUE</span>
-              <h3 className="location-visual-title">Mujer Bonita</h3>
-              <p className="location-visual-sub">by Paulina Castillo</p>
+              <span className="location-brand-badge">NAIL STUDIO</span>
+              <h3 className="location-visual-title">GLAMUROSA NAIL’S</h3>
+              <p className="location-visual-sub">Nail Studio Experience</p>
               <p className="location-visual-desc">
-                Servicios demostrativos de belleza, estilismo, color, maquillaje y cuidado personal por cita.
+                Servicios demostrativos de uñas acrílicas, gel semipermanente, nail art, manicura y pedicura spa por cita.
               </p>
               <p className="location-disclaimer-note">
-                * Servicios, precios e imágenes utilizados con fines demostrativos. La propuesta final puede adaptarse a la información real de Mujer Bonita.
+                * Servicios, precios, profesionales e imágenes utilizados con fines demostrativos. La versión final puede adaptarse a la información real de GLAMUROSA NAIL’S.
               </p>
             </div>
           </div>

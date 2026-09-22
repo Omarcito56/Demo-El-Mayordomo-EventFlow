@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboardIcon, CalendarIcon, FileTextIcon, UsersIcon, 
-  SettingsIcon, ScissorsIcon, CreditCardIcon, LogOutIcon, ArrowLeftIcon 
+  SettingsIcon, SparklesIcon, CreditCardIcon, LogOutIcon, ArrowLeftIcon 
 } from "../common/Icons";
 import { useClinicData } from "../../hooks/useClinicData";
 
@@ -21,11 +21,11 @@ export const AdminSidebar = () => {
       {/* Sidebar Brand */}
       <div className="sidebar-header">
         <div className="sidebar-logo-icon" style={{ background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)" }}>
-          <ScissorsIcon size={20} />
+          <SparklesIcon size={20} />
         </div>
         <div>
-          <h2 className="sidebar-title">Mujer Bonita</h2>
-          <span className="sidebar-sub">PANEL ADMINISTRACIÓN</span>
+          <h2 className="sidebar-title">GLAMUROSA</h2>
+          <span className="sidebar-sub">NAIL’S STUDIO</span>
         </div>
       </div>
 
@@ -78,7 +78,7 @@ export const AdminSidebar = () => {
             to="/admin/servicios" 
             className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
           >
-            <ScissorsIcon size={18} />
+            <SparklesIcon size={18} />
             <span>Servicios</span>
           </NavLink>
         </li>
@@ -88,7 +88,7 @@ export const AdminSidebar = () => {
             className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
           >
             <CreditCardIcon size={18} />
-            <span>Pagos</span>
+            <span>Anticipos</span>
           </NavLink>
         </li>
         <li>
@@ -106,7 +106,7 @@ export const AdminSidebar = () => {
       <div className="sidebar-footer">
         <Link to="/" className="sidebar-btn-public">
           <ArrowLeftIcon size={14} />
-          <span>Ver sitio de Mujer Bonita</span>
+          <span>Ver sitio GLAMUROSA</span>
         </Link>
         <button type="button" className="sidebar-btn-logout" onClick={handleLogout}>
           <LogOutIcon size={14} />

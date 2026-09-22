@@ -1,71 +1,71 @@
 import React from "react";
-import gallery1 from "../../assets/images/beauty/gallery-1.jpg";
-import gallery2 from "../../assets/images/beauty/gallery-2.jpg";
-import gallery3 from "../../assets/images/beauty/gallery-3.jpg";
-import gallery4 from "../../assets/images/beauty/gallery-4.jpg";
-import gallery5 from "../../assets/images/beauty/gallery-5.jpg";
-import gallery6 from "../../assets/images/beauty/gallery-6.jpg";
+import galleryGel from "../../assets/images/nails/gallery-gel.jpg";
+import galleryAcrylic from "../../assets/images/nails/gallery-acrylic.jpg";
+import galleryNailArt from "../../assets/images/nails/gallery-nailart.jpg";
+import galleryNude from "../../assets/images/nails/gallery-nude.jpg";
+import galleryChrome from "../../assets/images/nails/gallery-chrome.jpg";
+import gallerySpa from "../../assets/images/nails/gallery-spa.jpg";
 
 export const GallerySection = () => {
-  const galleryItems = [
+  const inspirationItems = [
     {
       id: 1,
-      image: gallery1,
-      category: "HAIR",
-      title: "Estilizado & Movimiento",
+      image: galleryGel,
+      category: "GEL",
+      title: "Gel Polish Glaseado",
       aspectClass: "aspect-tall"
     },
     {
       id: 2,
-      image: gallery2,
-      category: "COLOR",
-      title: "Balayage & Luminosidad",
+      image: galleryAcrylic,
+      category: "ACRYLIC",
+      title: "Escultural Almond Set",
       aspectClass: "aspect-regular"
     },
     {
       id: 3,
-      image: gallery3,
-      category: "MAKEUP",
-      title: "Maquillaje Radiante",
+      image: galleryNailArt,
+      category: "NAIL ART",
+      title: "Fine Art & Minimal Lines",
       aspectClass: "aspect-tall"
     },
     {
       id: 4,
-      image: gallery4,
-      category: "BEAUTY",
-      title: "Cuidado & Armonía",
+      image: galleryNude,
+      category: "NUDE",
+      title: "Clean Girl Nude Nails",
       aspectClass: "aspect-regular"
     },
     {
       id: 5,
-      image: gallery5,
-      category: "COLOR",
-      title: "Tonos & Textura",
+      image: galleryChrome,
+      category: "CHROME",
+      title: "Efecto Espejo & Silver Foil",
       aspectClass: "aspect-tall"
     },
     {
       id: 6,
-      image: gallery6,
-      category: "MAKEUP",
-      title: "Acabado Impecable",
+      image: gallerySpa,
+      category: "SPA",
+      title: "Pedicura & Cuidado Sensorial",
       aspectClass: "aspect-regular"
     }
   ];
 
   return (
-    <section id="galeria" className="gallery-boutique-section">
+    <section id="inspiracion" className="gallery-boutique-section">
       <div className="container">
         <div className="section-header-editorial text-center">
-          <span className="editorial-eyebrow">INSPIRACIÓN & ESTILO</span>
-          <h2 className="editorial-title">Beauty inspiration</h2>
+          <span className="editorial-eyebrow">MOODBOARD & TENDENCIAS</span>
+          <h2 className="editorial-title">Tu próxima inspiración</h2>
           <p className="editorial-subtext">
-            Ideas de cabello, color, maquillaje y belleza pensadas para inspirar tu próxima cita.
+            Explora estilos de gel, acrílico, chrome, nail art y spa pensados para inspirar el diseño de tu siguiente cita.
           </p>
         </div>
 
-        {/* Alternated vertical photo composition with gentle rounded corners and cream spacing */}
+        {/* Editorial Masonry-Style Grid */}
         <div className="gallery-boutique-grid">
-          {galleryItems.map((item) => (
+          {inspirationItems.map((item) => (
             <div key={item.id} className={`gallery-boutique-card ${item.aspectClass}`}>
               <div className="gallery-boutique-img-frame">
                 <img 
@@ -85,6 +85,7 @@ export const GallerySection = () => {
           ))}
         </div>
 
+        {/* Small Demonstrative Disclaimer */}
         <div className="gallery-disclaimer-wrap">
           <p className="gallery-disclaimer-text">
             * Imágenes de inspiración utilizadas únicamente para esta propuesta demostrativa.

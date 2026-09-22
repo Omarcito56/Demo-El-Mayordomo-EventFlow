@@ -14,11 +14,12 @@ export const ServicesPage = () => {
 
   const categories = [
     { key: "all", label: "Todos los servicios" },
-    { key: "color", label: "Coloración" },
-    { key: "hair", label: "Cabello & Peinado" },
-    { key: "treatments", label: "Tratamientos" },
-    { key: "makeup", label: "Maquillaje" },
-    { key: "nails", label: "Uñas & Manicure" }
+    { key: "acrylic", label: "Uñas Acrílicas" },
+    { key: "gel", label: "Gel Semipermanente" },
+    { key: "art", label: "Nail Art & Diseño" },
+    { key: "manicure", label: "Manicure" },
+    { key: "spa", label: "Pedicure Spa" },
+    { key: "maintenance", label: "Retiro & Cuidado" }
   ];
 
   const filteredServices = activeCategory === "all"
@@ -38,13 +39,13 @@ export const ServicesPage = () => {
       {/* Editorial Header */}
       <section className="services-page-hero">
         <div className="container text-center">
-          <span className="editorial-eyebrow">CATÁLOGO EXCLUSIVO</span>
+          <span className="editorial-eyebrow">CARTA DE SERVICIOS</span>
           <h1 className="services-page-title">
             Servicios diseñados para <br />
-            <span className="serif-highlight">realzar tu estilo.</span>
+            <span className="serif-highlight">elevar tu estilo.</span>
           </h1>
           <p className="services-page-lead">
-            Explora nuestra carta de servicios demostrativa. Diseños de color, corte, estilizado, tratamientos, uñas y maquillaje con horarios disponibles para agendar.
+            Explora nuestro menú demostrativo de servicios. Uñas acrílicas, gel semipermanente, efectos chrome, nail art, manicure y pedicure spa con horarios listos para agendar.
           </p>
         </div>
       </section>

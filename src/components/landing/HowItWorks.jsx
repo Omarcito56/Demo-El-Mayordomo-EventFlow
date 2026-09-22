@@ -5,22 +5,22 @@ export const HowItWorks = () => {
     {
       number: "1",
       title: "Elige tu servicio",
-      description: "Selecciona el servicio que deseas: corte, coloración, peinado, tratamiento, manicure o maquillaje."
+      description: "Selecciona el servicio que deseas: uñas acrílicas, gel semipermanente, nail art, manicure o pedicure spa."
     },
     {
       number: "2",
-      title: "Selecciona profesional",
-      description: "Escoge a la estilista especializada de tu preferencia o selecciona la opción con mayor disponibilidad."
+      title: "Selecciona técnica",
+      description: "Escoge a la especialista de tu preferencia o selecciona la opción flexible con mayor disponibilidad."
     },
     {
       number: "3",
       title: "Escoge fecha y horario",
-      description: "Revisa los turnos libres del salón y selecciona el día y la hora que mejor se adapten a tu rutina."
+      description: "Revisa los turnos libres del studio y selecciona el día y la hora que mejor se adapten a tu día."
     },
     {
       number: "4",
       title: "Confirma tu reserva",
-      description: "Registra tus datos, genera tu folio y recibe confirmación directa con seguimiento por WhatsApp."
+      description: "Registra tus datos, genera tu folio GLA y recibe confirmación directa con seguimiento por WhatsApp."
     }
   ];
 
@@ -31,7 +31,7 @@ export const HowItWorks = () => {
           <span className="section-tag">Paso a Paso</span>
           <h2 className="section-title">¿Cómo funciona la agenda en línea?</h2>
           <p className="section-desc">
-            En solo 4 pasos sencillos podrás programar tu próxima cita en Mujer Bonita sin complicaciones ni esperas.
+            En solo 4 pasos sencillos podrás programar tu próxima cita en GLAMUROSA NAIL’S sin complicaciones ni esperas.
           </p>
         </div>
 

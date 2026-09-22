@@ -17,13 +17,13 @@ export const AdminLayout = () => {
   // Determine header title based on current route
   const getHeaderTitle = () => {
     const path = location.pathname;
-    if (path.includes("/dashboard")) return "Resumen de Mujer Bonita";
+    if (path.includes("/dashboard")) return "Resumen de GLAMUROSA NAIL’S";
     if (path.includes("/agenda")) return "Agenda de Citas";
     if (path.includes("/citas")) return "Gestión de Citas";
     if (path.includes("/clientes") || path.includes("/pacientes")) return "Directorio de Clientes";
     if (path.includes("/servicios")) return "Catálogo de Servicios";
     if (path.includes("/pagos")) return "Anticipos y Pagos";
-    if (path.includes("/configuracion")) return "Configuración del Salón";
+    if (path.includes("/configuracion")) return "Configuración del Studio";
     return "Panel de Administración";
   };
 

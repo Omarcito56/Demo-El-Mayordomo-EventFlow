@@ -6,7 +6,6 @@ import { ExperienceSection } from "../../components/landing/ExperienceSection";
 import { GallerySection } from "../../components/landing/GallerySection";
 import { RemindersSection } from "../../components/landing/RemindersSection";
 import { StylistsSection } from "../../components/landing/StylistsSection";
-import { ClinicPitch } from "../../components/landing/ClinicPitch";
 import { BookingBanner } from "../../components/landing/BookingBanner";
 import { LocationContact } from "../../components/landing/LocationContact";
 import { useTrackOnMount } from "../../analytics/analytics";
@@ -39,7 +38,6 @@ export const HomePage = () => {
       <GallerySection />
       <RemindersSection />
       <StylistsSection />
-      <ClinicPitch />
       <BookingBanner />
       <LocationContact />
     </div>

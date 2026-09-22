@@ -54,8 +54,8 @@ export const Navbar = () => {
       <div className="container navbar-inner">
         {/* Brand Logo */}
         <Link to="/" className="navbar-brand" onClick={() => { closeMenu(); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
-          <span className="navbar-brand-editorial">Mujer Bonita</span>
-          <span className="navbar-brand-tagline">by Paulina Castillo</span>
+          <span className="navbar-brand-editorial">GLAMUROSA</span>
+          <span className="navbar-brand-tagline">NAIL’S STUDIO</span>
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -71,17 +71,13 @@ export const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/servicios" 
-                className={`nav-link ${location.pathname === "/servicios" ? "active" : ""}`}
-                onClick={closeMenu}
-              >
+              <button className="nav-link nav-btn-link" onClick={() => scrollToSection("servicios")}>
                 Servicios
-              </Link>
+              </button>
             </li>
             <li>
-              <button className="nav-link nav-btn-link" onClick={() => scrollToSection("experiencia")}>
-                Experiencia
+              <button className="nav-link nav-btn-link" onClick={() => scrollToSection("inspiracion")}>
+                Inspiración
               </button>
             </li>
             <li>
@@ -104,7 +100,7 @@ export const Navbar = () => {
         {/* Right Actions */}
         <div className="navbar-actions">
           <a
-            href="https://wa.me/528995452489?text=Hola%20Mujer%20Bonita%2C%20quisiera%20pedir%20informes."
+            href="https://wa.me/528992569812?text=Hola%20GLAMUROSA%20NAIL%E2%80%99S%2C%20quisiera%20pedir%20informes%20de%20servicios."
             target="_blank"
             rel="noopener noreferrer"
             className="navbar-whatsapp-link"
@@ -147,8 +143,8 @@ export const Navbar = () => {
           <div className="mobile-menu-drawer" onClick={(e) => e.stopPropagation()}>
             <div className="mobile-drawer-header">
               <div>
-                <span className="navbar-brand-editorial">Mujer Bonita</span>
-                <span className="navbar-brand-tagline" style={{ display: "block" }}>by Paulina Castillo</span>
+                <span className="navbar-brand-editorial">GLAMUROSA</span>
+                <span className="navbar-brand-tagline" style={{ display: "block" }}>NAIL’S STUDIO</span>
               </div>
               <button className="drawer-close-btn" onClick={closeMenu} aria-label="Cerrar menú">
                 <XIcon size={22} />
@@ -163,11 +159,11 @@ export const Navbar = () => {
               >
                 Inicio
               </Link>
-              <Link to="/servicios" className="mobile-nav-link" onClick={closeMenu}>
+              <button className="mobile-nav-link" onClick={() => scrollToSection("servicios")}>
                 Servicios
-              </Link>
-              <button className="mobile-nav-link" onClick={() => scrollToSection("experiencia")}>
-                Experiencia
+              </button>
+              <button className="mobile-nav-link" onClick={() => scrollToSection("inspiracion")}>
+                Inspiración
               </button>
               <Link to="/agendar" className="mobile-nav-link" onClick={closeMenu}>
                 Agenda
@@ -188,14 +184,14 @@ export const Navbar = () => {
               </Link>
 
               <a
-                href="https://wa.me/528995452489?text=Hola%20Mujer%20Bonita%2C%20quisiera%20pedir%20informes."
+                href="https://wa.me/528992569812?text=Hola%20GLAMUROSA%20NAIL%E2%80%99S%2C%20quisiera%20pedir%20informes%20de%20servicios."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-secondary btn-block"
                 onClick={closeMenu}
               >
                 <WhatsAppIcon size={18} />
-                <span>Contactar por WhatsApp</span>
+                <span>Contactar por WhatsApp (899 256 9812)</span>
               </a>
 
               <Link to="/admin/login" className="btn btn-outline btn-block" onClick={closeMenu}>

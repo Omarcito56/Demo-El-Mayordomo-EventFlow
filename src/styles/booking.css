@@ -1,5 +1,5 @@
 /* ===================================================================
-   MUJER BONITA BEAUTY BOUTIQUE - BOOKING & CONFIRMATION STYLES
+   GLAMUROSA NAIL’S - BOOKING & CONFIRMATION STYLES
    =================================================================== */
 
 .booking-page-editorial-wrap {
@@ -992,5 +992,43 @@
 
   .confirmation-secondary-links {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .editorial-stepper-bar {
+    display: flex;
+    overflow-x: auto;
+    gap: 0.6rem;
+    padding-bottom: 0.6rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .editorial-stepper-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .editorial-step-node {
+    flex: 0 0 96px;
+  }
+
+  .step-label-text {
+    font-size: 0.66rem;
+  }
+
+  .booking-editorial-card {
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+  }
+
+  .editorial-time-slots-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .editorial-slot-pill {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.82rem;
   }
 }

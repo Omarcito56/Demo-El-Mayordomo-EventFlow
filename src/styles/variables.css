@@ -1,33 +1,51 @@
 :root {
-  /* Brand Salon Beauty Color Palette: Mujer Bonita — Beauty Boutique */
-  --color-primary: #6F263D;              /* Vino profundo */
-  --color-primary-hover: #591D30;        /* Vino más intenso */
-  --color-primary-light: #8A334E;        /* Vino suave iluminado */
-  --color-primary-soft: #F9ECEF;         /* Tinte vino suave para fondos */
-  --color-primary-soft-border: #F3DDE2;  /* Borde vino muy suave */
+  /* Brand Salon Beauty Color Palette: GLAMUROSA NAIL’S — Nail Studio Experience */
+  --color-black-luxe: #171417;          /* Negro elegante */
+  --color-white-warm: #FFFDFC;          /* Blanco cálido */
+  --color-nude: #E7D4CC;                /* Nude */
+  --color-blush: #D9A8B4;               /* Rosa blush */
+  --color-rose-deep: #A85D73;           /* Rosa profundo */
+  --color-lavender-soft: #D9D0E5;       /* Lavanda suave */
+  --color-champagne: #D8C2A7;           /* Champagne */
+  --color-text-main: #272126;           /* Texto */
 
-  --color-accent: #B06B7B;               /* Acento cálido */
-  --color-accent-hover: #9A5666;         /* Acento activo */
-  --color-accent-soft: #FDF3F5;          /* Rosa cálido suave */
-  --color-accent-border: #E8CCD2;        /* Borde rosa cálido */
+  /* Semantic Brand Mapping */
+  --color-primary: #A85D73;             /* Rosa profundo como color de acción principal */
+  --color-primary-hover: #8F495D;       /* Rosa profundo más intenso en hover */
+  --color-primary-light: #C0758B;       /* Rosa profundo suave iluminado */
+  --color-primary-soft: #FBF0F3;        /* Fondo suave para tarjetas y badges */
+  --color-primary-soft-border: #F3D9E0; /* Borde rosa profundo sutil */
 
-  --color-rose-old: #C88F9B;             /* Rosa viejo */
-  --color-rose-light: #F3DDE2;           /* Rosa claro */
-  --color-cream: #FBF6F1;                /* Crema base */
-  --color-beige: #E9DDD3;                /* Beige */
-  --color-charcoal: #292326;             /* Carbón elegante */
-  --color-white: #FFFFFF;                /* Blanco puro */
-  --color-dark-accent: #3A2027;          /* Carbón vino para contrastes */
+  --color-accent: #D9A8B4;              /* Rosa blush como acento */
+  --color-accent-hover: #C6929F;        /* Rosa blush hover */
+  --color-accent-soft: #FAF2F4;         /* Rosa blush muy suave */
+  --color-accent-border: #EDD4DA;       /* Borde blush */
 
-  --color-bg: #FBF6F1;                   /* Fondo general crema cálido */
-  --color-surface: #FFFFFF;              /* Superficie de tarjetas blanca pura */
-  --color-surface-hover: #FAF2EC;        /* Hover sutil cálido */
+  --color-rose-old: #C48796;            /* Rosa glam */
+  --color-rose-light: #F7EAEF;          /* Rosa luz */
+  --color-cream: #FFFDFC;               /* Blanco cálido base */
+  --color-beige: #E7D4CC;               /* Nude cálido */
+  --color-charcoal: #171417;            /* Negro elegante */
+  --color-white: #FFFFFF;               /* Blanco puro */
+  --color-dark-accent: #272126;         /* Carbón texto */
+
+  --color-bg: #FFFDFC;                  /* Fondo general blanco cálido */
+  --color-bg-alt: #FAF5F2;              /* Fondo alterno nude muy suave */
+  --color-surface: #FFFFFF;             /* Superficie de tarjetas blanca pura */
+  --color-surface-hover: #FDF9F7;       /* Hover suave */
 
   /* Typography Colors */
-  --color-text-primary: #292326;         /* Carbón */
-  --color-text-secondary: #6B585F;       /* Tono neutro cálido femenino */
-  --color-text-muted: #9E8D93;          /* Muted neutro */
+  --color-text-primary: #272126;        /* Texto principal */
+  --color-text-secondary: #5C4F56;      /* Neutro secundario femenino y legible */
+  --color-text-muted: #8E7D86;          /* Muted neutro */
   --color-text-inverse: #FFFFFF;
+
+  /* Subtle Glossy & Chrome Gradients */
+  --gradient-chrome: linear-gradient(135deg, #FFFDFC 0%, #D8C2A7 40%, #E7D4CC 75%, #D9A8B4 100%);
+  --gradient-chrome-border: linear-gradient(135deg, rgba(216, 194, 167, 0.7) 0%, rgba(217, 168, 180, 0.4) 50%, rgba(168, 93, 115, 0.6) 100%);
+  --gradient-dark-editorial: linear-gradient(145deg, #171417 0%, #2A1F26 50%, #171417 100%);
+  --gradient-glam-cta: linear-gradient(135deg, #A85D73 0%, #C47A8F 50%, #D9A8B4 100%);
+  --gradient-card-glass: linear-gradient(135deg, rgba(255, 253, 252, 0.95) 0%, rgba(247, 234, 239, 0.6) 100%);
 
   /* Status Colors */
   --status-pending-bg: #FEF3C7;
@@ -38,17 +56,17 @@
   --status-confirmed-text: #065F46;
   --status-confirmed-border: #A7F3D0;
 
-  --status-attended-bg: #F5EFE9;
-  --status-attended-text: #1D1D1F;
-  --status-attended-border: #E8DED4;
+  --status-attended-bg: #F7F1EE;
+  --status-attended-text: #272126;
+  --status-attended-border: #E7D4CC;
 
   --status-cancelled-bg: #FDF2F2;
   --status-cancelled-text: #991B1B;
   --status-cancelled-border: #FECACA;
 
-  --status-rescheduled-bg: #F5F3FF;
+  --status-rescheduled-bg: #F5F1FA;
   --status-rescheduled-text: #5B21B6;
-  --status-rescheduled-border: #DDD6FE;
+  --status-rescheduled-border: #D9D0E5;
 
   --status-noassist-bg: #F3F4F6;
   --status-noassist-text: #4B5563;
@@ -60,11 +78,12 @@
   --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
 
   /* Shadows */
-  --shadow-xs: 0 1px 2px 0 rgba(29, 29, 31, 0.04);
-  --shadow-sm: 0 2px 4px 0 rgba(29, 29, 31, 0.06);
-  --shadow-md: 0 4px 14px -1px rgba(29, 29, 31, 0.07), 0 2px 6px -1px rgba(29, 29, 31, 0.04);
-  --shadow-lg: 0 12px 28px -4px rgba(29, 29, 31, 0.09), 0 4px 12px -2px rgba(29, 29, 31, 0.04);
-  --shadow-xl: 0 22px 38px -6px rgba(29, 29, 31, 0.12);
+  --shadow-xs: 0 1px 2px 0 rgba(23, 20, 23, 0.04);
+  --shadow-sm: 0 2px 4px 0 rgba(23, 20, 23, 0.06);
+  --shadow-md: 0 4px 14px -1px rgba(23, 20, 23, 0.07), 0 2px 6px -1px rgba(23, 20, 23, 0.04);
+  --shadow-lg: 0 12px 28px -4px rgba(23, 20, 23, 0.09), 0 4px 12px -2px rgba(23, 20, 23, 0.04);
+  --shadow-xl: 0 22px 38px -6px rgba(23, 20, 23, 0.12);
+  --shadow-glow: 0 0 25px rgba(217, 168, 180, 0.35);
 
   /* Borders & Radius */
   --radius-sm: 8px;
@@ -73,8 +92,8 @@
   --radius-xl: 26px;
   --radius-full: 9999px;
 
-  --border-light: 1px solid #E9DDD3;
-  --border-subtle: 1px solid #F4EBE4;
+  --border-light: 1px solid #E7D4CC;
+  --border-subtle: 1px solid #F3EBE6;
 
   /* Transitions */
   --transition-fast: 0.15s ease;

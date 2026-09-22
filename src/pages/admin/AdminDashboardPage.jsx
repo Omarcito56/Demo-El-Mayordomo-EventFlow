@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useClinicData } from "../../hooks/useClinicData";
 import { 
   CalendarIcon, ClockIcon, UserIcon, CheckCircleIcon, 
-  AlertCircleIcon, CreditCardIcon, ScissorsIcon, EyeIcon, ArrowRightIcon 
+  AlertCircleIcon, CreditCardIcon, SparklesIcon, EyeIcon, ArrowRightIcon 
 } from "../../components/common/Icons";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { AppointmentDetailModal } from "../../components/admin/AppointmentDetailModal";
@@ -29,11 +29,11 @@ export const AdminDashboardPage = () => {
   // Dynamic alert counts
   const pendingCount = metrics.pending;
   const noDepositCount = appointments.filter((a) => a.depositStatus !== "Pagado" && a.status !== "Cancelada").length;
-  const afternoonCount = appointments.filter((a) => a.time.includes("p.m.") && a.status !== "Cancelada").length;
+  const afternoonCount = appointments.filter((a) => a.time.includes("PM") && a.status !== "Cancelada").length;
 
   return (
     <div>
-      {/* Top 5 Metrics Cards */}
+      {/* Top 5 Metrics Cards: Citas de hoy, Pendientes, Clientes nuevos, Anticipos, Servicios activos */}
       <div className="stats-grid">
         <div className="stat-card">
           <div>
@@ -86,8 +86,8 @@ export const AdminDashboardPage = () => {
             </div>
             <div className="stat-label">Servicios activos</div>
           </div>
-          <div className="stat-icon-wrap" style={{ backgroundColor: "var(--color-beige-soft)", color: "var(--color-primary)" }}>
-            <ScissorsIcon size={22} />
+          <div className="stat-icon-wrap" style={{ backgroundColor: "var(--color-primary-soft)", color: "var(--color-primary)" }}>
+            <SparklesIcon size={22} />
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ export const AdminDashboardPage = () => {
             <div className="alert-content-left">
               <AlertCircleIcon size={18} />
               <span>
-                <strong>{pendingCount} cita{pendingCount > 1 ? "s" : ""} pendiente{pendingCount > 1 ? "s" : ""} de confirmar</strong> en la agenda del salón.
+                <strong>{pendingCount} cita{pendingCount > 1 ? "s" : ""} pendiente{pendingCount > 1 ? "s" : ""} de confirmar</strong> en la agenda del studio.
               </span>
             </div>
             <Link to="/admin/citas" className="btn btn-sm btn-secondary">
@@ -114,7 +114,7 @@ export const AdminDashboardPage = () => {
             <div className="alert-content-left">
               <CreditCardIcon size={18} style={{ color: "var(--color-accent)" }} />
               <span>
-                <strong>{noDepositCount} cita{noDepositCount > 1 ? "s" : ""} sin anticipo</strong> (pago completo al acudir a Mujer Bonita).
+                <strong>{noDepositCount} cita{noDepositCount > 1 ? "s" : ""} sin anticipo previo</strong> (liquidación total al acudir a GLAMUROSA NAIL’S).
               </span>
             </div>
             <Link to="/admin/pagos" className="btn btn-sm btn-secondary">
@@ -128,7 +128,7 @@ export const AdminDashboardPage = () => {
             <div className="alert-content-left">
               <ClockIcon size={18} />
               <span>
-                <strong>{afternoonCount} citas programadas esta tarde</strong> para estilizado y color.
+                <strong>{afternoonCount} citas programadas esta tarde</strong> en el studio de uñas.
               </span>
             </div>
             <Link to="/admin/agenda" className="btn btn-sm btn-secondary">
@@ -143,7 +143,7 @@ export const AdminDashboardPage = () => {
         {/* Upcoming Appointments Card */}
         <div className="admin-card">
           <div className="admin-card-header">
-            <h3 className="admin-card-title">Próximas Citas en Mujer Bonita</h3>
+            <h3 className="admin-card-title">Próximas Citas en GLAMUROSA NAIL’S</h3>
             <Link to="/admin/citas" style={{ fontSize: "0.86rem", fontWeight: 600, color: "var(--color-accent)" }}>
               Ver todas ({appointments.length}) →
             </Link>
@@ -156,7 +156,7 @@ export const AdminDashboardPage = () => {
                   <th>Folio</th>
                   <th>Cliente</th>
                   <th>Servicio</th>
-                  <th>Profesional</th>
+                  <th>Técnica</th>
                   <th>Fecha / Hora</th>
                   <th>Anticipo</th>
                   <th>Estado</th>
@@ -235,9 +235,9 @@ export const AdminDashboardPage = () => {
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
                 <span className="status-dot" style={{ backgroundColor: "var(--color-accent)", marginTop: "6px" }}></span>
                 <div>
-                  <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Nueva cita solicitada:</span>
+                  <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Nueva cita registrada:</span>
                   <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Folio {appointments[0]?.folio || "MB-000125"} por {appointments[0]?.clientName || appointments[0]?.patientName || "Cliente"}.
+                    Folio {appointments[0]?.folio || "GLA-000125"} por {appointments[0]?.clientName || appointments[0]?.patientName || "Cliente"}.
                   </p>
                 </div>
               </div>
@@ -245,9 +245,9 @@ export const AdminDashboardPage = () => {
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
                 <span className="status-dot" style={{ backgroundColor: "#059669", marginTop: "6px" }}></span>
                 <div>
-                  <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Cita confirmada por salón:</span>
+                  <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Cita confirmada por studio:</span>
                   <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Ana Torres (9:00 a.m. - Coloración con Andrea).
+                    Valeria García (9:00 AM - Uñas acrílicas con Mariana).
                   </p>
                 </div>
               </div>
@@ -257,7 +257,7 @@ export const AdminDashboardPage = () => {
                 <div>
                   <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Servicio atendido:</span>
                   <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Carolina Martínez completó tratamiento capilar.
+                    Carolina Martínez completó Pedicure spa.
                   </p>
                 </div>
               </div>
@@ -267,7 +267,7 @@ export const AdminDashboardPage = () => {
                 <div>
                   <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Cita reagendada:</span>
                   <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Fernanda Ruiz cambió su horario a las 5:30 p.m.
+                    Andrea Torres cambió su horario a las 5:30 PM.
                   </p>
                 </div>
               </div>
@@ -279,7 +279,7 @@ export const AdminDashboardPage = () => {
             <div className="admin-card-header">
               <h3 className="admin-card-title">Anticipos Recientes</h3>
               <Link to="/admin/pagos" style={{ fontSize: "0.84rem", fontWeight: 600, color: "var(--color-accent)" }}>
-                Ver pagos →
+                Ver anticipos →
               </Link>
             </div>
 

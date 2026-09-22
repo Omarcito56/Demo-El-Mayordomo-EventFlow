@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useClinicData } from "../../hooks/useClinicData";
-import { SearchIcon, UserIcon, WhatsAppIcon, ScissorsIcon } from "../../components/common/Icons";
+import { SearchIcon, UserIcon, WhatsAppIcon, SparklesIcon } from "../../components/common/Icons";
 import { trackEvent, useTrackOnMount } from "../../analytics/analytics";
 
 export const AdminPatientsPage = () => {
@@ -26,7 +26,7 @@ export const AdminPatientsPage = () => {
           <div>
             <h2 className="admin-card-title">Directorio de Clientes</h2>
             <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Directorio de clientas registradas en Mujer Bonita mediante la web y reservas previas.
+              Directorio de clientas registradas en GLAMUROSA NAIL’S mediante la web y reservas previas.
             </p>
           </div>
 
@@ -91,7 +91,7 @@ export const AdminPatientsPage = () => {
                         <div>
                           <div className="table-patient-name ph-mask">{patient.name}</div>
                           <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
-                            Estilista preferida: {patient.preferredStylist || "Andrea"}
+                            Técnica preferida: {patient.preferredStylist || "Andrea"}
                           </div>
                         </div>
                       </div>
@@ -120,7 +120,7 @@ export const AdminPatientsPage = () => {
                     </td>
                     <td>
                       <a 
-                        href={`https://wa.me/52${patient.phone}?text=${encodeURIComponent(`Hola ${patient.name}, te contactamos de Mujer Bonita.`)}`}
+                        href={`https://wa.me/52${patient.phone}?text=${encodeURIComponent(`Hola ${patient.name}, te contactamos de GLAMUROSA NAIL’S.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn btn-sm btn-action-wa"

@@ -4,7 +4,7 @@ import { initialBusinessData } from "../../data/businessData";
 
 export const FloatingWhatsApp = () => {
   const whatsappUrl = `https://wa.me/52${initialBusinessData.whatsapp}?text=${encodeURIComponent(
-    "Hola, quisiera solicitar información sobre los servicios en Mujer Bonita."
+    "Hola, quisiera solicitar información sobre los servicios en GLAMUROSA NAIL’S."
   )}`;
 
   return (
@@ -13,7 +13,7 @@ export const FloatingWhatsApp = () => {
       target="_blank"
       rel="noopener noreferrer"
       className="floating-whatsapp-btn"
-      aria-label="Contactar a Mujer Bonita por WhatsApp"
+      aria-label="Contactar a GLAMUROSA NAIL’S por WhatsApp"
       title="Escríbenos por WhatsApp"
     >
       <WhatsAppIcon size={24} />

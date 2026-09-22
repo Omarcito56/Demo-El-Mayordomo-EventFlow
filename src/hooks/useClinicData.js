@@ -41,9 +41,15 @@ export const useClinicData = () => {
 
   // Sync state on mount and ensure localStorage is seeded
   const refreshFromStorage = useCallback(() => {
-    // Check if storage has old Bellart data or is empty
+    // Check if storage has old Mujer Bonita / Bellart data or is empty
     const storedBus = getStored(STORAGE_KEYS.BUSINESS, null);
-    const isOldData = storedBus && (storedBus.salonName?.includes("Bellart") || storedBus.phone?.includes("899 124 1188"));
+    const isOldData = storedBus && (
+      storedBus.salonName?.includes("Mujer Bonita") ||
+      storedBus.salonName?.includes("Bellart") ||
+      storedBus.phone?.includes("8995452489") ||
+      storedBus.phone?.includes("899 124 1188") ||
+      !storedBus.salonName?.includes("GLAMUROSA")
+    );
 
     if (!localStorage.getItem(STORAGE_KEYS.BUSINESS) || isOldData) {
       localStorage.setItem(STORAGE_KEYS.BUSINESS, JSON.stringify(initialBusinessData));
@@ -85,11 +91,11 @@ export const useClinicData = () => {
     const currentApts = getStored(STORAGE_KEYS.APPOINTMENTS, initialAppointmentsData);
     const currentClients = getStored(STORAGE_KEYS.PATIENTS, initialPatientsData);
 
-    // Compute next sequential folio: MB-000126 etc.
+    // Compute next sequential folio: GLA-000126 etc.
     let nextNum = 126;
     currentApts.forEach((apt) => {
-      if (apt.folio && (apt.folio.startsWith("MB-") || apt.folio.startsWith("BEL-"))) {
-        const numPart = parseInt(apt.folio.replace(/^(MB|BEL)-/, ""), 10);
+      if (apt.folio && (apt.folio.startsWith("GLA-") || apt.folio.startsWith("MB-") || apt.folio.startsWith("BEL-"))) {
+        const numPart = parseInt(apt.folio.replace(/^(GLA|MB|BEL)-/, ""), 10);
         if (!isNaN(numPart) && numPart >= nextNum) {
           nextNum = numPart + 1;
         }
@@ -97,9 +103,9 @@ export const useClinicData = () => {
     });
 
     const paddedNum = String(nextNum).padStart(6, "0");
-    const folio = `MB-${paddedNum}`;
+    const folio = `GLA-${paddedNum}`;
 
-    const costNum = typeof formData.serviceCostNumber === "number" ? formData.serviceCostNumber : 700;
+    const costNum = typeof formData.serviceCostNumber === "number" ? formData.serviceCostNumber : 550;
     const hasDeposit = Boolean(formData.hasDeposit);
     const depNum = hasDeposit ? (typeof formData.depositNumber === "number" ? formData.depositNumber : 200) : 0;
     const balanceNum = Math.max(0, costNum - depNum);
@@ -119,7 +125,7 @@ export const useClinicData = () => {
       clientEmail: clientEmail,
       isFirstTime: Boolean(formData.isFirstTime),
       serviceId: formData.serviceId,
-      serviceName: formData.serviceName || "Servicio Mujer Bonita",
+      serviceName: formData.serviceName || "Servicio GLAMUROSA NAIL’S",
       professional: formData.professional || "Sin preferencia",
       date: formData.date,
       time: formData.time,
@@ -129,7 +135,7 @@ export const useClinicData = () => {
       depositNumber: depNum,
       balance: `$${balanceNum}`,
       depositStatus: hasDeposit ? "Pagado" : "No requerido",
-      paymentMethod: hasDeposit ? (formData.paymentMethod || "Tarjeta demo") : "En salón",
+      paymentMethod: hasDeposit ? (formData.paymentMethod || "Tarjeta demo") : "En studio",
       comments: formData.comments || "",
       status: "Pendiente",
       createdAt: new Date().toISOString()
