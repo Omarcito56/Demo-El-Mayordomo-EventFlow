@@ -36,8 +36,34 @@ const FORBIDDEN_PROPERTY_KEYS = new Set([
   "deposit",
   "depositAmount",
   "balance",
-  "cost"
+  "cost",
+  "address",
+  "city",
+  "zone",
+  "eventAddress",
+  "eventCity"
 ]);
+
+/**
+ * Helpers para categorizar datos en rangos sin filtrar información sensible individual
+ */
+export const getGuestRange = (guests) => {
+  const g = Number(guests);
+  if (g <= 50) return "1-50";
+  if (g <= 100) return "51-100";
+  if (g <= 150) return "101-150";
+  if (g <= 200) return "151-200";
+  return "200+";
+};
+
+export const getEstimatedTotalRange = (total) => {
+  const t = Number(total);
+  if (t < 20000) return "< 20k";
+  if (t <= 35000) return "20k-35k";
+  if (t <= 60000) return "35k-60k";
+  if (t <= 100000) return "60k-100k";
+  return "> 100k";
+};
 
 /**
  * Filtro de seguridad para garantizar que nunca se envíen datos personales a Analytics.

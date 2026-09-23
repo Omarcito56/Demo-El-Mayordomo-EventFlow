@@ -1,35 +1,35 @@
 import React from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { 
-  LayoutDashboardIcon, CalendarIcon, FileTextIcon, UsersIcon, 
-  SettingsIcon, SparklesIcon, CreditCardIcon, LogOutIcon, ArrowLeftIcon 
+  LayoutDashboardIcon, FileTextIcon, CalendarIcon, UsersIcon, 
+  CreditCardIcon, SparklesIcon, SettingsIcon, LogOutIcon, ArrowLeftIcon, MayordomoLogoIcon 
 } from "../common/Icons";
-import { useClinicData } from "../../hooks/useClinicData";
+import { useEventData } from "../../hooks/useEventData";
 
 export const AdminSidebar = () => {
   const navigate = useNavigate();
-  const { metrics } = useClinicData();
+  const { metrics, business } = useEventData();
 
   const handleLogout = () => {
-    localStorage.removeItem("beautyflow_auth");
-    localStorage.removeItem("clinicflow_auth");
+    localStorage.removeItem("eventflow_auth");
     navigate("/admin/login");
   };
 
   return (
     <aside className="admin-sidebar">
-      {/* Sidebar Brand */}
+      {/* Brand Header */}
       <div className="sidebar-header">
-        <div className="sidebar-logo-icon" style={{ background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)" }}>
-          <SparklesIcon size={20} />
+        <div className="sidebar-logo-icon">
+          <MayordomoLogoIcon size={22} />
         </div>
-        <div>
-          <h2 className="sidebar-title">GLAMUROSA</h2>
-          <span className="sidebar-sub">NAIL’S STUDIO</span>
+        <div className="sidebar-brand-text">
+          <h2 className="sidebar-title">EventFlow Admin</h2>
+          <span className="sidebar-sub">{business.brandShort}</span>
+          <span className="sidebar-demo-tag">Propuesta Demo</span>
         </div>
       </div>
 
-      {/* Navigation Links */}
+      {/* Nav Menu (9 items) */}
       <ul className="sidebar-nav">
         <li>
           <NavLink 
@@ -40,30 +40,45 @@ export const AdminSidebar = () => {
             <span>Resumen</span>
           </NavLink>
         </li>
+
         <li>
           <NavLink 
-            to="/admin/agenda" 
+            to="/admin/solicitudes" 
+            className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
+          >
+            <FileTextIcon size={18} />
+            <span>Solicitudes</span>
+            {metrics.newRequests > 0 && (
+              <span className="sidebar-badge">{metrics.newRequests}</span>
+            )}
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink 
+            to="/admin/calendario" 
             className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
           >
             <CalendarIcon size={18} />
-            <span>Agenda</span>
-            {metrics.today > 0 && (
-              <span className="sidebar-badge" style={{ backgroundColor: "var(--color-primary-light)" }}>
-                {metrics.today} hoy
+            <span>Calendario</span>
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink 
+            to="/admin/eventos" 
+            className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
+          >
+            <SparklesIcon size={18} />
+            <span>Eventos</span>
+            {metrics.upcomingEvents > 0 && (
+              <span className="sidebar-badge" style={{ backgroundColor: "#10B981", color: "#FFF" }}>
+                {metrics.upcomingEvents}
               </span>
             )}
           </NavLink>
         </li>
-        <li>
-          <NavLink 
-            to="/admin/citas" 
-            className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
-          >
-            <FileTextIcon size={18} />
-            <span>Citas</span>
-            {metrics.pending > 0 && <span className="sidebar-badge">{metrics.pending}</span>}
-          </NavLink>
-        </li>
+
         <li>
           <NavLink 
             to="/admin/clientes" 
@@ -73,24 +88,42 @@ export const AdminSidebar = () => {
             <span>Clientes</span>
           </NavLink>
         </li>
+
         <li>
           <NavLink 
-            to="/admin/servicios" 
+            to="/admin/cotizaciones" 
             className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
           >
-            <SparklesIcon size={18} />
-            <span>Servicios</span>
+            <FileTextIcon size={18} />
+            <span>Cotizaciones</span>
+            {metrics.pendingQuotes > 0 && (
+              <span className="sidebar-badge" style={{ backgroundColor: "#F59E0B", color: "#FFF" }}>
+                {metrics.pendingQuotes}
+              </span>
+            )}
           </NavLink>
         </li>
+
         <li>
           <NavLink 
             to="/admin/pagos" 
             className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
           >
             <CreditCardIcon size={18} />
-            <span>Anticipos</span>
+            <span>Pagos y Anticipos</span>
           </NavLink>
         </li>
+
+        <li>
+          <NavLink 
+            to="/admin/paquetes" 
+            className={({ isActive }) => `sidebar-item-link ${isActive ? "active" : ""}`}
+          >
+            <SparklesIcon size={18} />
+            <span>Paquetes Demo</span>
+          </NavLink>
+        </li>
+
         <li>
           <NavLink 
             to="/admin/configuracion" 
@@ -106,7 +139,7 @@ export const AdminSidebar = () => {
       <div className="sidebar-footer">
         <Link to="/" className="sidebar-btn-public">
           <ArrowLeftIcon size={14} />
-          <span>Ver sitio GLAMUROSA</span>
+          <span>Ver sitio web público</span>
         </Link>
         <button type="button" className="sidebar-btn-logout" onClick={handleLogout}>
           <LogOutIcon size={14} />

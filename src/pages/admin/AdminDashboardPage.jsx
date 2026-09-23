@@ -1,326 +1,200 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useClinicData } from "../../hooks/useClinicData";
+import { useEventData } from "../../hooks/useEventData";
 import { 
-  CalendarIcon, ClockIcon, UserIcon, CheckCircleIcon, 
-  AlertCircleIcon, CreditCardIcon, SparklesIcon, EyeIcon, ArrowRightIcon 
+  FileTextIcon, CalendarIcon, CreditCardIcon, 
+  EyeIcon, ArrowRightIcon, DollarIcon
 } from "../../components/common/Icons";
 import { StatusBadge } from "../../components/common/StatusBadge";
-import { AppointmentDetailModal } from "../../components/admin/AppointmentDetailModal";
-import { trackEvent, useTrackOnMount } from "../../analytics/analytics";
+import { EventDetailModal } from "../../components/admin/EventDetailModal";
+import { useTrackOnMount } from "../../analytics/analytics";
 
 export const AdminDashboardPage = () => {
-  const { metrics, appointments } = useClinicData();
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const { metrics, requests, events } = useEventData();
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  // Registrar apertura protegida contra duplicados de StrictMode
-  useTrackOnMount("admin_dashboard_opened", { module: "dashboard" });
+  useTrackOnMount("admin_requests_opened", { module: "dashboard" });
 
-  // Upcoming active appointments
-  const upcomingAppointments = appointments
-    .filter((a) => a.status !== "Cancelada")
-    .slice(0, 5);
-
-  // Recent deposits (citas con anticipo cubierto)
-  const recentDeposits = appointments
-    .filter((a) => a.depositStatus === "Pagado")
-    .slice(0, 4);
-
-  // Dynamic alert counts
-  const pendingCount = metrics.pending;
-  const noDepositCount = appointments.filter((a) => a.depositStatus !== "Pagado" && a.status !== "Cancelada").length;
-  const afternoonCount = appointments.filter((a) => a.time.includes("PM") && a.status !== "Cancelada").length;
+  const recentRequests = requests.slice(0, 5);
+  const upcomingEvents = events.filter(e => e.status !== "Cancelado").slice(0, 4);
 
   return (
     <div>
-      {/* Top 5 Metrics Cards: Citas de hoy, Pendientes, Clientes nuevos, Anticipos, Servicios activos */}
+      {/* Disclaimer de datos demo */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", padding: "0.6rem 1rem", backgroundColor: "#FEF3C7", borderRadius: "var(--radius-sm)", border: "1px solid #FDE68A", fontSize: "0.82rem", color: "#92400E" }}>
+        <span>
+          <strong>Entorno de Demostración Comercial:</strong> Todas las métricas, folios y saldos mostrados son ficticios con fines ilustrativos de la solución EventFlow.
+        </span>
+        <span style={{ fontWeight: 700, textTransform: "uppercase", fontSize: "0.72rem" }}>Datos Demostrativos</span>
+      </div>
+
+      {/* 5 Métricas Demo Solicitadas */}
       <div className="stats-grid">
+        {/* 1. Solicitudes Nuevas */}
         <div className="stat-card">
           <div>
-            <div className="stat-val">{metrics.today}</div>
-            <div className="stat-label">Citas de hoy</div>
+            <div className="stat-val" style={{ color: "var(--color-charcoal-deep)" }}>
+              {metrics.newRequests}
+            </div>
+            <div className="stat-label">Solicitudes nuevas</div>
           </div>
-          <div className="stat-icon-wrap" style={{ backgroundColor: "var(--color-primary-soft)", color: "var(--color-primary)" }}>
+          <div className="stat-icon-wrap" style={{ backgroundColor: "var(--status-info-bg)", color: "var(--status-info-text)" }}>
+            <FileTextIcon size={22} />
+          </div>
+        </div>
+
+        {/* 2. Eventos Próximos */}
+        <div className="stat-card">
+          <div>
+            <div className="stat-val" style={{ color: "#059669" }}>
+              {metrics.upcomingEvents}
+            </div>
+            <div className="stat-label">Eventos próximos</div>
+          </div>
+          <div className="stat-icon-wrap" style={{ backgroundColor: "#ECFDF5", color: "#059669" }}>
             <CalendarIcon size={22} />
           </div>
         </div>
 
+        {/* 3. Cotizaciones Pendientes */}
         <div className="stat-card">
           <div>
-            <div className="stat-val" style={{ color: "#D97706" }}>{metrics.pending}</div>
-            <div className="stat-label">Pendientes de confirmar</div>
+            <div className="stat-val" style={{ color: "#D97706" }}>
+              {metrics.pendingQuotes}
+            </div>
+            <div className="stat-label">Cotizaciones pendientes</div>
           </div>
           <div className="stat-icon-wrap" style={{ backgroundColor: "#FEF3C7", color: "#D97706" }}>
-            <ClockIcon size={22} />
+            <FileTextIcon size={22} />
           </div>
         </div>
 
+        {/* 4. Anticipos Registrados */}
         <div className="stat-card">
           <div>
             <div className="stat-val" style={{ color: "var(--color-accent)" }}>
-              {metrics.newClientsToday || 1}
+              ${metrics.totalDeposits.toLocaleString("es-MX")}
             </div>
-            <div className="stat-label">Clientes nuevos</div>
+            <div className="stat-label">Anticipos registrados demo</div>
           </div>
           <div className="stat-icon-wrap" style={{ backgroundColor: "var(--color-accent-soft)", color: "var(--color-accent)" }}>
-            <UserIcon size={22} />
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div>
-            <div className="stat-val" style={{ color: "#059669" }}>
-              ${metrics.totalDeposits || 500}
-            </div>
-            <div className="stat-label">Anticipos recibidos demo</div>
-          </div>
-          <div className="stat-icon-wrap" style={{ backgroundColor: "#ECFDF5", color: "#059669" }}>
             <CreditCardIcon size={22} />
           </div>
         </div>
 
+        {/* 5. Ingresos Proyectados */}
         <div className="stat-card">
           <div>
-            <div className="stat-val" style={{ color: "var(--color-primary)" }}>
-              {metrics.activeServices || 6}
+            <div className="stat-val" style={{ color: "var(--color-charcoal-deep)" }}>
+              ${metrics.projectedIncome.toLocaleString("es-MX")}
             </div>
-            <div className="stat-label">Servicios activos</div>
+            <div className="stat-label">Ingresos proyectados demo</div>
           </div>
-          <div className="stat-icon-wrap" style={{ backgroundColor: "var(--color-primary-soft)", color: "var(--color-primary)" }}>
-            <SparklesIcon size={22} />
+          <div className="stat-icon-wrap" style={{ backgroundColor: "#F3F4F6", color: "var(--color-charcoal-deep)" }}>
+            <DollarIcon size={22} />
           </div>
         </div>
       </div>
 
-      {/* Salon Dynamic Alerts */}
-      <div className="alerts-list">
-        {pendingCount > 0 && (
-          <div className="alert-banner alert-warning">
-            <div className="alert-content-left">
-              <AlertCircleIcon size={18} />
-              <span>
-                <strong>{pendingCount} cita{pendingCount > 1 ? "s" : ""} pendiente{pendingCount > 1 ? "s" : ""} de confirmar</strong> en la agenda del studio.
-              </span>
-            </div>
-            <Link to="/admin/citas" className="btn btn-sm btn-secondary">
-              <span>Revisar y confirmar</span>
+      {/* Grid de 2 Columnas: Solicitudes Recientes y Eventos Próximos */}
+      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "2rem", marginBottom: "2rem" }}>
+        {/* Solicitudes Recientes */}
+        <div className="admin-card-table">
+          <div className="admin-table-toolbar">
+            <h3 style={{ fontSize: "1.05rem", color: "var(--color-charcoal-deep)" }}>
+              Solicitudes Recientes
+            </h3>
+            <Link to="/admin/solicitudes" className="btn btn-outline btn-sm">
+              <span>Ver todas</span>
               <ArrowRightIcon size={14} />
             </Link>
           </div>
-        )}
 
-        {noDepositCount > 0 && (
-          <div className="alert-banner alert-info" style={{ backgroundColor: "var(--color-primary-soft)", borderColor: "var(--color-primary-soft-border)" }}>
-            <div className="alert-content-left">
-              <CreditCardIcon size={18} style={{ color: "var(--color-accent)" }} />
-              <span>
-                <strong>{noDepositCount} cita{noDepositCount > 1 ? "s" : ""} sin anticipo previo</strong> (liquidación total al acudir a GLAMUROSA NAIL’S).
-              </span>
-            </div>
-            <Link to="/admin/pagos" className="btn btn-sm btn-secondary">
-              <span>Ver anticipos</span>
-            </Link>
-          </div>
-        )}
-
-        {afternoonCount > 0 && (
-          <div className="alert-banner alert-info">
-            <div className="alert-content-left">
-              <ClockIcon size={18} />
-              <span>
-                <strong>{afternoonCount} citas programadas esta tarde</strong> en el studio de uñas.
-              </span>
-            </div>
-            <Link to="/admin/agenda" className="btn btn-sm btn-secondary">
-              <span>Ver agenda de la tarde</span>
-            </Link>
-          </div>
-        )}
-      </div>
-
-      {/* Grid: Upcoming Appointments and Right Column (Activity + Recent Deposits) */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: "1.5rem" }}>
-        {/* Upcoming Appointments Card */}
-        <div className="admin-card">
-          <div className="admin-card-header">
-            <h3 className="admin-card-title">Próximas Citas en GLAMUROSA NAIL’S</h3>
-            <Link to="/admin/citas" style={{ fontSize: "0.86rem", fontWeight: 600, color: "var(--color-accent)" }}>
-              Ver todas ({appointments.length}) →
-            </Link>
-          </div>
-
-          <div className="table-responsive">
-            <table className="admin-table">
+          <div className="table-responsive-container">
+            <table className="admin-data-table">
               <thead>
                 <tr>
                   <th>Folio</th>
                   <th>Cliente</th>
-                  <th>Servicio</th>
-                  <th>Técnica</th>
-                  <th>Fecha / Hora</th>
-                  <th>Anticipo</th>
+                  <th>Evento</th>
+                  <th>Fecha</th>
+                  <th>Estimado</th>
                   <th>Estado</th>
                   <th>Acción</th>
                 </tr>
               </thead>
               <tbody>
-                {upcomingAppointments.map((apt) => {
-                  const clientName = apt.clientName || apt.patientName || "Cliente";
-                  const clientPhone = apt.clientPhone || apt.patientPhone || "";
-                  return (
-                    <tr key={apt.id}>
-                      <td>
-                        <span className="table-folio-link ph-mask">{apt.folio}</span>
-                      </td>
-                      <td>
-                        <div className="table-patient-name ph-mask">{clientName}</div>
-                        <div className="table-patient-contact ph-mask">{clientPhone}</div>
-                      </td>
-                      <td>{apt.serviceName}</td>
-                      <td>
-                        <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>
-                          {apt.professional || "Sin preferencia"}
-                        </span>
-                      </td>
-                      <td>
-                        <div style={{ fontWeight: 600, color: "var(--color-primary)" }}>{apt.time}</div>
-                        <div style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)" }}>{apt.date}</div>
-                      </td>
-                      <td>
-                        <span style={{ 
-                          fontSize: "0.8rem", 
-                          fontWeight: 700, 
-                          color: apt.depositStatus === "Pagado" ? "#059669" : "#D97706" 
-                        }}>
-                          {apt.depositAmount || "$0"}
-                        </span>
-                      </td>
-                      <td>
-                        <StatusBadge status={apt.status} />
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-action-view"
-                          onClick={() => {
-                            trackEvent("record_detail_opened", {
-                              record_type: "appointment",
-                              status: apt.status
-                            });
-                            setSelectedAppointment(apt);
-                          }}
-                          title="Ver detalle completo"
-                        >
-                          <EyeIcon size={14} />
-                          <span>Detalle</span>
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {recentRequests.map((req) => (
+                  <tr key={req.id}>
+                    <td className="folio-cell">{req.folio}</td>
+                    <td className="client-name-cell ph-mask">{req.clientName}</td>
+                    <td>{req.eventType}</td>
+                    <td>{req.date}</td>
+                    <td style={{ fontWeight: 600 }}>${(req.estimatedTotal || 0).toLocaleString("es-MX")}</td>
+                    <td><StatusBadge status={req.status} /></td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                        style={{ padding: "0.3rem 0.6rem", fontSize: "0.75rem" }}
+                        onClick={() => setSelectedItem(req)}
+                      >
+                        <EyeIcon size={13} />
+                        <span>Ver</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Right Column: Actividad Reciente & Anticipos Recientes */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-          {/* Recent Activity Feed */}
-          <div className="admin-card">
-            <div className="admin-card-header">
-              <h3 className="admin-card-title">Actividad Reciente</h3>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
-              <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
-                <span className="status-dot" style={{ backgroundColor: "var(--color-accent)", marginTop: "6px" }}></span>
-                <div>
-                  <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Nueva cita registrada:</span>
-                  <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Folio {appointments[0]?.folio || "GLA-000125"} por {appointments[0]?.clientName || appointments[0]?.patientName || "Cliente"}.
-                  </p>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
-                <span className="status-dot" style={{ backgroundColor: "#059669", marginTop: "6px" }}></span>
-                <div>
-                  <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Cita confirmada por studio:</span>
-                  <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Valeria García (9:00 AM - Uñas acrílicas con Mariana).
-                  </p>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
-                <span className="status-dot" style={{ backgroundColor: "var(--color-primary)", marginTop: "6px" }}></span>
-                <div>
-                  <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Servicio atendido:</span>
-                  <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Carolina Martínez completó Pedicure spa.
-                  </p>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", fontSize: "0.88rem" }}>
-                <span className="status-dot" style={{ backgroundColor: "#7C3AED", marginTop: "6px" }}></span>
-                <div>
-                  <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>Cita reagendada:</span>
-                  <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-                    Andrea Torres cambió su horario a las 5:30 PM.
-                  </p>
-                </div>
-              </div>
-            </div>
+        {/* Eventos Próximos en Agenda */}
+        <div className="admin-card-table">
+          <div className="admin-table-toolbar">
+            <h3 style={{ fontSize: "1.05rem", color: "var(--color-charcoal-deep)" }}>
+              Próximos Eventos en Agenda
+            </h3>
+            <Link to="/admin/eventos" className="btn btn-outline btn-sm">
+              <span>Ver agenda</span>
+              <ArrowRightIcon size={14} />
+            </Link>
           </div>
 
-          {/* Recent Deposits Card */}
-          <div className="admin-card">
-            <div className="admin-card-header">
-              <h3 className="admin-card-title">Anticipos Recientes</h3>
-              <Link to="/admin/pagos" style={{ fontSize: "0.84rem", fontWeight: 600, color: "var(--color-accent)" }}>
-                Ver anticipos →
-              </Link>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              {recentDeposits.map((dep) => (
-                <div key={dep.id} style={{ 
-                  display: "flex", 
-                  alignItems: "center", 
-                  justifyContent: "space-between",
-                  padding: "0.6rem 0.8rem",
-                  background: "var(--color-bg)",
-                  borderRadius: "8px",
-                  fontSize: "0.84rem"
-                }}>
-                  <div>
-                    <strong className="ph-mask" style={{ color: "var(--color-primary)" }}>{dep.clientName || dep.patientName}</strong>
-                    <div style={{ fontSize: "0.74rem", color: "var(--color-text-secondary)" }}>
-                      {dep.serviceName} • {dep.paymentMethod || "Tarjeta demo"}
-                    </div>
+          <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+            {upcomingEvents.map((evt) => (
+              <div 
+                key={evt.id} 
+                style={{ padding: "1rem", backgroundColor: "var(--color-bg)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-light)", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+              >
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.2rem" }}>
+                    <span style={{ fontWeight: 700, fontSize: "0.92rem", color: "var(--color-charcoal-deep)" }}>{evt.eventType}</span>
+                    <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>({evt.folio})</span>
                   </div>
-                  <span style={{ fontWeight: 700, color: "#059669", fontSize: "0.9rem" }}>
-                    +{dep.depositAmount}
-                  </span>
+                  <div style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }} className="ph-mask">
+                    {evt.clientName} · {evt.guests} comensales · {evt.zone}
+                  </div>
                 </div>
-              ))}
-            </div>
 
-            <div style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid #F1F5F9", textAlign: "center" }}>
-              <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>
-                Datos sincronizados localmente con localStorage
-              </span>
-            </div>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontWeight: 600, fontSize: "0.85rem", color: "var(--color-accent)", marginBottom: "0.2rem" }}>
+                    {evt.date}
+                  </div>
+                  <StatusBadge status={evt.status} />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Appointment Detail Modal */}
-      <AppointmentDetailModal
-        isOpen={Boolean(selectedAppointment)}
-        onClose={() => setSelectedAppointment(null)}
-        appointment={selectedAppointment}
+      {/* Modal de Detalle */}
+      <EventDetailModal
+        item={selectedItem}
+        isOpen={Boolean(selectedItem)}
+        onClose={() => setSelectedItem(null)}
       />
     </div>
   );

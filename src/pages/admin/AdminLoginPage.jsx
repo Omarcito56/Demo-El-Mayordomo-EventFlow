@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { SparklesIcon, ArrowLeftIcon, AlertCircleIcon, ArrowRightIcon } from "../../components/common/Icons";
+import { MayordomoLogoIcon, ArrowLeftIcon, AlertCircleIcon, ArrowRightIcon, SparklesIcon } from "../../components/common/Icons";
 import { trackEvent, useTrackOnMount } from "../../analytics/analytics";
 
 export const AdminLoginPage = () => {
@@ -9,18 +9,16 @@ export const AdminLoginPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Registrar apertura protegida contra duplicados de StrictMode
   useTrackOnMount("admin_login_opened", { route: "/admin/login" });
 
   const handleLogin = (e) => {
     e.preventDefault();
     setError("");
 
-    // Demo credentials check
     const validEmail = email.trim().toLowerCase();
-    if ((validEmail === "admin@glamurosanails.demo" || validEmail === "admin@clinicflow.com") && password === "demo123") {
+    if ((validEmail === "admin@eventflow.demo" || validEmail === "elmayordomo@eventflow.demo") && password === "demo123") {
       trackEvent("admin_login_success", { route: "/admin/dashboard" });
-      localStorage.setItem("beautyflow_auth", "true");
+      localStorage.setItem("eventflow_auth", "true");
       navigate("/admin/dashboard");
     } else {
       setError("Credenciales incorrectas. Utiliza el usuario demo indicado abajo.");
@@ -28,7 +26,7 @@ export const AdminLoginPage = () => {
   };
 
   const handleFillDemoCreds = () => {
-    setEmail("admin@glamurosanails.demo");
+    setEmail("admin@eventflow.demo");
     setPassword("demo123");
     setError("");
   };
@@ -37,15 +35,15 @@ export const AdminLoginPage = () => {
     <div className="login-page-wrap">
       <div className="login-card animate-fade-in">
         <div className="login-brand-header">
-          <div className="login-logo-circle" style={{ background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)" }}>
-            <SparklesIcon size={26} />
+          <div className="login-logo-circle">
+            <MayordomoLogoIcon size={26} />
           </div>
-          <span className="login-demo-pill">Acceso demo para administración</span>
-          <h1 style={{ fontSize: "1.55rem", color: "var(--color-primary)", marginBottom: "0.35rem" }}>
-            Panel GLAMUROSA NAIL’S
+          <span className="login-demo-pill">Panel Administrativo Demo</span>
+          <h1 style={{ fontSize: "1.6rem", color: "var(--color-charcoal-deep)", marginBottom: "0.35rem" }}>
+            EventFlow Admin
           </h1>
           <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)" }}>
-            Gestión interna de citas, agenda, anticipos y clientas
+            El Mayordomo Banquetes & Catering
           </p>
         </div>
 
@@ -66,8 +64,9 @@ export const AdminLoginPage = () => {
             <input
               type="email"
               id="admin-email"
+              className="form-input"
               value={email}
-              placeholder="admin@glamurosanails.demo"
+              placeholder="admin@eventflow.demo"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -80,6 +79,7 @@ export const AdminLoginPage = () => {
             <input
               type="password"
               id="admin-pass"
+              className="form-input"
               value={password}
               placeholder="demo123"
               onChange={(e) => setPassword(e.target.value)}
@@ -87,35 +87,35 @@ export const AdminLoginPage = () => {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: "0.5rem" }}>
+          <button type="submit" className="btn btn-primary btn-block" style={{ marginTop: "0.5rem" }}>
             <span>Ingresar al panel</span>
             <ArrowRightIcon size={16} />
           </button>
         </form>
 
-        {/* Quick demo credentials filler */}
+        {/* Botón rápido para demo */}
         <div className="login-quick-creds">
-          <p style={{ fontWeight: 600, color: "var(--color-primary)", marginBottom: "0.35rem" }}>
+          <p style={{ fontWeight: 600, color: "var(--color-charcoal-deep)", marginBottom: "0.35rem", fontSize: "0.85rem" }}>
             Credenciales de prueba:
           </p>
-          <div style={{ fontFamily: "monospace", fontSize: "0.85rem", color: "var(--color-text-primary)", marginBottom: "0.75rem" }}>
-            Usuario: <strong>admin@glamurosanails.demo</strong><br />
+          <div style={{ fontFamily: "monospace", fontSize: "0.84rem", color: "var(--color-text-primary)", marginBottom: "0.75rem" }}>
+            Usuario: <strong>admin@eventflow.demo</strong><br />
             Contraseña: <strong>demo123</strong>
           </div>
           <button
             type="button"
-            className="btn btn-secondary btn-sm"
+            className="btn btn-secondary btn-sm btn-block"
             onClick={handleFillDemoCreds}
-            style={{ width: "100%" }}
           >
-            Autocompletar credenciales demo
+            <SparklesIcon size={14} />
+            <span>Autocompletar credenciales demo</span>
           </button>
         </div>
 
         <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
           <Link to="/" style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
             <ArrowLeftIcon size={14} />
-            <span>Volver al sitio público de GLAMUROSA NAIL’S</span>
+            <span>Volver al sitio público de El Mayordomo</span>
           </Link>
         </div>
       </div>

@@ -1,28 +1,22 @@
 import React from "react";
-import { UserIcon, ClockIcon } from "../common/Icons";
+import { Link } from "react-router-dom";
+import { SparklesIcon } from "../common/Icons";
 
-export const AdminHeader = ({ title = "Panel de Recepción" }) => {
-  const todayFormatted = new Intl.DateTimeFormat("es-MX", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  }).format(new Date());
-
+export const AdminHeader = ({ title = "Panel de Administración" }) => {
   return (
     <header className="admin-header">
       <h1 className="admin-header-title">{title}</h1>
 
-      <div className="admin-header-right">
-        <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.86rem", color: "var(--color-text-secondary)" }}>
-          <ClockIcon size={16} />
-          <span style={{ textTransform: "capitalize" }}>{todayFormatted}</span>
+      <div className="admin-header-actions">
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#10B981" }} />
+          <span>Demo en línea</span>
         </div>
 
-        <div className="admin-reception-pill">
-          <span className="status-dot" style={{ backgroundColor: "var(--color-accent)", width: "8px", height: "8px" }}></span>
-          <span>Panel Activo</span>
-        </div>
+        <Link to="/cotizar" className="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer">
+          <SparklesIcon size={14} />
+          <span>Nuevo evento (+ Cotizar)</span>
+        </Link>
       </div>
     </header>
   );

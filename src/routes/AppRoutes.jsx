@@ -7,48 +7,60 @@ import { AdminLayout } from "../layouts/AdminLayout";
 
 // Public Pages
 import { HomePage } from "../pages/public/HomePage";
-import { ServicesPage } from "../pages/public/ServicesPage";
-import { BookingPage } from "../pages/public/BookingPage";
+import { PackagesPage } from "../pages/public/PackagesPage";
+import { QuotePage } from "../pages/public/QuotePage";
 import { ConfirmationPage } from "../pages/public/ConfirmationPage";
 
 // Admin Pages
 import { AdminLoginPage } from "../pages/admin/AdminLoginPage";
 import { AdminDashboardPage } from "../pages/admin/AdminDashboardPage";
-import { AdminAgendaPage } from "../pages/admin/AdminAgendaPage";
-import { AdminAppointmentsPage } from "../pages/admin/AdminAppointmentsPage";
-import { AdminPatientsPage } from "../pages/admin/AdminPatientsPage";
-import { AdminServicesPage } from "../pages/admin/AdminServicesPage";
+import { AdminRequestsPage } from "../pages/admin/AdminRequestsPage";
+import { AdminCalendarPage } from "../pages/admin/AdminCalendarPage";
+import { AdminEventsPage } from "../pages/admin/AdminEventsPage";
+import { AdminClientsPage } from "../pages/admin/AdminClientsPage";
+import { AdminQuotesPage } from "../pages/admin/AdminQuotesPage";
 import { AdminPaymentsPage } from "../pages/admin/AdminPaymentsPage";
+import { AdminPackagesPage } from "../pages/admin/AdminPackagesPage";
 import { AdminSettingsPage } from "../pages/admin/AdminSettingsPage";
 
 export const AppRoutes = () => {
   return (
     <Routes>
-      {/* Public Client Routes */}
+      {/* Rutas Públicas */}
       <Route element={<PublicLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/servicios" element={<ServicesPage />} />
-        <Route path="/agendar" element={<BookingPage />} />
+        <Route path="/paquetes" element={<PackagesPage />} />
+        <Route path="/cotizar" element={<QuotePage />} />
         <Route path="/confirmacion" element={<ConfirmationPage />} />
+
+        {/* Redirecciones de rutas de proyectos anteriores */}
+        <Route path="/servicios" element={<Navigate to="/paquetes" replace />} />
+        <Route path="/agendar" element={<Navigate to="/cotizar" replace />} />
       </Route>
 
-      {/* Admin Login */}
+      {/* Login de Administración */}
       <Route path="/admin/login" element={<AdminLoginPage />} />
 
-      {/* Admin Protected Routes */}
+      {/* Panel Administrativo Protegido */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboardPage />} />
-        <Route path="agenda" element={<AdminAgendaPage />} />
-        <Route path="citas" element={<AdminAppointmentsPage />} />
-        <Route path="clientes" element={<AdminPatientsPage />} />
-        <Route path="pacientes" element={<Navigate to="/admin/clientes" replace />} />
-        <Route path="servicios" element={<AdminServicesPage />} />
+        <Route path="solicitudes" element={<AdminRequestsPage />} />
+        <Route path="calendario" element={<AdminCalendarPage />} />
+        <Route path="eventos" element={<AdminEventsPage />} />
+        <Route path="clientes" element={<AdminClientsPage />} />
+        <Route path="cotizaciones" element={<AdminQuotesPage />} />
         <Route path="pagos" element={<AdminPaymentsPage />} />
+        <Route path="paquetes" element={<AdminPackagesPage />} />
         <Route path="configuracion" element={<AdminSettingsPage />} />
+
+        {/* Aliases internos para compatibilidad */}
+        <Route path="agenda" element={<Navigate to="/admin/calendario" replace />} />
+        <Route path="citas" element={<Navigate to="/admin/solicitudes" replace />} />
+        <Route path="servicios" element={<Navigate to="/admin/paquetes" replace />} />
       </Route>
 
-      {/* Fallback route */}
+      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

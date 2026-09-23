@@ -1,214 +1,149 @@
 import React, { useState } from "react";
-import { useClinicData } from "../../hooks/useClinicData";
-import { CheckIcon, RefreshIcon, SparklesIcon } from "../../components/common/Icons";
+import { useEventData } from "../../hooks/useEventData";
+import { ANALYTICS_CONFIG } from "../../analytics/analyticsConfig";
+import { CheckCircleIcon, RefreshIcon } from "../../components/common/Icons";
+import { useTrackOnMount } from "../../analytics/analytics";
 
 export const AdminSettingsPage = () => {
-  const { business, updateBusiness, resetDemoData } = useClinicData();
+  const { business, updateBusiness, resetDemoData } = useEventData();
   const [formData, setFormData] = useState({ ...business });
-  const [savedSuccess, setSavedSuccess] = useState(false);
-  const [resetSuccess, setResetSuccess] = useState(false);
+  const [notice, setNotice] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ 
-      ...prev, 
-      [name]: value,
-      // Keep aliases in sync
-      ...(name === "salonName" ? { clinicName: value, doctorName: value } : {})
-    }));
-    setSavedSuccess(false);
-    setResetSuccess(false);
-  };
+  useTrackOnMount("admin_requests_opened", { module: "settings" });
 
   const handleSave = (e) => {
     e.preventDefault();
     updateBusiness(formData);
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 3500);
+    setNotice("¡Configuración guardada en localStorage!");
+    setTimeout(() => setNotice(""), 3000);
   };
 
   const handleReset = () => {
-    if (window.confirm("¿Seguro que deseas restablecer todos los datos demo de GLAMUROSA NAIL’S a los valores iniciales de fábrica? Esto recargará las citas, técnicas y clientas de muestra.")) {
+    if (window.confirm("¿Seguro que deseas restaurar todos los datos demostrativos a los valores iniciales de fábrica?")) {
       resetDemoData();
-      setResetSuccess(true);
-      setSavedSuccess(false);
-      setTimeout(() => {
-        window.location.reload();
-      }, 700);
+      setFormData({ ...business });
+      setNotice("¡Datos demo restaurados con éxito!");
+      setTimeout(() => setNotice(""), 3000);
     }
   };
 
   return (
-    <div>
-      <div className="admin-card" style={{ maxWidth: "800px" }}>
-        <div className="admin-card-header">
-          <div>
-            <h2 className="admin-card-title">Configuración de GLAMUROSA NAIL’S</h2>
-            <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Personaliza los datos visibles del studio, medios de contacto y mensaje de confirmación.
-            </p>
+    <div style={{ maxWidth: "800px" }}>
+      {notice && (
+        <div className="alert-banner alert-warning" style={{ backgroundColor: "#ECFDF5", color: "#065F46", borderColor: "#A7F3D0", marginBottom: "1.25rem" }}>
+          <div className="alert-content-left">
+            <CheckCircleIcon size={16} />
+            <span>{notice}</span>
           </div>
         </div>
+      )}
 
-        {savedSuccess && (
-          <div className="alert-banner alert-info" style={{ marginBottom: "1.5rem" }}>
-            <div className="alert-content-left">
-              <CheckIcon size={18} />
-              <span>¡Configuración actualizada y guardada en localStorage correctamente!</span>
-            </div>
-          </div>
-        )}
+      <div className="card-editorial" style={{ padding: "2rem", marginBottom: "2rem" }}>
+        <h2 style={{ fontSize: "1.3rem", color: "var(--color-charcoal-deep)", marginBottom: "0.25rem" }}>
+          Identidad de la Propuesta
+        </h2>
+        <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", marginBottom: "1.5rem" }}>
+          Información visible en la cabecera y pie de página de la landing pública.
+        </p>
 
-        {resetSuccess && (
-          <div className="alert-banner alert-warning" style={{ marginBottom: "1.5rem" }}>
-            <div className="alert-content-left">
-              <RefreshIcon size={18} />
-              <span>Restableciendo datos demo iniciales de GLAMUROSA NAIL’S...</span>
-            </div>
-          </div>
-        )}
-
-        <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          <div className="form-grid">
-            {/* Nombre del negocio */}
-            <div>
-              <label className="form-label" htmlFor="salonName">Nombre del Negocio</label>
-              <input
-                type="text"
-                id="salonName"
-                name="salonName"
-                value={formData.salonName || formData.clinicName || "GLAMUROSA NAIL’S"}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Teléfono */}
-            <div>
-              <label className="form-label" htmlFor="phone">Teléfono de Contacto</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone || "8992569812"}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* WhatsApp */}
-            <div>
-              <label className="form-label" htmlFor="whatsapp">WhatsApp para Citas</label>
-              <input
-                type="tel"
-                id="whatsapp"
-                name="whatsapp"
-                value={formData.whatsapp || "8992569812"}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Correo */}
-            <div>
-              <label className="form-label" htmlFor="email">Correo Electrónico (Demo)</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email || "contacto@glamurosanails.demo"}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Color Principal */}
-            <div>
-              <label className="form-label" htmlFor="primaryColor">Color Principal de Marca</label>
-              <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                <input
-                  type="color"
-                  id="primaryColorPicker"
-                  name="primaryColor"
-                  value={formData.primaryColor || "#A85D73"}
-                  onChange={handleChange}
-                  style={{ width: "45px", height: "42px", padding: "2px", cursor: "pointer" }}
-                />
-                <input
-                  type="text"
-                  id="primaryColor"
-                  name="primaryColor"
-                  value={formData.primaryColor || "#A85D73"}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            {/* Dirección */}
-            <div className="form-group-full">
-              <label className="form-label" htmlFor="address">Ubicación Demostrativa</label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address || "Ubicación demostrativa (adaptable a GLAMUROSA NAIL’S)"}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Horario */}
-            <div className="form-group-full">
-              <label className="form-label" htmlFor="schedule">Horario Demostrativo</label>
-              <input
-                type="text"
-                id="schedule"
-                name="schedule"
-                value={formData.schedule || "Lunes a Sábado de 9:00 AM a 7:00 PM (Demostrativo)"}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Mensaje de Confirmación */}
-            <div className="form-group-full">
-              <label className="form-label" htmlFor="confirmationMessage">Mensaje de Confirmación para Clientas</label>
-              <textarea
-                id="confirmationMessage"
-                name="confirmationMessage"
-                rows="3"
-                value={formData.confirmationMessage || "Tu cita fue registrada con éxito en GLAMUROSA NAIL’S. Revisaremos tu solicitud y confirmaremos tu horario por WhatsApp."}
-                onChange={handleChange}
-                required
-              ></textarea>
-            </div>
+        <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "1.15rem" }}>
+          <div>
+            <label className="form-label" htmlFor="settings-name">Nombre comercial</label>
+            <input
+              type="text"
+              id="settings-name"
+              className="form-input"
+              value={formData.name || ""}
+              onChange={e => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
           </div>
 
-          <div style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            justifyContent: "space-between", 
-            paddingTop: "1.5rem", 
-            borderTop: "1px solid var(--border-light)",
-            flexWrap: "wrap",
-            gap: "1rem"
-          }}>
-            <button
-              type="button"
-              className="btn btn-outline"
-              onClick={handleReset}
-              style={{ color: "#DC2626", borderColor: "#FCA5A5" }}
-            >
-              <RefreshIcon size={16} />
-              <span>Restablecer datos demo</span>
-            </button>
+          <div>
+            <label className="form-label" htmlFor="settings-short">Nombre corto</label>
+            <input
+              type="text"
+              id="settings-short"
+              className="form-input"
+              value={formData.brandShort || ""}
+              onChange={e => setFormData({ ...formData, brandShort: e.target.value })}
+              required
+            />
+          </div>
 
-            <button type="submit" className="btn btn-primary">
-              <CheckIcon size={18} />
-              <span>Guardar configuración</span>
+          <div>
+            <label className="form-label" htmlFor="settings-email">Correo oficial verificado</label>
+            <input
+              type="email"
+              id="settings-email"
+              className="form-input"
+              value={formData.email || ""}
+              onChange={e => setFormData({ ...formData, email: e.target.value })}
+              required
+            />
+            <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
+              Canal único y verificado para recepción de correos de cotización.
+            </span>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "0.5rem" }}>
+            <button type="submit" className="btn btn-primary btn-sm">
+              Guardar configuración
             </button>
           </div>
         </form>
+      </div>
+
+      {/* Parámetros de BS Code & Analytics */}
+      <div className="card-editorial" style={{ padding: "2rem", marginBottom: "2rem" }}>
+        <h3 style={{ fontSize: "1.15rem", color: "var(--color-charcoal-deep)", marginBottom: "0.25rem" }}>
+          Telemetría y Analítica Comercial (BS Code)
+        </h3>
+        <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", marginBottom: "1.25rem" }}>
+          Valores inyectados de forma automática en todos los eventos y sesiones de Session Replay.
+        </p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", fontFamily: "monospace", fontSize: "0.85rem" }}>
+          <div style={{ padding: "0.75rem", backgroundColor: "var(--color-bg)", borderRadius: "var(--radius-xs)" }}>
+            <span style={{ color: "var(--color-text-muted)" }}>DEMO_ID:</span><br />
+            <strong>{ANALYTICS_CONFIG.demoId}</strong>
+          </div>
+
+          <div style={{ padding: "0.75rem", backgroundColor: "var(--color-bg)", borderRadius: "var(--radius-xs)" }}>
+            <span style={{ color: "var(--color-text-muted)" }}>PROSPECT_ID:</span><br />
+            <strong>{ANALYTICS_CONFIG.prospectId}</strong>
+          </div>
+
+          <div style={{ padding: "0.75rem", backgroundColor: "var(--color-bg)", borderRadius: "var(--radius-xs)" }}>
+            <span style={{ color: "var(--color-text-muted)" }}>PROJECT_TYPE:</span><br />
+            <strong>{ANALYTICS_CONFIG.projectType}</strong>
+          </div>
+
+          <div style={{ padding: "0.75rem", backgroundColor: "var(--color-bg)", borderRadius: "var(--radius-xs)" }}>
+            <span style={{ color: "var(--color-text-muted)" }}>SESSION_REPLAY:</span><br />
+            <strong style={{ color: "#059669" }}>Enmascaramiento Activo (.ph-mask)</strong>
+          </div>
+        </div>
+      </div>
+
+      {/* Restaurar Datos Demo */}
+      <div className="card-editorial" style={{ padding: "2rem", borderColor: "#FECACA", backgroundColor: "#FEF2F2" }}>
+        <h3 style={{ fontSize: "1.15rem", color: "#991B1B", marginBottom: "0.25rem" }}>
+          Zona de Reinicio de Demostración
+        </h3>
+        <p style={{ fontSize: "0.85rem", color: "#7F1D1D", marginBottom: "1.25rem" }}>
+          Si deseas reiniciar las solicitudes, eventos, cotizaciones y anticipos registrados a su estado demo inicial de fábrica.
+        </p>
+
+        <button 
+          type="button" 
+          className="btn btn-outline btn-sm"
+          style={{ borderColor: "#DC2626", color: "#DC2626" }}
+          onClick={handleReset}
+        >
+          <RefreshIcon size={14} />
+          <span>Restaurar datos demo de fábrica</span>
+        </button>
       </div>
     </div>
   );

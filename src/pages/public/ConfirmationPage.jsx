@@ -1,123 +1,201 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+import { useEventData } from "../../hooks/useEventData";
 import { 
-  CheckIcon, WhatsAppIcon, CalendarIcon, ArrowLeftIcon, 
-  SparklesIcon, ClockIcon 
+  CheckIcon, CheckCircleIcon, ArrowLeftIcon, 
+  CreditCardIcon, SparklesIcon 
 } from "../../components/common/Icons";
 import { StatusBadge } from "../../components/common/StatusBadge";
-import { initialBusinessData } from "../../data/businessData";
-import confirmationNailsImg from "../../assets/images/nails/hero-nails-macro.jpg";
+import { useTrackOnMount } from "../../analytics/analytics";
 
 export const ConfirmationPage = () => {
   const location = useLocation();
-  const appointment = location.state?.appointment || {
-    folio: "GLA-000128",
+  const { registerDepositDemo, requests } = useEventData();
+
+  // Tomar la solicitud del state o de fallback mock
+  const request = location.state?.request || (requests && requests[0]) || {
+    folio: "EVT-000128",
     clientName: "Cliente Demo",
-    patientName: "Cliente Demo",
-    serviceName: "Uñas acrílicas",
-    professional: "Mariana",
+    eventType: "Boda",
+    packageName: "Celebración",
+    guests: 120,
     date: new Date().toISOString().split("T")[0],
-    time: "10:30 AM",
-    depositAmount: "$200",
-    clientPhone: "8992569812",
-    status: "Pendiente de confirmación"
+    estimatedTotal: 38500,
+    suggestedDeposit: 5000,
+    status: "Solicitud recibida"
   };
 
-  const clientDisplayName = appointment.clientName || appointment.patientName || "Cliente";
-  const professionalName = appointment.professional || "Sin preferencia";
-  const depositText = appointment.depositAmount ? `${appointment.depositAmount} demo` : "Sin anticipo";
+  const [depositMethod, setDepositMethod] = useState("Transferencia");
+  const [depositRegistered, setDepositRegistered] = useState(false);
 
-  const whatsappMessage = encodeURIComponent(
-    `Hola, registré mi solicitud de cita en GLAMUROSA NAIL’S (Folio: ${appointment.folio}) para ${appointment.serviceName} el día ${appointment.date} a las ${appointment.time}. Mi nombre es ${clientDisplayName}.`
-  );
+  useTrackOnMount("deposit_demo_viewed", {
+    route: "/confirmacion",
+    has_request: Boolean(request?.folio)
+  });
+
+  const estimatedTotal = request.estimatedTotal || 38500;
+  const depositAmount = request.suggestedDeposit || 5000;
+  const remainingBalance = Math.max(0, estimatedTotal - depositAmount);
+
+  const handleRegisterDeposit = () => {
+    registerDepositDemo(request.folio, {
+      amount: depositAmount,
+      method: `${depositMethod} demo`,
+      clientName: request.clientName,
+      eventType: request.eventType
+    });
+    setDepositRegistered(true);
+  };
 
   return (
-    <div className="confirmation-editorial-wrap">
+    <div className="quote-page-wrap">
       <div className="container">
-        <div className="confirmation-editorial-card animate-fade-in">
-          {/* Left / Top Side: Decorative photo thumbnail */}
-          <div className="confirmation-side-visual">
-            <img 
-              src={confirmationNailsImg} 
-              alt="Momento GLAMUROSA NAIL’S" 
-              className="confirmation-visual-img"
-            />
-            <div className="confirmation-visual-overlay">
-              <span className="confirmation-visual-tag">GLAMUROSA</span>
+        <div className="confirmation-card-editorial animate-fade-in">
+          {/* Success Check */}
+          <div className="confirmation-success-icon">
+            <CheckIcon size={32} />
+          </div>
+
+          <span className="confirmation-folio-pill ph-mask">
+            FOLIO DEMO: {request.folio}
+          </span>
+
+          <h1 className="confirmation-title">
+            ¡Tu solicitud está en camino!
+          </h1>
+
+          <p className="confirmation-lead-text">
+            El Mayordomo podrá revisar los detalles y ponerse en contacto contigo para confirmar disponibilidad y preparar una cotización final.
+          </p>
+
+          {/* Details Card */}
+          <div className="confirmation-details-card">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.25rem" }}>
+              <div>
+                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Evento</span>
+                <div style={{ fontWeight: 600, color: "var(--color-charcoal-deep)" }}>{request.eventType}</div>
+              </div>
+
+              <div>
+                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Fecha tentativa</span>
+                <div style={{ fontWeight: 600, color: "var(--color-charcoal-deep)" }}>{request.date}</div>
+              </div>
+
+              <div>
+                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Invitados</span>
+                <div style={{ fontWeight: 600, color: "var(--color-charcoal-deep)" }}>{request.guests} personas</div>
+              </div>
+
+              <div>
+                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Paquete</span>
+                <div style={{ fontWeight: 600, color: "var(--color-charcoal-deep)" }}>{request.packageName}</div>
+              </div>
+
+              <div>
+                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Estimado preliminar</span>
+                <div style={{ fontWeight: 700, color: "var(--color-accent)" }}>
+                  ${estimatedTotal.toLocaleString("es-MX")} MXN
+                </div>
+              </div>
+
+              <div>
+                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Estado actual</span>
+                <div>
+                  <StatusBadge status={depositRegistered ? "Confirmada" : "Solicitud recibida"} />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Right Side: Details & Actions */}
-          <div className="confirmation-card-content">
-            <div className="confirmation-success-badge">
-              <CheckIcon size={22} />
+          {/* SECCIÓN ANTICIPO DEMO: APARTA TU FECHA */}
+          <div className="deposit-demo-box">
+            <span className="simulation-badge">SIMULACIÓN DEMOSTRATIVA</span>
+
+            <div className="deposit-demo-header">
+              <h3>Aparta tu fecha</h3>
+              <p>
+                En una implementación real de BS EventFlow, el cliente puede asegurar su fecha mediante un anticipo pactado. Esta sección es una simulación 100% segura para probar el flujo comercial sin dinero real.
+              </p>
             </div>
 
-            <span className="confirmation-folio-pill ph-mask">
-              FOLIO: {appointment.folio}
-            </span>
+            <div className="deposit-amounts-row">
+              <div className="deposit-amt-box">
+                <span className="deposit-amt-label">Cotización estimada</span>
+                <div className="deposit-amt-val">${estimatedTotal.toLocaleString("es-MX")}</div>
+              </div>
 
-            <h1 className="confirmation-title-editorial">
-              ¡Tu cita quedó registrada! ✨
-            </h1>
-            
-            <p className="confirmation-subtext-editorial">
-              GLAMUROSA podrá revisar tu solicitud y confirmar tu horario contigo.
-            </p>
+              <div className="deposit-amt-box" style={{ borderColor: "var(--color-accent)", backgroundColor: "var(--color-accent-soft)" }}>
+                <span className="deposit-amt-label">Anticipo demo</span>
+                <div className="deposit-amt-val" style={{ color: "var(--color-accent)" }}>
+                  ${depositAmount.toLocaleString("es-MX")}
+                </div>
+              </div>
 
-            {/* Details Table */}
-            <div className="confirmation-editorial-details">
-              <div className="conf-row">
-                <span className="conf-label">Cliente:</span>
-                <span className="conf-value ph-mask">{clientDisplayName}</span>
+              <div className="deposit-amt-box">
+                <span className="deposit-amt-label">Restante estimado</span>
+                <div className="deposit-amt-val">${remainingBalance.toLocaleString("es-MX")}</div>
               </div>
-              <div className="conf-row">
-                <span className="conf-label">Servicio:</span>
-                <span className="conf-value">{appointment.serviceName}</span>
-              </div>
-              <div className="conf-row">
-                <span className="conf-label">Técnica:</span>
-                <span className="conf-value highlight-stylist">{professionalName}</span>
-              </div>
-              <div className="conf-row">
-                <span className="conf-label">Fecha y horario:</span>
-                <span className="conf-value highlight-datetime">
-                  {appointment.date} — {appointment.time}
+            </div>
+
+            {!depositRegistered ? (
+              <div>
+                <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-charcoal-deep)", display: "block", marginBottom: "0.6rem" }}>
+                  Selecciona método de prueba demostrativo:
                 </span>
-              </div>
-              <div className="conf-row">
-                <span className="conf-label">Anticipo registrado:</span>
-                <span className="conf-value highlight-deposit">{depositText}</span>
-              </div>
-              <div className="conf-row">
-                <span className="conf-label">Estado actual:</span>
-                <StatusBadge status={appointment.status || "Pendiente de confirmación"} />
-              </div>
-            </div>
 
-            {/* Actions */}
-            <div className="confirmation-editorial-actions">
-              <a 
-                href={`https://wa.me/52${initialBusinessData.whatsapp}?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-whatsapp btn-block"
-              >
-                <WhatsAppIcon size={18} />
-                <span>Contactar por WhatsApp</span>
-              </a>
+                <div className="deposit-method-choices">
+                  <div 
+                    className={`deposit-method-option ${depositMethod === "Transferencia" ? "selected" : ""}`}
+                    onClick={() => setDepositMethod("Transferencia")}
+                  >
+                    <span>🏦 Transferencia bancaria demo</span>
+                  </div>
 
-              <div className="confirmation-secondary-links">
-                <Link to="/" className="btn btn-outline btn-sm">
-                  <ArrowLeftIcon size={15} />
-                  <span>Volver al inicio</span>
-                </Link>
-                <Link to="/agendar" className="btn btn-secondary btn-sm">
-                  <CalendarIcon size={15} />
-                  <span>Reservar otra cita</span>
-                </Link>
+                  <div 
+                    className={`deposit-method-option ${depositMethod === "Tarjeta" ? "selected" : ""}`}
+                    onClick={() => setDepositMethod("Tarjeta")}
+                  >
+                    <CreditCardIcon size={18} />
+                    <span>Tarjeta demo</span>
+                  </div>
+                </div>
+
+                <button 
+                  type="button" 
+                  className="btn btn-primary btn-block btn-lg"
+                  onClick={handleRegisterDeposit}
+                >
+                  <SparklesIcon size={18} />
+                  <span>Registrar anticipo demo (${depositAmount.toLocaleString("es-MX")} MXN)</span>
+                </button>
+
+                <p style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: "0.85rem", textAlign: "center" }}>
+                  * No se procesa ningún cargo real ni se solicitan datos bancarios. La simulación actualizará el estado de la solicitud inmediatamente en el panel administrativo.
+                </p>
               </div>
-            </div>
+            ) : (
+              <div style={{ padding: "1.25rem", backgroundColor: "#ECFDF5", borderRadius: "var(--radius-sm)", border: "1px solid #A7F3D0", textAlign: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", color: "#065F46", fontWeight: 700, fontSize: "1.05rem", marginBottom: "0.25rem" }}>
+                  <CheckCircleIcon size={22} />
+                  <span>¡Anticipo demo registrado con éxito!</span>
+                </div>
+                <p style={{ fontSize: "0.85rem", color: "#047857" }}>
+                  La fecha ha sido apartada en la simulación. Puedes ver el registro reflejado en el módulo de Pagos y Eventos del panel administrativo.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Botones de Retorno y Admin */}
+          <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
+            <Link to="/" className="btn btn-outline btn-sm">
+              <ArrowLeftIcon size={15} />
+              <span>Volver al inicio</span>
+            </Link>
+
+            <Link to="/admin/login" className="btn btn-secondary btn-sm">
+              <span>Ver panel de administración demo</span>
+            </Link>
           </div>
         </div>
       </div>

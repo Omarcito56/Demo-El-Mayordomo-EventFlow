@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Hero } from "../../components/landing/Hero";
-import { BeautyStrip } from "../../components/landing/BeautyStrip";
-import { ServicesSection } from "../../components/landing/ServicesSection";
+import { IntroSection } from "../../components/landing/IntroSection";
+import { PackagesSection } from "../../components/landing/PackagesSection";
+import { EventTypesSection } from "../../components/landing/EventTypesSection";
 import { ExperienceSection } from "../../components/landing/ExperienceSection";
-import { GallerySection } from "../../components/landing/GallerySection";
-import { RemindersSection } from "../../components/landing/RemindersSection";
-import { StylistsSection } from "../../components/landing/StylistsSection";
-import { BookingBanner } from "../../components/landing/BookingBanner";
+import { ProblemSolutionSection } from "../../components/landing/ProblemSolutionSection";
+import { AvailabilityCalendarSection } from "../../components/landing/AvailabilityCalendarSection";
+import { FinalCtaSection } from "../../components/landing/FinalCtaSection";
 import { LocationContact } from "../../components/landing/LocationContact";
 import { useTrackOnMount } from "../../analytics/analytics";
 
@@ -17,7 +17,7 @@ export const HomePage = () => {
   });
 
   useEffect(() => {
-    // Handle hash scroll if arriving with hash like #servicios or #galeria or #contacto or #experiencia
+    // Si viene con ancla hash e.g. #paquetes, #contacto, #calendario
     if (window.location.hash) {
       const id = window.location.hash.replace("#", "");
       const elem = document.getElementById(id);
@@ -32,13 +32,13 @@ export const HomePage = () => {
   return (
     <div className="homepage-editorial-wrap">
       <Hero />
-      <BeautyStrip />
-      <ServicesSection />
+      <IntroSection />
+      <PackagesSection />
+      <EventTypesSection />
       <ExperienceSection />
-      <GallerySection />
-      <RemindersSection />
-      <StylistsSection />
-      <BookingBanner />
+      <ProblemSolutionSection />
+      <AvailabilityCalendarSection />
+      <FinalCtaSection />
       <LocationContact />
     </div>
   );

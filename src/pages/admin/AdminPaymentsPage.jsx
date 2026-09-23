@@ -1,224 +1,120 @@
 import React, { useState } from "react";
-import { useClinicData } from "../../hooks/useClinicData";
-import { SearchIcon, FilterIcon, CreditCardIcon, SparklesIcon, CheckCircleIcon } from "../../components/common/Icons";
+import { useEventData } from "../../hooks/useEventData";
+import { SearchIcon, FilterIcon } from "../../components/common/Icons";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { useTrackOnMount } from "../../analytics/analytics";
 
 export const AdminPaymentsPage = () => {
-  const { appointments } = useClinicData();
+  const { payments } = useEventData();
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("TODOS");
+  const [filterConcept, setFilterConcept] = useState("todos");
 
-  useTrackOnMount("admin_requests_opened", { module: "payments" });
+  useTrackOnMount("admin_payments_opened", { module: "payments" });
 
-  const filteredPayments = appointments.filter((apt) => {
-    const clientName = apt.clientName || apt.patientName || "";
-    const matchesSearch =
-      clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      apt.serviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (apt.paymentMethod && apt.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredPayments = payments.filter((pay) => {
+    const matchesSearch = 
+      (pay.folio && pay.folio.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (pay.clientName && pay.clientName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (pay.eventType && pay.eventType.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesStatus = statusFilter === "TODOS" || apt.depositStatus === statusFilter;
-
-    return matchesSearch && matchesStatus;
+    const matchesConcept = filterConcept === "todos" || pay.concept === filterConcept;
+    return matchesSearch && matchesConcept;
   });
 
-  // Calculate totals
-  const totalReceived = appointments
-    .filter((a) => a.depositStatus === "Pagado")
-    .reduce((sum, a) => sum + (a.depositNumber || 0), 0);
-
-  const totalPendingInSalon = appointments
-    .filter((a) => a.status !== "Cancelada")
-    .reduce((sum, a) => {
-      const cost = a.costNumber || 650;
-      const dep = a.depositStatus === "Pagado" ? (a.depositNumber || 0) : 0;
-      return sum + (cost - dep);
-    }, 0);
-
-  const totalWithDeposit = appointments.filter((a) => a.depositStatus === "Pagado").length;
-
-  const getDepositBadge = (status) => {
-    switch (status) {
-      case "Pagado":
-        return (
-          <span className="status-badge status-Confirmada">
-            <span className="status-dot"></span>
-            Pagado
-          </span>
-        );
-      case "Pendiente":
-        return (
-          <span className="status-badge status-Pendiente">
-            <span className="status-dot"></span>
-            Pendiente
-          </span>
-        );
-      case "Cancelado":
-        return (
-          <span className="status-badge status-Cancelada">
-            <span className="status-dot"></span>
-            Cancelado
-          </span>
-        );
-      case "No requerido":
-      default:
-        return (
-          <span className="status-badge status-Atendida">
-            <span className="status-dot"></span>
-            No requerido
-          </span>
-        );
-    }
-  };
+  const totalPaidSum = filteredPayments
+    .filter(p => p.status === "Pagado")
+    .reduce((sum, p) => sum + (p.amount || 0), 0);
 
   return (
     <div>
-      {/* Summary KPI Cards */}
-      <div className="stats-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginBottom: "1.75rem" }}>
-        <div className="stat-card">
-          <div>
-            <div className="stat-val" style={{ color: "#059669" }}>
-              ${totalReceived} MXN
-            </div>
-            <div className="stat-label">Anticipos recibidos demo</div>
-          </div>
-          <div className="stat-icon-wrap" style={{ backgroundColor: "#ECFDF5", color: "#059669" }}>
-            <CreditCardIcon size={22} />
-          </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
+        <div>
+          <h2 style={{ fontSize: "1.35rem", color: "var(--color-charcoal-deep)" }}>Anticipos y Pagos</h2>
+          <span style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
+            Registro simulado de anticipos, abonos y liquidaciones de eventos
+          </span>
         </div>
 
-        <div className="stat-card">
-          <div>
-            <div className="stat-val" style={{ color: "var(--color-primary)" }}>
-              ${totalPendingInSalon} MXN
-            </div>
-            <div className="stat-label">Saldo restante por liquidar en salón</div>
-          </div>
-          <div className="stat-icon-wrap" style={{ backgroundColor: "var(--color-primary-soft)", color: "var(--color-primary)" }}>
-            <SparklesIcon size={22} />
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div>
-            <div className="stat-val" style={{ color: "var(--color-accent)" }}>
-              {totalWithDeposit}
-            </div>
-            <div className="stat-label">Citas con anticipo cubierto</div>
-          </div>
-          <div className="stat-icon-wrap" style={{ backgroundColor: "var(--color-accent-soft)", color: "var(--color-accent)" }}>
-            <CheckCircleIcon size={22} />
-          </div>
+        <div style={{ padding: "0.6rem 1.2rem", backgroundColor: "var(--color-surface)", border: "1px solid var(--border-light)", borderRadius: "var(--radius-sm)", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", textTransform: "uppercase" }}>Total Registrado:</span>
+          <strong style={{ fontSize: "1.1rem", color: "var(--color-accent)" }}>
+            ${totalPaidSum.toLocaleString("es-MX")} MXN
+          </strong>
         </div>
       </div>
 
-      <div className="admin-card">
-        <div className="admin-card-header">
-          <div>
-            <h2 className="admin-card-title">Anticipos</h2>
-            <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
-              Registro y control de anticipos demostrativos para asegurar la disponibilidad de turnos.
-            </p>
+      <div className="admin-card-table">
+        <div className="admin-table-toolbar">
+          <div className="table-toolbar-left">
+            <div className="table-search-input-wrap">
+              <SearchIcon size={16} />
+              <input
+                type="text"
+                placeholder="Buscar por folio, cliente..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <FilterIcon size={16} style={{ color: "var(--color-text-muted)" }} />
+              <select
+                value={filterConcept}
+                onChange={(e) => setFilterConcept(e.target.value)}
+                style={{ padding: "0.45rem 0.75rem", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-light)", fontSize: "0.85rem" }}
+              >
+                <option value="todos">Todos los conceptos</option>
+                <option value="Anticipo">Anticipo</option>
+                <option value="Segundo pago">Segundo pago</option>
+                <option value="Liquidación">Liquidación</option>
+              </select>
+            </div>
           </div>
 
-          <div style={{ fontSize: "0.86rem", color: "var(--color-text-secondary)" }}>
-            Total registros: <strong>{filteredPayments.length}</strong>
-          </div>
-        </div>
-
-        {/* Filter Bar */}
-        <div className="filter-bar">
-          <div className="search-input-wrap">
-            <SearchIcon size={18} />
-            <input
-              type="text"
-              placeholder="Buscar por cliente, servicio o método..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <FilterIcon size={16} style={{ color: "var(--color-text-secondary)" }} />
-            <select
-              className="filter-select"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="TODOS">Todos los estados</option>
-              <option value="Pagado">Pagado</option>
-              <option value="Pendiente">Pendiente</option>
-              <option value="No requerido">No requerido</option>
-              <option value="Cancelado">Cancelado</option>
-            </select>
+          <div style={{ fontSize: "0.84rem", color: "var(--color-text-secondary)" }}>
+            Movimientos demo: <strong>{filteredPayments.length}</strong>
           </div>
         </div>
 
-        {/* Table: Cliente, Servicio, Anticipo, Método, Estado */}
-        <div className="table-responsive">
-          <table className="admin-table">
+        <div className="table-responsive-container">
+          <table className="admin-data-table">
             <thead>
               <tr>
+                <th>Folio</th>
                 <th>Cliente</th>
-                <th>Servicio</th>
-                <th>Anticipo</th>
+                <th>Evento</th>
+                <th>Concepto</th>
+                <th>Monto</th>
                 <th>Método</th>
+                <th>Fecha</th>
                 <th>Estado</th>
               </tr>
             </thead>
             <tbody>
-              {filteredPayments.length === 0 ? (
-                <tr>
-                  <td colSpan="5" style={{ textAlign: "center", padding: "3rem", color: "var(--color-text-secondary)" }}>
-                    No se encontraron registros de anticipos con los criterios seleccionados.
+              {filteredPayments.map((pay) => (
+                <tr key={pay.id}>
+                  <td className="folio-cell">{pay.folio}</td>
+                  <td className="client-name-cell ph-mask">{pay.clientName}</td>
+                  <td>{pay.eventType}</td>
+                  <td>
+                    <span style={{ fontWeight: 600 }}>{pay.concept}</span>
+                  </td>
+                  <td style={{ fontWeight: 700, color: "var(--color-charcoal-deep)" }}>
+                    ${(pay.amount || 0).toLocaleString("es-MX")} MXN
+                  </td>
+                  <td>
+                    <span style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
+                      {pay.method}
+                    </span>
+                  </td>
+                  <td>{pay.date}</td>
+                  <td>
+                    <StatusBadge status={pay.status} />
                   </td>
                 </tr>
-              ) : (
-                filteredPayments.map((apt) => {
-                  const clientName = apt.clientName || apt.patientName || "Cliente";
-                  const clientPhone = apt.clientPhone || apt.patientPhone || "";
-                  return (
-                    <tr key={apt.id}>
-                      <td>
-                        <div className="table-patient-name ph-mask">{clientName}</div>
-                        <div className="table-patient-contact ph-mask">{clientPhone}</div>
-                      </td>
-                      <td>
-                        <strong>{apt.serviceName}</strong>
-                        <div style={{ fontSize: "0.76rem", color: "var(--color-text-muted)" }}>
-                          Total: {apt.cost} • Restante: {apt.balance}
-                        </div>
-                      </td>
-                      <td>
-                        <strong style={{ color: apt.depositStatus === "Pagado" ? "#059669" : "var(--color-primary)", fontSize: "0.95rem" }}>
-                          {apt.depositAmount || "$0"}
-                        </strong>
-                      </td>
-                      <td>
-                        <span style={{ 
-                          backgroundColor: "var(--color-bg)", 
-                          padding: "0.25rem 0.65rem", 
-                          borderRadius: "var(--radius-full)", 
-                          fontSize: "0.8rem",
-                          border: "1px solid var(--border-light)"
-                        }}>
-                          {apt.paymentMethod || "En salón"}
-                        </span>
-                      </td>
-                      <td>
-                        {getDepositBadge(apt.depositStatus || "No requerido")}
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
+              ))}
             </tbody>
           </table>
-        </div>
-
-        <div style={{ marginTop: "1.5rem", padding: "1rem", backgroundColor: "var(--color-bg)", borderRadius: "10px", border: "1px dashed var(--border-light)", fontSize: "0.84rem", color: "var(--color-text-secondary)" }}>
-          ✨ <strong>Nota comercial de anticipos:</strong> Los registros de esta sección son simulaciones demostrativas para mostrar al prospecto cómo puede controlar ingresos previos y saldos a liquidar en sucursal. No se utiliza dinero real.
         </div>
       </div>
     </div>

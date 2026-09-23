@@ -8,23 +8,24 @@ export const AdminLayout = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("beautyflow_auth") || localStorage.getItem("clinicflow_auth");
+    const isAuth = localStorage.getItem("eventflow_auth");
     if (!isAuth) {
       navigate("/admin/login");
     }
   }, [navigate]);
 
-  // Determine header title based on current route
   const getHeaderTitle = () => {
     const path = location.pathname;
-    if (path.includes("/dashboard")) return "Resumen de GLAMUROSA NAIL’S";
-    if (path.includes("/agenda")) return "Agenda de Citas";
-    if (path.includes("/citas")) return "Gestión de Citas";
-    if (path.includes("/clientes") || path.includes("/pacientes")) return "Directorio de Clientes";
-    if (path.includes("/servicios")) return "Catálogo de Servicios";
+    if (path.includes("/dashboard")) return "Resumen General · EventFlow";
+    if (path.includes("/solicitudes")) return "Solicitudes de Eventos";
+    if (path.includes("/calendario")) return "Calendario y Disponibilidad";
+    if (path.includes("/eventos")) return "Eventos Confirmados";
+    if (path.includes("/clientes")) return "Directorio de Clientes";
+    if (path.includes("/cotizaciones")) return "Cotizaciones Emitidas";
     if (path.includes("/pagos")) return "Anticipos y Pagos";
-    if (path.includes("/configuracion")) return "Configuración del Studio";
-    return "Panel de Administración";
+    if (path.includes("/paquetes")) return "Catálogo de Paquetes Demo";
+    if (path.includes("/configuracion")) return "Configuración del Sistema";
+    return "Panel de Administración · El Mayordomo";
   };
 
   return (
